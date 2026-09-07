@@ -317,8 +317,8 @@ export default function App() {
       // Also notify local Express server if available
       fetch('/api/products', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer fut2026' },
-        body: JSON.stringify({ ...newProd, adminSecret: 'fut2026' })
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer shotarameqeni' },
+        body: JSON.stringify({ ...newProd, adminSecret: 'shotarameqeni' })
       }).catch(() => {});
 
     } catch (e) {
@@ -333,7 +333,7 @@ export default function App() {
       await dbDeleteProduct(productId);
       fetch(`/api/products/${productId}`, {
         method: 'DELETE',
-        headers: { 'Authorization': 'Bearer fut2026', 'x-admin-secret': 'fut2026' }
+        headers: { 'Authorization': 'Bearer shotarameqeni', 'x-admin-secret': 'shotarameqeni' }
       }).catch(() => {});
     } catch (e) {
       console.error('Failed to delete product:', e);
@@ -347,8 +347,8 @@ export default function App() {
       await dbUpdateProduct(productId, updatedData);
       fetch(`/api/products/${productId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer fut2026' },
-        body: JSON.stringify({ ...updatedData, adminSecret: 'fut2026' })
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer shotarameqeni' },
+        body: JSON.stringify({ ...updatedData, adminSecret: 'shotarameqeni' })
       }).catch(() => {});
     } catch (e) {
       console.error('Failed to update product:', e);
@@ -382,7 +382,7 @@ export default function App() {
       fetch('/api/blog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...newPost, adminSecret: 'fut2026' })
+        body: JSON.stringify({ ...newPost, adminSecret: 'shotarameqeni' })
       }).catch(() => {});
     } catch (e) {
       console.error('Failed to add blog post:', e);

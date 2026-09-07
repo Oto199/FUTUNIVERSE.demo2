@@ -291,7 +291,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
   const fetchContactMessages = async () => {
     try {
       const res = await fetch('/api/contact-messages', {
-        headers: { Authorization: 'Bearer fut2026' }
+        headers: { Authorization: 'Bearer shotarameqeni' }
       });
       if (res.ok) {
         const data = await res.json();
@@ -319,7 +319,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
       await dbDeleteContactMessage(id);
       fetch(`/api/contact-messages/${id}`, {
         method: 'DELETE',
-        headers: { Authorization: 'Bearer fut2026' }
+        headers: { Authorization: 'Bearer shotarameqeni' }
       }).catch(() => {});
       setContactMessages(prev => prev.filter(m => m.id !== id));
     } catch (err) {
@@ -347,11 +347,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'fut2026' || password === 'admin') {
+    if (password === 'shotarameqeni') {
       setIsAuthenticated(true);
       setAuthError('');
     } else {
-      setAuthError('არასწორი პაროლი! (გამოიყენეთ: fut2026)');
+      setAuthError('არასწორი პაროლი!');
     }
   };
 
@@ -606,7 +606,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
               FUT Universe ადმინ პანელი
             </h1>
             <p className="text-xs text-slate-400 mt-1">
-              შეიყვანეთ ადმინისტრატორის პაროლი (Default: <code className="text-[#00e5ff] font-mono">fut2026</code>)
+              შეიყვანეთ ადმინისტრატორის პაროლი
             </p>
           </div>
 

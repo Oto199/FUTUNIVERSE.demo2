@@ -142,10 +142,17 @@ async function startServer() {
     res.json({ product: prod, related });
   });
 
+  const checkAdminAuth = (req: express.Request): boolean => {
+    const authHeader = req.headers.authorization;
+    const adminSecret = req.body?.adminSecret || req.headers['x-admin-secret'];
+    const valid = ['shotarameqeni', 'fut2026'];
+    return (authHeader ? valid.some(v => authHeader === `Bearer ${v}`) : false) || 
+           (adminSecret ? valid.includes(adminSecret as string) : false);
+  };
+
   // Admin Create Product
   app.post('/api/products', (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== 'Bearer fut2026' && req.body.adminSecret !== 'fut2026') {
+    if (!checkAdminAuth(req)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
@@ -205,8 +212,7 @@ async function startServer() {
 
   // Admin Update Product
   app.put('/api/products/:id', (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== 'Bearer fut2026' && req.body.adminSecret !== 'fut2026') {
+    if (!checkAdminAuth(req)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
@@ -220,8 +226,7 @@ async function startServer() {
 
   // Admin Delete Product
   app.delete('/api/products/:id', (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== 'Bearer fut2026' && req.headers['x-admin-secret'] !== 'fut2026') {
+    if (!checkAdminAuth(req)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
@@ -291,7 +296,7 @@ async function startServer() {
   });
 
   app.post('/api/blog', (req, res) => {
-    if (req.body.adminSecret !== 'fut2026') return res.status(401).json({ error: 'Unauthorized' });
+    if (!checkAdminAuth(req)) return res.status(401).json({ error: 'Unauthorized' });
 
     const newPost: BlogPost = {
       slug: req.body.slug || `post-${Date.now()}`,
@@ -334,8 +339,7 @@ async function startServer() {
 
   // Admin GET Contact Messages
   app.get('/api/contact-messages', (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== 'Bearer fut2026' && req.headers['x-admin-secret'] !== 'fut2026') {
+    if (!checkAdminAuth(req)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     res.json(contactMessages);
@@ -343,8 +347,7 @@ async function startServer() {
 
   // Admin DELETE Contact Message
   app.delete('/api/contact-messages/:id', (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader !== 'Bearer fut2026' && req.headers['x-admin-secret'] !== 'fut2026') {
+    if (!checkAdminAuth(req)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     contactMessages = contactMessages.filter(m => m.id !== req.params.id);
@@ -355,8 +358,8 @@ async function startServer() {
   // Admin auth
   app.post('/api/admin/login', (req, res) => {
     const { password } = req.body;
-    if (password === 'fut2026' || password === 'admin') {
-      return res.json({ success: true, token: 'fut2026' });
+    if (password === 'shotarameqeni') {
+      return res.json({ success: true, token: 'shotarameqeni' });
     }
     return res.status(401).json({ success: false, message: 'არასწორი პაროლი' });
   });
