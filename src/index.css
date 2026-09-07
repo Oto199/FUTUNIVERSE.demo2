@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Outfit', 'Noto Sans Georgian', -apple-system, sans-serif;
+    background-color: #fcfcfd;
+    color: #18181b;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Syne', 'Outfit', 'Noto Sans Georgian', sans-serif;
+  }
+}
+
+/* Bold Typography Theme Utility Classes - Light Mode */
+.display-huge {
+  font-family: 'Outfit', 'Syne', sans-serif;
+  font-size: clamp(3.2rem, 11vw, 9.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.display-large {
+  font-family: 'Outfit', 'Syne', sans-serif;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.micro-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-weight: 700;
+  color: #71717a;
+}
+
+.micro-label-cyan {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+  color: #008ba3;
+}
+
+.outline-text {
+  -webkit-text-stroke: 1.5px rgba(24, 24, 27, 0.25);
+  color: transparent;
+}
+
+.outline-text-cyan {
+  -webkit-text-stroke: 1.5px #008ba3;
+  color: transparent;
+}
+
+.bold-card {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bold-card:hover {
+  border-color: #008ba3;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom scrollbar for light theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #008ba3;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.animate-shine {
+  animation: shine 4s linear infinite;
+}
+
+@keyframes sparkOut {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-spark-out {
+  animation: sparkOut 0.4s ease-out forwards;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "FUT Universe",
+  "description": "Football jersey library and archive in Tbilisi, Georgia — WC26 kits, niche players, and rare football shirts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

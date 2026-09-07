@@ -1,0 +1,101 @@
+{
+  "entities": {
+    "products": {
+      "title": "Products",
+      "description": "Football jerseys and store merchandise",
+      "properties": {
+        "id": { "type": "string" },
+        "titleKa": { "type": "string" },
+        "titleEn": { "type": "string" },
+        "playerSlug": { "type": "string" },
+        "playerKa": { "type": "string" },
+        "playerEn": { "type": "string" },
+        "number": { "type": "number" },
+        "teamCategory": { "type": "string" },
+        "nationalTeamKa": { "type": "string" },
+        "nationalTeamEn": { "type": "string" },
+        "teamSlug": { "type": "string" },
+        "clubKa": { "type": "string" },
+        "clubEn": { "type": "string" },
+        "category": { "type": "string" },
+        "kitType": { "type": "string" },
+        "sizes": { "type": "array" },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "isFeatured": { "type": "boolean" },
+        "isWc26": { "type": "boolean" },
+        "isNiche": { "type": "boolean" },
+        "imageFront": { "type": "string" },
+        "imageBack": { "type": "string" },
+        "images": { "type": "array" },
+        "descriptionKa": { "type": "string" },
+        "descriptionEn": { "type": "string" },
+        "inStock": { "type": "boolean" },
+        "releaseYear": { "type": "number" },
+        "tags": { "type": "array" }
+      }
+    },
+    "players": {
+      "title": "Players",
+      "description": "Featured players in the FUT store",
+      "properties": {
+        "slug": { "type": "string" },
+        "nameKa": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "teamKa": { "type": "string" },
+        "teamEn": { "type": "string" },
+        "teamSlug": { "type": "string" },
+        "position": { "type": "string" },
+        "number": { "type": "number" },
+        "bioKa": { "type": "string" },
+        "bioEn": { "type": "string" },
+        "wc26Role": { "type": "string" },
+        "image": { "type": "string" }
+      }
+    },
+    "teams": {
+      "title": "Teams",
+      "description": "Clubs and National teams",
+      "properties": {
+        "slug": { "type": "string" },
+        "nameKa": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "type": { "type": "string" },
+        "flagUrl": { "type": "string" },
+        "wc26Group": { "type": "string" },
+        "descriptionKa": { "type": "string" },
+        "descriptionEn": { "type": "string" }
+      }
+    },
+    "blogPosts": {
+      "title": "Blog Posts",
+      "description": "Store journal and news articles",
+      "properties": {
+        "slug": { "type": "string" },
+        "titleKa": { "type": "string" },
+        "titleEn": { "type": "string" },
+        "excerptKa": { "type": "string" },
+        "excerptEn": { "type": "string" },
+        "contentKa": { "type": "string" },
+        "contentEn": { "type": "string" },
+        "publishDate": { "type": "string" },
+        "readTime": { "type": "string" },
+        "coverImage": { "type": "string" },
+        "author": { "type": "string" },
+        "tags": { "type": "array" },
+        "relatedPlayerSlugs": { "type": "array" }
+      }
+    },
+    "contactMessages": {
+      "title": "Contact Messages",
+      "description": "User inquiries and customer messages",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "contact": { "type": "string" },
+        "message": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    }
+  }
+}
