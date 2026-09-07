@@ -63,10 +63,47 @@ export const INITIAL_TEAMS: TeamInfo[] = [
     descriptionKa: 'ლივერპულისა და კოლუმბიის შემტევი — ლუის დიაზი.',
     descriptionEn: 'Liverpool and Colombia winger — Luis Díaz.',
     heroImage: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    slug: 'brazil',
+    nameKa: 'ბრაზილია',
+    nameEn: 'Brazil',
+    flagEmoji: '🇧🇷',
+    descriptionKa: 'ხუთგზის მსოფლიო ჩემპიონი — რონალდინიოს 2002 წლის ლეგენდარული მაისური.',
+    descriptionEn: 'Five-time World Champions — Ronaldinho 2002 legendary retro kit.',
+    heroImage: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80'
   }
 ];
 
 export const INITIAL_PLAYERS: PlayerInfo[] = [
+  {
+    slug: 'ronaldinho',
+    nameKa: 'რონალდინიო',
+    nameEn: 'Ronaldinho',
+    teamKa: 'ბრაზილია',
+    teamEn: 'Brazil',
+    teamSlug: 'brazil',
+    position: 'ლეგენდარული შემტევი',
+    number: 11,
+    bioKa: 'რონალდინიო (Ronaldinho Gaucho) — მსოფლიო ფეხბურთის ჯადოქარი. ბრაზილიის 2002 წლის მსოფლიო ჩემპიონატის საკულტო რეტრო მაისური. ხელმისაწვდომია L და XL ზომებში.',
+    bioEn: 'Ronaldinho Gaucho — The magician of football. Iconic Brazil 2002 World Cup champion retro jersey. Available in sizes L and XL.',
+    wc26Role: '⭐ Player / Retro — 59₾ (ზომები: L, XL)',
+    image: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=600&q=80'
+  },
+  {
+    slug: 'mbappe',
+    nameKa: 'კილიან მბაპე',
+    nameEn: 'Kylian Mbappé',
+    teamKa: 'საფრანგეთი',
+    teamEn: 'France',
+    teamSlug: 'france',
+    position: 'თავდამსხმელი',
+    number: 10,
+    bioKa: 'კილიან მბაპე — საფრანგეთის 2018 წლის მსოფლიო ჩემპიონატის ოქროს მაისური. ხელმისაწვდომია XL ზომაში.',
+    bioEn: 'Kylian Mbappé — France 2018 World Cup Champions jersey. Available in size XL.',
+    wc26Role: '⭐ Player / Retro — 59₾ (ზომა: XL)',
+    image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80'
+  },
   {
     slug: 'wirtz',
     nameKa: 'ფლორიან ვირცი',
@@ -76,9 +113,9 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     teamSlug: 'germany',
     position: 'შემტევი ნახევარმცველი',
     number: 10,
-    bioKa: 'ფლორიან ვირცი — გერმანული და ევროპული ფეხბურთის მთავარი შემოქმედი. ხელმისაწვდომია ოფიციალური მოთამაშის ვერსია (Player Version) L ზომაში.',
-    bioEn: 'Florian Wirtz — German genius. Available in official Player Version in size L.',
-    wc26Role: 'მოთამაშის ვერსია (Player Version) — 67₾ (ზომა: L)',
+    bioKa: 'ფლორიან ვირცი — გერმანული და ევროპული ფეხბურთის მთავარი შემოქმედი. ხელმისაწვდომია 49₾-ად Back to School Sale-ში L ზომაში.',
+    bioEn: 'Florian Wirtz — German genius. Available in size L at 49 GEL in the Back to School Sale.',
+    wc26Role: '💛 Fan Version / Sale — 49₾ (ზომა: L)',
     image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=80'
   },
   {
@@ -89,10 +126,10 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     teamEn: 'England / Manchester United',
     teamSlug: 'england',
     position: 'ნახევარმცველი',
-    number: 37,
-    bioKa: 'კობი მეინუ — ინგლისური ფეხბურთისა და მანჩესტერ იუნაიტედის აღმოჩენა. ხელმისაწვდომია ფან ვერსია (Fan Version) L ზომაში.',
-    bioEn: 'Kobbie Mainoo — Manchester United star. Fan Version available in size L.',
-    wc26Role: 'ფან ვერსია (Fan Version) — 55₾ (ზომა: L)',
+    number: 26,
+    bioKa: 'კობი მეინუ — ინგლისური ფეხბურთისა და მანჩესტერ იუნაიტედის აღმოჩენა. ხელმისაწვდომია ფან ვერსია (Fan Version) L ზომაში 49₾-ად.',
+    bioEn: 'Kobbie Mainoo — Manchester United star. Fan Version available in size L at 49 GEL.',
+    wc26Role: '💛 Fan Version — 49₾ (ზომა: L)',
     image: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=600&q=80'
   },
   {
@@ -104,9 +141,9 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     teamSlug: 'portugal',
     position: 'პლეიმეიკერი',
     number: 8,
-    bioKa: 'ბრუნო ფერნანდეში — პორტუგალიის ნაკრებისა და იუნაიტედის კაპიტანი. ხელმისაწვდომია ფან ვერსია (Fan Version) L ზომაში.',
-    bioEn: 'Bruno Fernandes — Portugal captain. Fan Version available in size L.',
-    wc26Role: 'ფან ვერსია (Fan Version) — 55₾ (ზომა: L)',
+    bioKa: 'ბრუნო ფერნანდეში — პორტუგალიის ნაკრებისა და იუნაიტედის კაპიტანი. ხელმისაწვდომია ფან ვერსია (Fan Version) L ზომაში 49₾-ად.',
+    bioEn: 'Bruno Fernandes — Portugal captain. Fan Version available in size L at 49 GEL.',
+    wc26Role: '💛 Fan Version — 49₾ (ზომა: L)',
     image: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=600&q=80'
   },
   {
@@ -120,7 +157,7 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     number: 19,
     bioKa: 'ხულიან ალვარესი — მსოფლიო ჩემპიონი არგენტინელი თავდამსხმელი. ხელმისაწვდომია ფან ვერსია (Fan Version) L ზომაში.',
     bioEn: 'Julián Álvarez — World Champion striker. Fan Version available in size L.',
-    wc26Role: 'ფან ვერსია (Fan Version) — 55₾ (ზომა: L)',
+    wc26Role: '💛 Fan Version — 49₾ (ზომა: L)',
     image: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80'
   },
   {
@@ -146,9 +183,9 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     teamSlug: 'colombia',
     position: 'გარემარბი',
     number: 7,
-    bioKa: 'ლუის დიაზი — ლივერპულისა და კოლუმბიის ელვისებური ფლანგელი. ხელმისაწვდომია ფან ვერსია (Fan Version) XL ზომაში.',
-    bioEn: 'Luis Díaz — Liverpool & Colombia electric winger. Fan Version available in size XL.',
-    wc26Role: 'ფან ვერსია (Fan Version) — 55₾ (ზომა: XL)',
+    bioKa: 'ლუის დიაზი — ლივერპულისა და კოლუმბიის ელვისებური ფლანგელი. ხელმისაწვდომია ფან ვერსია (Fan Version) XL ზომაში 49₾-ად.',
+    bioEn: 'Luis Díaz — Liverpool & Colombia electric winger. Fan Version available in size XL at 49 GEL.',
+    wc26Role: '💛 Fan Version — 49₾ (ზომა: XL)',
     image: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=600&q=80'
   },
   {
@@ -160,19 +197,51 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     teamSlug: 'france',
     position: 'ლეგენდარული პლეიმეიკერი',
     number: 10,
-    bioKa: 'ზინედინ ზიდანი ✨ — საფრანგეთის 2006 წლის მსოფლიო ჩემპიონატის ლეგენდარული რეტრო მაისური. ხელმისაწვდომია M, L და XL ზომებში.',
-    bioEn: 'Zinedine Zidane ✨ — Iconic France 2006 World Cup Retro jersey. Available in M, L, XL sizes.',
-    wc26Role: '⭐️ რეტრო ვერსია ✨ — 49₾ (ზომები: M, L, XL)',
+    bioKa: 'ზინედინ ზიდანი ✨ — საფრანგეთის 1998 და 2006 წლების მსოფლიო ჩემპიონატის ლეგენდარული რეტრო მაისურები. ხელმისაწვდომია M, L და XL ზომებში.',
+    bioEn: 'Zinedine Zidane ✨ — Iconic France 1998 and 2006 World Cup Retro jerseys. Available in M, L, XL sizes.',
+    wc26Role: '⭐ რეტრო ვერსია — 59₾ (ზომები: M, L, XL)',
     image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80'
   }
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
-    id: 'prod-zidane-2006',
-    titleKa: 'ზინედინ ზიდანი (Zinedine Zidane) — 2006 World Cup Jersey',
-    titleEn: 'Zinedine Zidane — 2006 World Cup Jersey',
-    playerSlug: 'zinedine-zidane',
+    id: 'prod-ronaldinho-brazil-2002',
+    titleKa: 'რონალდინიო (Ronaldinho) — Brazil 2002 World Cup Retro',
+    titleEn: 'Ronaldinho — Brazil 2002 World Cup Retro',
+    playerSlug: 'ronaldinho',
+    playerKa: 'რონალდინიო',
+    playerEn: 'Ronaldinho',
+    number: 11,
+    teamCategory: 'nation',
+    nationalTeamKa: 'ბრაზილია',
+    nationalTeamEn: 'Brazil',
+    teamSlug: 'brazil',
+    category: 'Jersey',
+    kitType: 'Retro',
+    sizes: ['L', 'XL'],
+    price: 59,
+    originalPrice: 79,
+    isFeatured: true,
+    isWc26: false,
+    isNiche: true,
+    imageFront: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🇧🇷 Ronaldinho Brazil 2002 World Cup Retro | 💰 59₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L, XL.',
+    descriptionEn: '🇧🇷 Ronaldinho Brazil 2002 World Cup Retro | 59 GEL (BACK TO SCHOOL SALE!) | Sizes: L, XL.',
+    inStock: true,
+    releaseYear: 2002,
+    tags: ['Retro', 'Ronaldinho', 'Brazil', 'World Cup 2002', 'Sale', 'Back To School']
+  },
+  {
+    id: 'prod-zidane-france-1998',
+    titleKa: 'ზინედინ ზიდანი (Zinedine Zidane) — France 1998 World Cup Final Retro',
+    titleEn: 'Zinedine Zidane — France 1998 World Cup Final Retro',
+    playerSlug: 'zidane',
     playerKa: 'ზინედინ ზიდანი',
     playerEn: 'Zinedine Zidane',
     number: 10,
@@ -181,20 +250,214 @@ export const INITIAL_PRODUCTS: Product[] = [
     nationalTeamEn: 'France',
     teamSlug: 'france',
     category: 'Jersey',
-    kitType: 'World Cup Home',
-    sizes: ['M', 'L', 'XL'],
-    price: 49,
+    kitType: 'Retro',
+    sizes: ['L', 'XL'],
+    price: 59,
+    originalPrice: 79,
     isFeatured: true,
     isWc26: false,
     isNiche: true,
     imageFront: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
     imageBack: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
-    images: ['https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'],
-    descriptionKa: '🔥 Zinedine Zidane — საფრანგეთის 2006 წლის მსოფლიო ჩემპიონატის მაისური | 💰 49₾ | 📏 M, L, XL.',
-    descriptionEn: '🔥 Zinedine Zidane — France 2006 World Cup Jersey | 49 GEL | Sizes M, L, XL.',
+    images: [
+      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🇫🇷 Zidane France 1998 World Cup Final Retro | 💰 59₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L, XL.',
+    descriptionEn: '🇫🇷 Zidane France 1998 World Cup Final Retro | 59 GEL (BACK TO SCHOOL SALE!) | Sizes: L, XL.',
+    inStock: true,
+    releaseYear: 1998,
+    tags: ['Retro', 'Zidane', 'France', 'World Cup 1998', 'Sale', 'Back To School']
+  },
+  {
+    id: 'prod-zidane-2006',
+    titleKa: 'ზინედინ ზიდანი (Zinedine Zidane) — France 2006 World Cup Retro',
+    titleEn: 'Zinedine Zidane — France 2006 World Cup Retro',
+    playerSlug: 'zidane',
+    playerKa: 'ზინედინ ზიდანი',
+    playerEn: 'Zinedine Zidane',
+    number: 10,
+    teamCategory: 'nation',
+    nationalTeamKa: 'საფრანგეთი',
+    nationalTeamEn: 'France',
+    teamSlug: 'france',
+    category: 'Jersey',
+    kitType: 'Retro',
+    sizes: ['M', 'L', 'XL'],
+    price: 59,
+    originalPrice: 75,
+    isFeatured: true,
+    isWc26: false,
+    isNiche: true,
+    imageFront: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🇫🇷 Zidane France 2006 World Cup Retro | 💰 59₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: M, L, XL.',
+    descriptionEn: '🇫🇷 Zidane France 2006 World Cup Retro | 59 GEL (BACK TO SCHOOL SALE!) | Sizes: M, L, XL.',
     inStock: true,
     releaseYear: 2006,
-    tags: ['Retro', 'Zidane', 'France', 'World Cup']
+    tags: ['Retro', 'Zidane', 'France', 'World Cup 2006', 'Sale', 'Back To School']
+  },
+  {
+    id: 'prod-bruno-portugal',
+    titleKa: 'ბრუნო ფერნანდეში (Bruno Fernandes) — Portugal 2026',
+    titleEn: 'Bruno Fernandes — Portugal 2026 World Cup',
+    playerSlug: 'brunof',
+    playerKa: 'ბრუნო ფერნანდეში',
+    playerEn: 'Bruno Fernandes',
+    number: 8,
+    teamCategory: 'nation',
+    nationalTeamKa: 'პორტუგალია',
+    nationalTeamEn: 'Portugal',
+    teamSlug: 'portugal',
+    category: 'Jersey',
+    kitType: 'Fan Version',
+    sizes: ['L'],
+    price: 49,
+    originalPrice: 55,
+    isFeatured: true,
+    isWc26: true,
+    isNiche: false,
+    imageFront: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🇵🇹 Bruno Fernandes Portugal 2026 (Fan Version) | 💰 49₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L.',
+    descriptionEn: '🇵🇹 Bruno Fernandes Portugal 2026 (Fan Version) | 49 GEL (BACK TO SCHOOL SALE!) | Size: L.',
+    inStock: true,
+    releaseYear: 2026,
+    tags: ['Bruno Fernandes', 'Portugal', 'World Cup', 'Sale', 'Fan Version', 'Back To School']
+  },
+  {
+    id: 'prod-mbappe-france-2018',
+    titleKa: 'კილიან მბაპე (Kylian Mbappé) — France 2018 World Cup Champions',
+    titleEn: 'Kylian Mbappé — France 2018 World Cup Champions',
+    playerSlug: 'mbappe',
+    playerKa: 'კილიან მბაპე',
+    playerEn: 'Kylian Mbappé',
+    number: 10,
+    teamCategory: 'nation',
+    nationalTeamKa: 'საფრანგეთი',
+    nationalTeamEn: 'France',
+    teamSlug: 'france',
+    category: 'Jersey',
+    kitType: 'Retro',
+    sizes: ['XL'],
+    price: 59,
+    originalPrice: 79,
+    isFeatured: true,
+    isWc26: false,
+    isNiche: true,
+    imageFront: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🇫🇷 Mbappé France 2018 World Cup Champions | 💰 59₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: XL.',
+    descriptionEn: '🇫🇷 Mbappé France 2018 World Cup Champions | 59 GEL (BACK TO SCHOOL SALE!) | Size: XL.',
+    inStock: true,
+    releaseYear: 2018,
+    tags: ['Mbappe', 'France', 'World Cup 2018', 'Retro', 'Sale', 'Back To School']
+  },
+  {
+    id: 'prod-mainoo-england',
+    titleKa: 'კობი მეინუ (Kobbie Mainoo) — England 2026 World Cup',
+    titleEn: 'Kobbie Mainoo — England 2026 World Cup',
+    playerSlug: 'mainoo',
+    playerKa: 'კობი მეინუ',
+    playerEn: 'Kobbie Mainoo',
+    number: 26,
+    teamCategory: 'nation',
+    nationalTeamKa: 'ინგლისი',
+    nationalTeamEn: 'England',
+    teamSlug: 'england',
+    category: 'Jersey',
+    kitType: 'Fan Version',
+    sizes: ['L'],
+    price: 49,
+    originalPrice: 55,
+    isFeatured: true,
+    isWc26: true,
+    isNiche: false,
+    imageFront: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Kobbie Mainoo England 2026 (Fan Version) | 💰 49₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L.',
+    descriptionEn: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Kobbie Mainoo England 2026 (Fan Version) | 49 GEL (BACK TO SCHOOL SALE!) | Size: L.',
+    inStock: true,
+    releaseYear: 2026,
+    tags: ['Mainoo', 'England', 'World Cup', 'Sale', 'Fan Version', 'Back To School']
+  },
+  {
+    id: 'prod-wirtz-germany',
+    titleKa: 'ფლორიან ვირცი (Florian Wirtz) — Germany 2026 World Cup',
+    titleEn: 'Florian Wirtz — Germany 2026 World Cup',
+    playerSlug: 'wirtz',
+    playerKa: 'ფლორიან ვირცი',
+    playerEn: 'Florian Wirtz',
+    number: 10,
+    teamCategory: 'nation',
+    nationalTeamKa: 'გერმანია',
+    nationalTeamEn: 'Germany',
+    teamSlug: 'germany',
+    category: 'Jersey',
+    kitType: 'Fan Version',
+    sizes: ['L'],
+    price: 49,
+    originalPrice: 67,
+    isFeatured: true,
+    isWc26: true,
+    isNiche: true,
+    imageFront: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🇩🇪 Florian Wirtz Germany 2026 | 💰 49₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L.',
+    descriptionEn: '🇩🇪 Florian Wirtz Germany 2026 | 49 GEL (BACK TO SCHOOL SALE!) | Size: L.',
+    inStock: true,
+    releaseYear: 2026,
+    tags: ['Wirtz', 'Germany', 'World Cup', 'Sale', 'Back To School']
+  },
+  {
+    id: 'prod-diaz-colombia-2026',
+    titleKa: 'ლუის დიაზი (Luis Díaz) — Colombia 2026 World Cup',
+    titleEn: 'Luis Díaz — Colombia 2026 World Cup',
+    playerSlug: 'diaz',
+    playerKa: 'ლუის დიაზი',
+    playerEn: 'Luis Díaz',
+    number: 7,
+    teamCategory: 'nation',
+    nationalTeamKa: 'კოლუმბია',
+    nationalTeamEn: 'Colombia',
+    teamSlug: 'colombia',
+    category: 'Jersey',
+    kitType: 'Fan Version',
+    sizes: ['XL'],
+    price: 49,
+    originalPrice: 55,
+    isFeatured: true,
+    isWc26: true,
+    isNiche: false,
+    imageFront: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=800&q=80'
+    ],
+    descriptionKa: '🇨🇴 Luis Diaz Colombia 2026 (Fan Version) | 💰 49₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: XL.',
+    descriptionEn: '🇨🇴 Luis Diaz Colombia 2026 (Fan Version) | 49 GEL (BACK TO SCHOOL SALE!) | Size: XL.',
+    inStock: true,
+    releaseYear: 2026,
+    tags: ['Luis Diaz', 'Colombia', 'World Cup', 'Sale', 'Fan Version', 'Back To School']
   },
   {
     id: 'prod-ronaldo-mufc-2007',
@@ -281,97 +544,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     tags: ['Trent', 'Liverpool', 'Home Kit']
   },
   {
-    id: 'prod-wirtz-germany',
-    titleKa: 'ფლორიან ვირცი (Florian Wirtz) — Germany 2026 World Cup Jersey',
-    titleEn: 'Florian Wirtz — Germany 2026 World Cup Jersey',
-    playerSlug: 'florian-wirtz',
-    playerKa: 'ფლორიან ვირცი',
-    playerEn: 'Florian Wirtz',
-    number: 10,
-    teamCategory: 'nation',
-    nationalTeamKa: 'გერმანია',
-    nationalTeamEn: 'Germany',
-    teamSlug: 'germany',
-    category: 'Jersey',
-    kitType: 'Player Version',
-    sizes: ['L'],
-    price: 49,
-    originalPrice: 67,
-    isFeatured: true,
-    isWc26: true,
-    isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
-    images: ['https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'],
-    descriptionKa: '🔥 Florian Wirtz — გერმანიის 2026 World Cup მოთამაშის ვერსია | 💰 49₾ (ფასდაკლება!) | 📏 L.',
-    descriptionEn: '🔥 Florian Wirtz — Germany 2026 World Cup Player Version | 49 GEL (Sale!) | Size L.',
-    inStock: true,
-    releaseYear: 2026,
-    tags: ['Wirtz', 'Germany', 'World Cup', 'Sale', 'Player Version']
-  },
-  {
-    id: 'prod-mainoo-england',
-    titleKa: 'კობი მეინუ (Kobbie Mainoo) — England 2026 World Cup Jersey',
-    titleEn: 'Kobbie Mainoo — England 2026 World Cup Jersey',
-    playerSlug: 'kobbie-mainoo',
-    playerKa: 'კობი მეინუ',
-    playerEn: 'Kobbie Mainoo',
-    number: 26,
-    teamCategory: 'nation',
-    nationalTeamKa: 'ინგლისი',
-    nationalTeamEn: 'England',
-    teamSlug: 'england',
-    category: 'Jersey',
-    kitType: 'Fan Version',
-    sizes: ['L'],
-    price: 49,
-    originalPrice: 55,
-    isFeatured: true,
-    isWc26: true,
-    isNiche: false,
-    imageFront: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
-    images: ['https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80'],
-    descriptionKa: '🔥 Kobbie Mainoo — ინგლისის 2026 World Cup ფან ვერსია | 💰 49₾ (ფასდაკლება!) | 📏 L.',
-    descriptionEn: '🔥 Kobbie Mainoo — England 2026 World Cup Fan Version | 49 GEL (Sale!) | Size L.',
-    inStock: true,
-    releaseYear: 2026,
-    tags: ['Mainoo', 'England', 'World Cup', 'Sale', 'Fan Version']
-  },
-  {
-    id: 'prod-bruno-portugal',
-    titleKa: 'ბრუნო ფერნანდეში (Bruno Fernandes) — Portugal 2026 World Cup Jersey',
-    titleEn: 'Bruno Fernandes — Portugal 2026 World Cup Jersey',
-    playerSlug: 'bruno-fernandes',
-    playerKa: 'ბრუნო ფერნანდეში',
-    playerEn: 'Bruno Fernandes',
-    number: 8,
-    teamCategory: 'nation',
-    nationalTeamKa: 'პორტუგალია',
-    nationalTeamEn: 'Portugal',
-    teamSlug: 'portugal',
-    category: 'Jersey',
-    kitType: 'Fan Version',
-    sizes: ['L'],
-    price: 49,
-    originalPrice: 55,
-    isFeatured: true,
-    isWc26: true,
-    isNiche: false,
-    imageFront: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
-    images: ['https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80'],
-    descriptionKa: '🔥 Bruno Fernandes #8 — პორტუგალიის 2026 World Cup ფან ვერსია | 💰 49₾ (ფასდაკლება!) | 📏 L.',
-    descriptionEn: '🔥 Bruno Fernandes #8 — Portugal 2026 World Cup Fan Version | 49 GEL (Sale!) | Size L.',
-    inStock: true,
-    releaseYear: 2026,
-    tags: ['Bruno Fernandes', 'Portugal', 'World Cup', 'Sale', 'Fan Version']
-  },
-  {
     id: 'prod-alvarez-argentina',
     titleKa: 'ხულიან ალვარესი (Julián Álvarez) — Argentina 2026 World Cup Jersey',
     titleEn: 'Julián Álvarez — Argentina 2026 World Cup Jersey',
-    playerSlug: 'julián-álvarez',
+    playerSlug: 'alvarez',
     playerKa: 'ხულიან ალვარესი',
     playerEn: 'Julián Álvarez',
     number: 19,
@@ -399,6 +575,79 @@ export const INITIAL_PRODUCTS: Product[] = [
 ];
 
 export const INITIAL_BLOG_POSTS: BlogPost[] = [
+  {
+    slug: 'back-to-school-sale-2026',
+    titleKa: '🎒⚽️ BACK TO SCHOOL SALE — ახალი სასწავლო წელი ახალი მაისურით!',
+    titleEn: '🎒⚽️ BACK TO SCHOOL SALE — Kick Off the New Academic Year With a Fresh Kit!',
+    excerptKa: 'ახალი სასწავლო წელი ახალი მაისურით უფრო კარგად იწყება! განსაკუთრებული მაისურები ფეხბურთის სხვადასხვა ეპოქიდან — ლეგენდებიდან დღევანდელ ვარსკვლავებამდე: Fan Version — 49₾ | Player / Retro — 59₾.',
+    excerptEn: 'The new school year starts better with a fresh football kit! Special kits across eras — from legends to modern superstars: Fan Version — 49 GEL | Player / Retro — 59 GEL.',
+    contentKa: `🎒⚽️ **BACK TO SCHOOL SALE — FUT UNIVERSE TBILISI**
+
+ახალი სასწავლო წელი ახალი მაისურით უფრო კარგად იწყება. 👕🔥
+
+განსაკუთრებული მაისურები ფეხბურთის სხვადასხვა ეპოქიდან — ლეგენდებიდან დღევანდელ ვარსკვლავებამდე:
+
+---
+
+### 📦 ხელმისაწვდომი მაისურების სრული სია:
+* 🇧🇷 **Ronaldinho Brazil 2002** — 💰 **59₾** | 📏 ზომა: **L, XL** (⭐ Player / Retro)
+* 🇫🇷 **Zidane France 1998** — 💰 **59₾** | 📏 ზომა: **L, XL** (⭐ Player / Retro)
+* 🇫🇷 **Zidane France 2006** — 💰 **59₾** | 📏 ზომა: **M, L, XL** (⭐ Player / Retro)
+* 🇵🇹 **Bruno Fernandes Portugal 2026** — 💰 **49₾** | 📏 ზომა: **L** (💛 Fan Version)
+* 🇫🇷 **Mbappé France 2018** — 💰 **59₾** | 📏 ზომა: **XL** (⭐ Player / Retro)
+* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 **Kobbie Mainoo England 2026** — 💰 **49₾** | 📏 ზომა: **L** (💛 Fan Version)
+* 🇩🇪 **Florian Wirtz Germany 2026** — 💰 **49₾** | 📏 ზომა: **L** (💛 Fan Version)
+* 🇨🇴 **Luis Diaz Colombia 2026** — 💰 **49₾** | 📏 ზომა: **XL** (💛 Fan Version)
+
+---
+
+### 🏷️ საფასო კატეგორიები:
+* 💛 **Fan Version** — **49₾**
+* ⭐ **Player / Retro** — **59₾**
+
+---
+
+### 📍 როგორ შეუკვეთოთ?
+ყველა მაისური ადგილზეა თბილისში, დამზადებულია პრემიუმ სუნთქვადი ქსოვილითა და ოფიციალური დეტალებით.
+* **Instagram:** მოგვწერეთ პირადში — [@futt_universe](https://instagram.com/futt_universe)
+* **მიწოდება:** თბილისში იმავე დღეს კურიერით, რეგიონებში 1-2 სამუშაო დღეში!`,
+    contentEn: `🎒⚽️ **BACK TO SCHOOL SALE — FUT UNIVERSE TBILISI**
+
+The new school year starts better with a fresh jersey! 👕🔥
+
+Special jerseys from across football eras — from timeless legends to today's brightest stars:
+
+---
+
+### 📦 Available Kits in This Drop:
+* 🇧🇷 **Ronaldinho Brazil 2002** — 💰 **59 GEL** | 📏 Sizes: **L, XL** (⭐ Player / Retro)
+* 🇫🇷 **Zidane France 1998** — 💰 **59 GEL** | 📏 Sizes: **L, XL** (⭐ Player / Retro)
+* 🇫🇷 **Zidane France 2006** — 💰 **59 GEL** | 📏 Sizes: **M, L, XL** (⭐ Player / Retro)
+* 🇵🇹 **Bruno Fernandes Portugal 2026** — 💰 **49 GEL** | 📏 Size: **L** (💛 Fan Version)
+* 🇫🇷 **Mbappé France 2018** — 💰 **59 GEL** | 📏 Size: **XL** (⭐ Player / Retro)
+* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 **Kobbie Mainoo England 2026** — 💰 **49 GEL** | 📏 Size: **L** (💛 Fan Version)
+* 🇩🇪 **Florian Wirtz Germany 2026** — 💰 **49 GEL** | 📏 Size: **L** (💛 Fan Version)
+* 🇨🇴 **Luis Diaz Colombia 2026** — 💰 **49 GEL** | 📏 Size: **XL** (💛 Fan Version)
+
+---
+
+### 🏷️ Pricing Categories:
+* 💛 **Fan Version** — **49 GEL**
+* ⭐ **Player / Retro** — **59 GEL**
+
+---
+
+### 📍 How to Order?
+All jerseys are physically in stock in Tbilisi with premium breathable fabrics and official player prints.
+* **Instagram:** Direct message us at [@futt_universe](https://instagram.com/futt_universe)
+* **Delivery:** Same-day express delivery in Tbilisi, 1-2 business days nationwide!`,
+    publishDate: '2026-09-01',
+    readTime: '2 წუთი',
+    coverImage: '/back-to-school-poster.jpg',
+    author: 'FUT Universe Curation Team',
+    tags: ['Back To School', 'Sale', 'Retro', 'Fan Version', 'Player Version', 'Ronaldinho', 'Zidane', 'Mbappe', 'Tbilisi'],
+    relatedPlayerSlugs: ['ronaldinho', 'zidane', 'mbappe', 'brunof', 'mainoo', 'wirtz', 'diaz']
+  },
   {
     slug: '2026-world-cup-jerseys-sale-49gel',
     titleKa: '🔥 2026 World Cup-ის მაისურების დიდი ფასდაკლება — 2026 წლის მსოფლიო ჩემპიონატის ყველა მაისური 49₾-ად!',

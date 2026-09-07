@@ -33,10 +33,17 @@ export default function App() {
 
   const [products, setProducts] = useState<Product[]>(() => {
     try {
-      const stored = localStorage.getItem('fut_products_v3');
+      const stored = localStorage.getItem('fut_products_v4') || localStorage.getItem('fut_products_v3');
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const map = new Map<string, Product>();
+          INITIAL_PRODUCTS.forEach(p => map.set(p.id, p));
+          parsed.forEach((p: Product) => {
+            if (p?.id) map.set(p.id, { ...(map.get(p.id) || {}), ...p });
+          });
+          return Array.from(map.values());
+        }
       }
     } catch (e) {}
     return INITIAL_PRODUCTS;
@@ -44,7 +51,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('fut_products_v3', JSON.stringify(products));
+      localStorage.setItem('fut_products_v4', JSON.stringify(products));
     } catch (e) {}
   }, [products]);
 
@@ -53,10 +60,23 @@ export default function App() {
 
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(() => {
     try {
-      const stored = localStorage.getItem('fut_blog_posts_v3');
+      const stored = localStorage.getItem('fut_blog_posts_v4') || localStorage.getItem('fut_blog_posts_v3');
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const map = new Map<string, BlogPost>();
+          INITIAL_BLOG_POSTS.forEach(b => map.set(b.slug, b));
+          parsed.forEach((b: BlogPost) => {
+            if (b?.slug) {
+              const item = { ...(map.get(b.slug) || {}), ...b };
+              if (b.slug === 'back-to-school-sale-2026' && (!b.coverImage || b.coverImage.includes('unsplash.com'))) {
+                item.coverImage = '/back-to-school-poster.jpg';
+              }
+              map.set(b.slug, item);
+            }
+          });
+          return Array.from(map.values());
+        }
       }
     } catch (e) {}
     return INITIAL_BLOG_POSTS;
@@ -64,7 +84,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('fut_blog_posts_v3', JSON.stringify(blogPosts));
+      localStorage.setItem('fut_blog_posts_v4', JSON.stringify(blogPosts));
     } catch (e) {}
   }, [blogPosts]);
 
@@ -75,7 +95,7 @@ export default function App() {
   const mergeProducts = (incomingFromDb: Product[]): Product[] => {
     let localStored: Product[] = [];
     try {
-      const stored = localStorage.getItem('fut_products_v3');
+      const stored = localStorage.getItem('fut_products_v4') || localStorage.getItem('fut_products_v3');
       if (stored) localStored = JSON.parse(stored);
     } catch (e) {}
 
@@ -175,6 +195,12 @@ export default function App() {
           map.set(bp.slug, existing ? { ...existing, ...bp } : bp);
         }
       });
+    }
+
+    // Ensure Back to School poster is preserved if previous db record has placeholder
+    const schoolPost = map.get('back-to-school-sale-2026');
+    if (schoolPost && (!schoolPost.coverImage || schoolPost.coverImage.includes('unsplash.com'))) {
+      schoolPost.coverImage = '/back-to-school-poster.jpg';
     }
 
     return Array.from(map.values());

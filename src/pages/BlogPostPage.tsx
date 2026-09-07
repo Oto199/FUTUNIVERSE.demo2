@@ -75,12 +75,12 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
         </p>
       </div>
 
-      {/* Cover Image */}
-      <div className="aspect-[16/9] rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl">
+      {/* Cover Image / Poster */}
+      <div className="rounded-3xl overflow-hidden border border-slate-800 bg-[#090914] shadow-2xl flex items-center justify-center p-2 sm:p-4">
         <img
           src={post.coverImage}
           alt={post.titleKa}
-          className="w-full h-full object-cover"
+          className="max-h-[750px] w-auto max-w-full rounded-2xl object-contain shadow-2xl"
           referrerPolicy="no-referrer"
         />
       </div>

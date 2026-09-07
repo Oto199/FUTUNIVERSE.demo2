@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Sparkles, ShieldCheck, Flame, BookOpen, MessageCircle, Search, Compass, Instagram, Layers, MapPin, Award, CheckCircle2, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldCheck, BookOpen, MessageCircle, Search, Compass, Instagram, Layers, MapPin, Award, CheckCircle2, Zap, Tag, Percent, ShoppingBag } from 'lucide-react';
 import { Product, PlayerInfo, TeamInfo, BlogPost } from '../types';
 import { ProductCard } from '../components/ProductCard';
 import Stack from '../components/Stack';
@@ -28,12 +28,14 @@ export const HomePage: React.FC<HomePageProps> = ({
   navigate,
   lang
 }) => {
+  const backToSchoolProducts = products.filter(p => 
+    p.tags?.some(t => t.toLowerCase().includes('back to school') || t.toLowerCase().includes('sale')) ||
+    (p.originalPrice && p.originalPrice > p.price)
+  );
   const featuredNicheProducts = products.filter(p => p.isNiche || p.isFeatured).slice(0, 8);
-  const stackItems = (featuredNicheProducts.length > 0 ? featuredNicheProducts : products).slice(0, 5);
-  const topProduct = products[0];
-
-  const stackCards = stackItems.map((prod) => (
-    <div key={prod.id} className="relative w-full h-full bg-[#080811] border border-white/20 rounded-2xl overflow-hidden group shadow-2xl select-none">
+  const saleStackItems = (backToSchoolProducts.length > 0 ? backToSchoolProducts : products).slice(0, 8);
+  const saleStackCards = saleStackItems.map((prod) => (
+    <div key={`sale-stack-${prod.id}`} className="relative w-full h-full bg-[#0d091a] border-2 border-amber-500/40 rounded-2xl overflow-hidden group shadow-2xl select-none">
       <img
         src={prod.imageFront}
         alt={lang === 'ka' ? prod.titleKa : prod.titleEn}
@@ -41,35 +43,53 @@ export const HomePage: React.FC<HomePageProps> = ({
         onError={handleImageError}
         className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500 pointer-events-none"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/30 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0614] via-[#0a0614]/40 to-transparent pointer-events-none" />
 
-      {/* Badge */}
-      <div className="absolute top-3 right-3 px-2.5 py-1 bg-[#00e5ff] text-black text-[10px] font-black uppercase tracking-wider rounded pointer-events-none shadow-lg">
-        {prod.category || 'JERSEY'}
+      {/* Badges */}
+      <div className="absolute top-3 left-3 flex items-center space-x-1.5 pointer-events-none">
+        <div className="px-2.5 py-1 bg-amber-500 text-black text-[10px] font-black uppercase tracking-wider rounded shadow-lg flex items-center space-x-1">
+          <span>🎒 SALE</span>
+        </div>
+        {prod.kitType && (
+          <div className="px-2 py-0.5 bg-black/80 backdrop-blur-sm border border-amber-400/40 text-amber-300 text-[10px] font-mono font-bold rounded">
+            {prod.kitType}
+          </div>
+        )}
       </div>
 
+      {prod.sizes && prod.sizes.length > 0 && (
+        <div className="absolute top-3 right-3 px-2 py-0.5 bg-black/80 backdrop-blur-sm border border-white/20 text-white text-[10px] font-mono font-bold rounded pointer-events-none">
+          {prod.sizes.join(', ')}
+        </div>
+      )}
+
       {/* Details */}
-      <div className="absolute bottom-5 left-5 right-5 space-y-2 text-left">
-        <p className="micro-label-cyan text-[10px]">
+      <div className="absolute bottom-4 left-4 right-4 space-y-1.5 text-left">
+        <p className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">
           {lang === 'ka' ? prod.nationalTeamKa : prod.nationalTeamEn}
         </p>
-        <h3 className="text-xl font-black text-white uppercase tracking-tight line-clamp-1">
+        <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-tight line-clamp-1">
           {lang === 'ka' ? prod.titleKa : prod.titleEn}
         </h3>
-        <p className="text-xs text-zinc-400 line-clamp-1 italic">
+        <p className="text-xs text-zinc-300 line-clamp-1 italic">
           {lang === 'ka' ? prod.descriptionKa : prod.descriptionEn}
         </p>
 
         <div className="flex items-center justify-between pt-2 border-t border-white/10">
-          <span className="text-xl font-black text-[#00e5ff] font-display">{prod.price} ₾</span>
+          <div className="flex items-baseline space-x-2">
+            <span className="text-2xl font-black text-amber-400 font-display">{prod.price} ₾</span>
+            {prod.originalPrice && (
+              <span className="text-xs text-zinc-400 line-through font-mono">{prod.originalPrice} ₾</span>
+            )}
+          </div>
           <button
             onClick={(e) => {
               e.stopPropagation();
               navigate(`/product/${prod.id}`);
             }}
-            className="px-3.5 py-1.5 bg-white/15 hover:bg-[#00e5ff] hover:text-black text-white text-[11px] font-bold uppercase tracking-wider transition rounded flex items-center space-x-1.5 cursor-pointer z-10"
+            className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black text-[11px] font-black uppercase tracking-wider transition rounded-lg flex items-center space-x-1.5 cursor-pointer z-10 shadow-lg shadow-amber-500/20"
           >
-            <span>{lang === 'ka' ? 'იხილეთ' : 'View'}</span>
+            <span>{lang === 'ka' ? 'შეკვეთა' : 'View / Order'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -85,168 +105,168 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   return (
     <div className="space-y-16 pb-16">
-      {/* MAIN FIRST DIV: DRIFT WALL HERO */}
-      <div className="relative w-full overflow-hidden bg-[#050508] border-b border-white/10">
-        <div className="relative w-full h-[580px] sm:h-[700px] flex items-center justify-center">
-          <DriftWall
-            items={driftWallItems.length > 0 ? driftWallItems : undefined}
-            columns={5}
-            tileWidth={220}
-            tileHeight={140}
-            gap={20}
-            tilt={16}
-            turn={-14}
-            perspective={1200}
-            depth={120}
-            speed={42}
-            direction="up"
-            variance={0.45}
-            parallax={0.6}
-            lift={64}
-            fade={0.12}
-            dim={0.92}
-            overlayColor="transparent"
-            onTileClick={(item) => {
-              if (item.id) navigate(`/product/${item.id}`);
-            }}
-          />
+      {/* MAIN TOP HERO SECTION: DRIFT WALL + STATS WITH NO MARGIN */}
+      <div className="w-full">
+        {/* MAIN FIRST DIV: DRIFT WALL HERO */}
+        <div className="relative w-full overflow-hidden bg-[#050508] border-b border-white/10">
+          <div className="relative w-full h-[580px] sm:h-[700px] flex items-center justify-center">
+            <DriftWall
+              items={driftWallItems.length > 0 ? driftWallItems : undefined}
+              columns={5}
+              tileWidth={220}
+              tileHeight={140}
+              gap={20}
+              tilt={16}
+              turn={-14}
+              perspective={1200}
+              depth={120}
+              speed={42}
+              direction="up"
+              variance={0.45}
+              parallax={0.6}
+              lift={64}
+              fade={0.12}
+              dim={0.92}
+              overlayColor="transparent"
+              onTileClick={(item) => {
+                if (item.id) navigate(`/product/${item.id}`);
+              }}
+            />
 
-          {/* Overlay text / CTA overlay */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#050508]/90 via-transparent to-[#050508]/60 flex flex-col items-center justify-between p-6 sm:p-10 text-center z-20">
-            <div className="pointer-events-auto backdrop-blur-md bg-black/80 px-5 py-2.5 rounded-full border border-white/20 shadow-2xl flex items-center space-x-3">
-              <img src="/logo.jpg" alt="FUT Universe Logo" className="w-6 h-6 rounded-full object-cover border border-[#00e5ff]/60" referrerPolicy="no-referrer" />
-              <span className="text-xs font-black uppercase tracking-widest text-white">
-                FUT UNIVERSE • {lang === 'ka' ? 'თბილისის საფეხბურთო გალერეა' : 'TBILISI FOOTBALL GALLERY'}
-              </span>
-            </div>
-
-            <div className="pointer-events-auto max-w-xl space-y-3 bg-black/85 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/20 shadow-2xl">
-              <div className="flex items-center justify-center space-x-2.5">
-                <img src="/logo.jpg" alt="FUT Universe" className="w-8 h-8 rounded-xl border border-cyan-400/50 shadow-lg shadow-cyan-500/20" referrerPolicy="no-referrer" />
-                <span className="text-xs font-mono font-bold text-[#00e5ff] tracking-widest uppercase">FUT UNIVERSE</span>
+            {/* Overlay text / CTA overlay */}
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#050508]/90 via-transparent to-[#050508]/60 flex flex-col items-center justify-between p-6 sm:p-10 text-center z-20">
+              <div className="pointer-events-auto backdrop-blur-md bg-black/80 px-5 py-2.5 rounded-full border border-white/20 shadow-2xl flex items-center space-x-3">
+                <img src="/logo.png" alt="FUT Universe Logo" className="w-6 h-6 rounded-full object-contain border border-[#00e5ff]/60 bg-black" referrerPolicy="no-referrer" />
+                <span className="text-xs font-black uppercase tracking-widest text-white">
+                  FUT UNIVERSE • {lang === 'ka' ? 'თბილისის საფეხბურთო გალერეა' : 'TBILISI FOOTBALL GALLERY'}
+                </span>
               </div>
-              <h2 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight">
-                {lang === 'ka' ? 'ინტერაქტიული კოლექცია' : 'INTERACTIVE WALL CATALOG'}
-              </h2>
-              <p className="text-xs sm:text-sm text-zinc-300">
-                {lang === 'ka'
-                  ? 'დააჭირეთ ნებისმიერ მაისურს კოლექციის დეტალურად სანახავად'
-                  : 'Click any drifting kit tile to open its complete page'}
-              </p>
-              <div className="pt-2 flex justify-center">
-                <ClickSpark sparkColor="#00e5ff">
-                  <button
-                    onClick={() => navigate('/shop')}
-                    className="px-6 py-3 bg-[#00e5ff] hover:bg-[#33ebff] text-black font-black text-xs uppercase tracking-widest flex items-center space-x-2 transition cursor-pointer shadow-xl shadow-cyan-500/20 rounded-xl"
-                  >
-                    <span>{lang === 'ka' ? 'მაღაზიის დათვალიერება' : 'EXPLORE ALL KITS'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </ClickSpark>
+
+              <div className="pointer-events-auto max-w-xl space-y-3 bg-black/85 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/20 shadow-2xl">
+                <div className="flex items-center justify-center space-x-2.5">
+                  <img src="/logo.png" alt="FUT Universe" className="w-8 h-8 rounded-xl border border-cyan-400/50 shadow-lg shadow-cyan-500/20 object-contain bg-black p-0.5" referrerPolicy="no-referrer" />
+                  <span className="text-xs font-mono font-bold text-[#00e5ff] tracking-widest uppercase">FUT UNIVERSE</span>
+                </div>
+                <h2 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                  {lang === 'ka' ? 'ყველაფერი საფეხბურთო ორბიტის გარშემო.' : 'EVERYTHING AROUND FOOTBALL’S ORBIT'}
+                </h2>
+                <div className="pt-2 flex justify-center">
+                  <ClickSpark sparkColor="#00e5ff">
+                    <button
+                      onClick={() => navigate('/shop')}
+                      className="px-6 py-3 bg-[#00e5ff] hover:bg-[#33ebff] text-black font-black text-xs uppercase tracking-widest flex items-center space-x-2 transition cursor-pointer shadow-xl shadow-cyan-500/20 rounded-xl"
+                    >
+                      <span>{lang === 'ka' ? 'მაღაზიის დათვალიერება' : 'EXPLORE ALL KITS'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </ClickSpark>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 100% საუკეთესო ხარისხი... STATS BAR DIRECTLY BELOW MAIN DIV (NO MARGIN) */}
+        <div className="w-full bg-[#080811] border-b border-white/10 py-6 sm:py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-3 gap-6 text-center sm:text-left divide-x divide-white/10">
+              <div className="space-y-1 sm:pl-0">
+                <div className="text-3xl sm:text-4xl font-black text-white font-display tracking-tight">100%</div>
+                <div className="micro-label">{lang === 'ka' ? 'საუკეთესო ხარისხი' : 'Best Quality'}</div>
+              </div>
+              <div className="space-y-1 pl-4 sm:pl-8">
+                <div className="text-xl sm:text-2xl md:text-3xl font-black text-[#00e5ff] font-display tracking-tight leading-none">{lang === 'ka' ? 'რეტრო და ახალი' : 'Retro & New'}</div>
+                <div className="micro-label text-slate-400 text-[10px]">{lang === 'ka' ? 'უდიდესი კოლექცია' : 'Largest Collection'}</div>
+              </div>
+              <div className="space-y-1 pl-4 sm:pl-8">
+                <div className="text-3xl sm:text-4xl font-black text-white font-display tracking-tight">24/7</div>
+                <div className="micro-label">{lang === 'ka' ? 'თბილისის ექსპრესი' : 'Tbilisi Velocity'}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-[#050508] pt-8 pb-20 border-b border-white/10">
-        {/* Background Watermark Text - Bold Typography Theme Signature */}
-        <div className="absolute top-2 right-[-20px] sm:right-[-60px] text-[100px] sm:text-[180px] lg:text-[240px] font-black leading-none opacity-5 select-none pointer-events-none text-white outline-text font-display uppercase tracking-tighter">
-          MANIFESTO
-        </div>
+      {/* BACK TO SCHOOL SALE 🎒⚽️ BANNER & SHOWCASE */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a1005] via-[#0d091a] to-[#05050d] border-2 border-amber-500/40 p-6 sm:p-10 shadow-2xl shadow-amber-500/10">
+          {/* Subtle glowing orb */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="relative z-10">
+            {/* Top Showcase: Split into Headline/Info on Left & Interactive 3D Stack on Right */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Left Column: Info & Badges */}
+              <div className="lg:col-span-7 space-y-5 text-left">
+                <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-black uppercase tracking-wider">
+                  <span>🎒⚽️ BACK TO SCHOOL SALE</span>
+                </div>
+                
+                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-tight">
+                  {lang === 'ka' 
+                    ? 'ახალი სასწავლო წელი ახალი მაისურით უფრო კარგად იწყება 👕🔥' 
+                    : 'Kick Off the School Year with a Fresh Kit 👕🔥'}
+                </h2>
+                
+                <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
+                  {lang === 'ka'
+                    ? 'განსაკუთრებული მაისურები ფეხბურთის სხვადასხვა ეპოქიდან — ლეგენდებიდან დღევანდელ ვარსკვლავებამდე (რონალდინიო, ზიდანი, მბაპე, ბრუნო, მეინუ, ვირცი, დიაზი).'
+                    : 'Special jerseys from across football eras — from timeless legends to today’s brightest stars (Ronaldinho, Zidane, Mbappé, Bruno, Mainoo, Wirtz, Díaz).'}
+                </p>
 
-        {/* Ambient Glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-[#00e5ff]/10 rounded-full blur-[130px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Massive Bold Typography Headline & Copy */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              <div>
-                <div className="micro-label-cyan mb-3 flex items-center space-x-2">
-                  <Sparkles className="w-3.5 h-3.5 text-[#00e5ff]" />
-                  <ShinyText text="THE CURATED FOOTBALL CATALYST" speed={3.5} className="text-[11px] font-black tracking-widest uppercase" />
+                {/* Price Categories Badge Pills */}
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold">
+                    <span>💛 Fan Version</span>
+                    <span className="text-white font-mono font-black text-sm">— 49₾</span>
+                  </div>
+                  <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-cyan-400/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold">
+                    <span>⭐ Player / Retro</span>
+                    <span className="text-white font-mono font-black text-sm">— 59₾</span>
+                  </div>
                 </div>
 
-                <h1 className="display-huge text-white">
-                  <span className="block">ყველაფერი</span>
-                  <span className="block text-white font-black drop-shadow-sm">საფეხბურთო</span>
-                  <span className="block text-[#00e5ff] mt-1">
-                    <DecryptedText text="ორბიტის გარშემო" speed={30} className="text-[#00e5ff]" />
-                  </span>
-                </h1>
-              </div>
-
-              <div className="max-w-xl">
-                <p className="text-zinc-300 text-sm sm:text-base font-light leading-relaxed border-l-2 border-[#00e5ff] pl-4">
-                  {lang === 'ka'
-                    ? 'FUT Universe შეიქმნა ნამდვილი საფეხბურთო ესთეტებისთვის. ჩვენთან იპოვით ექსკლუზიური მოთამაშეების ოფიციალურ მაისურებს (ვირცი, მეინუ, ბრუნო, ალვარესი, ვალვერდე, ლუის დიაზი, ზიდანი).'
-                    : 'FUT Universe is a curated archive for football purists. Discover exclusive official kits for Wirtz, Mainoo, Bruno, Álvarez, Valverde, Luis Díaz, and Zidane.'}
-                </p>
-              </div>
-
-              {/* Action Buttons - Wrapped in ClickSpark */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
-                <ClickSpark sparkColor="#00e5ff" sparkCount={10} sparkRadius={30}>
+                {/* Action buttons */}
+                <div className="flex flex-wrap items-center gap-3 pt-2">
                   <button
-                    onClick={() => navigate('/shop?niche=true')}
-                    className="w-full sm:w-auto px-8 py-4 rounded-none bg-[#00e5ff] hover:bg-[#33ebff] text-black font-black text-xs uppercase tracking-widest flex items-center justify-center space-x-3 transition shadow-2xl shadow-cyan-500/20 cursor-pointer"
+                    onClick={() => navigate('/journal/back-to-school-sale-2026')}
+                    className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition border border-white/20 flex items-center space-x-2 cursor-pointer"
                   >
-                    <span>{lang === 'ka' ? 'ახალი კოლექცია' : 'New Collection'}</span>
+                    <BookOpen className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'ka' ? 'სტატიის წაკითხვა' : 'Read Article'}</span>
+                  </button>
+                  <button
+                    onClick={() => navigate('/shop?sale=true')}
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-black text-xs uppercase tracking-widest transition flex items-center space-x-2 shadow-lg shadow-amber-500/20 cursor-pointer"
+                  >
+                    <span>{lang === 'ka' ? 'ყველა SALE მაისური' : 'View All Sale Kits'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
-                </ClickSpark>
-
-                <ClickSpark sparkColor="#ffffff" sparkCount={8} sparkRadius={25}>
-                  <button
-                    onClick={() => navigate('/shop')}
-                    className="w-full sm:w-auto px-8 py-4 rounded-none bg-black hover:bg-zinc-900 border border-white/20 text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center space-x-3 transition cursor-pointer"
-                  >
-                    <Search className="w-4 h-4 text-[#00e5ff]" />
-                    <span>{lang === 'ka' ? 'ბიბლიოთეკაში ძებნა' : 'Search Library'}</span>
-                  </button>
-                </ClickSpark>
-              </div>
-
-              {/* Bold Stats & Operational Velocity Grid */}
-              <div className="pt-8 border-t border-white/10 grid grid-cols-3 gap-6">
-                <div className="space-y-1">
-                  <div className="text-3xl sm:text-4xl font-black text-white font-display tracking-tight">100%</div>
-                  <div className="micro-label">{lang === 'ka' ? 'საუკეთესო ხარისხი' : 'Best Quality'}</div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-xl sm:text-2xl md:text-3xl font-black text-[#00e5ff] font-display tracking-tight leading-none">{lang === 'ka' ? 'რეტრო და ახალი' : 'Retro & New'}</div>
-                  <div className="micro-label text-slate-400 text-[10px]">{lang === 'ka' ? 'უდიდესი კოლექცია' : 'Largest Collection'}</div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-3xl sm:text-4xl font-black text-white font-display tracking-tight">24/7</div>
-                  <div className="micro-label">{lang === 'ka' ? 'თბილისის ექსპრესი' : 'Tbilisi Velocity'}</div>
                 </div>
               </div>
-            </div>
 
-            {/* Right Column: High-Contrast Interactive React Bits Stack Card */}
-            <div className="lg:col-span-5 relative flex flex-col items-center">
-              <div className="w-full max-w-[340px] sm:max-w-[400px] aspect-[4/5] relative">
-                <Stack
-                  randomRotation={true}
-                  sensitivity={160}
-                  sendToBackOnClick={true}
-                  autoplay={true}
-                  autoplayDelay={4000}
-                  pauseOnHover={true}
-                  cards={stackCards}
-                />
+              {/* Right Column: High-Contrast Interactive React Bits Stack Card for Back To School */}
+              <div className="lg:col-span-5 relative flex flex-col items-center">
+                <div className="w-full max-w-[320px] sm:max-w-[360px] aspect-[4/5] relative">
+                  <Stack
+                    randomRotation={true}
+                    sensitivity={160}
+                    sendToBackOnClick={true}
+                    autoplay={true}
+                    autoplayDelay={3500}
+                    pauseOnHover={true}
+                    cards={saleStackCards}
+                  />
+                </div>
+                <p className="text-[11px] text-amber-300/80 mt-3 flex items-center space-x-1.5 font-medium tracking-wide">
+                  <Layers className="w-3.5 h-3.5 text-amber-400" />
+                  <span>
+                    {lang === 'ka'
+                      ? 'დააჭირეთ ან გადაფურცლეთ SALE მაისურების დასათვალიერებლად'
+                      : 'Click or swipe card to reveal next SALE kit'}
+                  </span>
+                </p>
               </div>
-              <p className="text-[11px] text-zinc-400 mt-3 flex items-center space-x-1.5 font-medium tracking-wide">
-                <Layers className="w-3.5 h-3.5 text-[#00e5ff]" />
-                <span>
-                  {lang === 'ka'
-                    ? 'გაასრიალეთ ან დააჭირეთ ბარათს კოლექციის გადასაფურცლად'
-                    : 'Drag or click card to cycle through collection'}
-                </span>
-              </p>
             </div>
           </div>
         </div>
@@ -297,7 +317,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-white/10">
             <div>
               <div className="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-black/80 border border-[#00e5ff]/30 backdrop-blur-md mb-2">
-                <img src="/logo.jpg" alt="FUT Universe" className="w-4 h-4 rounded-full object-cover border border-[#00e5ff]" referrerPolicy="no-referrer" />
+                <img src="/logo.png" alt="FUT Universe" className="w-4 h-4 rounded-full object-contain border border-[#00e5ff] bg-black" referrerPolicy="no-referrer" />
                 <span className="text-[11px] font-mono font-bold text-[#00e5ff] tracking-widest uppercase">
                   {lang === 'ka' ? 'FUT UNIVERSE STANDARDS' : 'FUT UNIVERSE STANDARDS'}
                 </span>

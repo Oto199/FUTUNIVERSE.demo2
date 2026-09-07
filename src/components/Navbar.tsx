@@ -69,9 +69,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           <div className="relative w-12 h-12 rounded-xl bg-black border border-zinc-800 flex items-center justify-center shadow-md group-hover:border-[#008ba3] group-hover:shadow-cyan-500/20 transition duration-300 overflow-hidden shrink-0">
             <img 
-              src="/logo.jpg" 
+              src="/logo.png" 
               alt="FUT Universe Logo" 
-              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+              className="w-full h-full object-contain p-0.5 group-hover:scale-105 transition duration-300"
               referrerPolicy="no-referrer"
             />
           </div>

@@ -41,7 +41,9 @@ export const Footer: React.FC<FooterProps> = ({ navigate, lang, players, teams }
         {/* Brand column */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
-            <img src="/logo.jpg" alt="FUT Universe" className="w-8 h-8 rounded-lg border border-zinc-300 object-cover" referrerPolicy="no-referrer" />
+            <div className="w-9 h-9 rounded-lg bg-black border border-zinc-300 flex items-center justify-center overflow-hidden p-0.5 shadow-sm">
+              <img src="/logo.png" alt="FUT Universe" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+            </div>
             <span className="font-display font-black text-lg text-zinc-900 tracking-wider">FUT UNIVERSE</span>
           </div>
           <p className="text-xs text-zinc-600 leading-relaxed">
