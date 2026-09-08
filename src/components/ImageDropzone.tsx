@@ -44,7 +44,7 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-          const MAX_SIZE = 700;
+          const MAX_SIZE = 960;
 
           if (width > height) {
             if (width > MAX_SIZE) {
@@ -66,14 +66,75 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({
             ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(0, 0, width, height);
             ctx.drawImage(img, 0, 0, width, height);
-            // Export optimized JPEG data URL (quality 0.72)
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+            
+            // Prefer modern WebP format for superior compression (typically 50-100KB)
+            let format = 'image/webp';
+            let compressedDataUrl = canvas.toDataURL(format, 0.78);
+            if (!compressedDataUrl.startsWith('data:image/webp')) {
+              format = 'image/jpeg';
+              compressedDataUrl = canvas.toDataURL(format, 0.75);
+            }
+
+            // Adaptive Safety Fallback: If still > 180KB, downscale to 720px and lower quality
+            if (compressedDataUrl.length > 180000) {
+              const safeCanvas = document.createElement('canvas');
+              const SAFE_SIZE = 720;
+              let sWidth = width;
+              let sHeight = height;
+              if (sWidth > sHeight) {
+                sHeight = Math.round((sHeight * SAFE_SIZE) / sWidth);
+                sWidth = SAFE_SIZE;
+              } else {
+                sWidth = Math.round((sWidth * SAFE_SIZE) / sHeight);
+                sHeight = SAFE_SIZE;
+              }
+              safeCanvas.width = sWidth;
+              safeCanvas.height = sHeight;
+              const sCtx = safeCanvas.getContext('2d');
+              if (sCtx) {
+                sCtx.fillStyle = '#FFFFFF';
+                sCtx.fillRect(0, 0, sWidth, sHeight);
+                sCtx.drawImage(img, 0, 0, sWidth, sHeight);
+                compressedDataUrl = safeCanvas.toDataURL(format, 0.68);
+              }
+            }
+
             onChange(compressedDataUrl);
             triggerSuccess();
+
+            // Seamlessly persist to permanent server storage (/public/uploads)
+            fetch('/api/upload', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                image: compressedDataUrl,
+                name: file.name
+              })
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data?.url) {
+                  onChange(data.url);
+                }
+              })
+              .catch(err => {
+                console.warn('Background server upload fallback to data URL:', err);
+              });
           } else {
             // Fallback to raw string
-            onChange(event.target?.result as string);
+            const raw = event.target?.result as string;
+            onChange(raw);
             triggerSuccess();
+            if (raw && raw.startsWith('data:image/')) {
+              fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: raw, name: file.name })
+              })
+                .then(r => r.json())
+                .then(d => { if (d?.url) onChange(d.url); })
+                .catch(() => {});
+            }
           }
         } catch (err) {
           console.error('Image compression error:', err);
@@ -244,9 +305,14 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({
               <div className="flex items-center justify-center sm:justify-start space-x-1.5 text-emerald-400 text-xs font-bold">
                 <Check className="w-4 h-4" />
                 <span>ფოტო არჩეულია!</span>
+                {value.startsWith('/uploads/') && (
+                  <span className="ml-1 text-[10px] text-cyan-300 bg-cyan-950/80 border border-cyan-500/40 px-2 py-0.5 rounded-full font-mono font-bold">
+                    ✓ შენახულია სერვერზე
+                  </span>
+                )}
               </div>
               <p className="text-[11px] text-slate-400 font-mono truncate max-w-xs">
-                {value.startsWith('data:') ? 'Base64 სურათის ფაილი' : value}
+                {value.startsWith('data:') ? '⚡ Base64 სურათის ფაილი' : value}
               </p>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
                 <label

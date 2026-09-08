@@ -174,8 +174,13 @@ export const AdminPage: React.FC<AdminPageProps> = ({
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
 
-  const [activeTab, setActiveTab] = useState<'products' | 'instagram' | 'blog' | 'messages'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'instagram' | 'gallery' | 'blog' | 'messages'>('products');
   const [contactMessages, setContactMessages] = useState<Array<{ id: string; name: string; contact: string; message: string; date: string }>>([]);
+  const [serverUploads, setServerUploads] = useState<Array<{ url: string; filename: string; size: number; createdAt: string }>>([]);
+  const [pickerSlot, setPickerSlot] = useState<'front' | 'back' | 'detail1' | 'detail2' | 'detail3' | null>(null);
+  const [selectedJerseyForUpload, setSelectedJerseyForUpload] = useState<string>('');
+  const [selectedTargetSlot, setSelectedTargetSlot] = useState<'front' | 'back' | 'gallery'>('front');
+  const [isBulkUploading, setIsBulkUploading] = useState(false);
 
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
@@ -325,6 +330,82 @@ export const AdminPage: React.FC<AdminPageProps> = ({
     } catch (err) {
       console.error('Error deleting message:', err);
     }
+  };
+
+  const fetchUploads = async () => {
+    try {
+      const res = await fetch('/api/uploads');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.images)) {
+          setServerUploads(data.images);
+        }
+      }
+    } catch (err) {
+      console.warn('Error fetching server uploads:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchUploads();
+    }
+  }, [isAuthenticated, activeTab]);
+
+  const handleAssignImageToJersey = async (imageUrl: string, jerseyId: string, slot: 'front' | 'back' | 'gallery') => {
+    const targetProd = products.find(p => p.id === jerseyId);
+    if (!targetProd) {
+      alert('გთხოვთ აირჩიოთ მაისური ჩამონათვალიდან');
+      return;
+    }
+
+    const updatedData: Partial<Product> = {};
+    if (slot === 'front') {
+      updatedData.imageFront = imageUrl;
+    } else if (slot === 'back') {
+      updatedData.imageBack = imageUrl;
+    } else {
+      const existing = Array.isArray(targetProd.images) ? targetProd.images : [];
+      updatedData.images = Array.from(new Set([...existing, imageUrl]));
+    }
+
+    if (onUpdateProduct) {
+      await onUpdateProduct(jerseyId, updatedData);
+    }
+    setStatusMessage(`✓ ფოტო წარმატებით მიება: ${targetProd.titleKa} (${slot === 'front' ? 'წინა ხედი' : slot === 'back' ? 'უკანა ხედი' : 'გალერეა'})`);
+    setTimeout(() => setStatusMessage(''), 3500);
+  };
+
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    setIsBulkUploading(true);
+    const files: File[] = Array.from(e.target.files);
+    let successCount = 0;
+
+    for (const file of files) {
+      try {
+        const reader = new FileReader();
+        const base64: string = await new Promise((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: base64, name: file.name, prefix: 'jersey' })
+        });
+        if (res.ok) successCount++;
+      } catch (err) {
+        console.error('Failed to upload file:', file.name, err);
+      }
+    }
+
+    setIsBulkUploading(false);
+    await fetchUploads();
+    setStatusMessage(`✓ ${successCount} ფოტო წარმატებით აიტვირთა და შეინახა სერვერზე!`);
+    setTimeout(() => setStatusMessage(''), 4000);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, callback: (url: string) => void) => {
@@ -763,6 +844,17 @@ export const AdminPage: React.FC<AdminPageProps> = ({
             }`}
           >
             მაისურები ({products.length})
+          </button>
+          <button
+            onClick={() => { setActiveTab('gallery'); fetchUploads(); }}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 ${
+              activeTab === 'gallery'
+                ? 'bg-[#00e5ff] text-black font-extrabold shadow-lg shadow-cyan-500/20'
+                : 'bg-slate-900 text-slate-300 border border-slate-800 hover:border-cyan-500/40'
+            }`}
+          >
+            <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
+            <span>🖼️ ატვირთული ფოტოები ({serverUploads.length})</span>
           </button>
           <button
             onClick={() => setActiveTab('instagram')}
@@ -1210,8 +1302,30 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                     <ImageIcon className="w-4 h-4 text-[#00e5ff]" />
                     <span>მაისურის ფოტოები (4-5 Photos Gallery):</span>
                   </label>
-                  <span className="text-[10px] text-slate-400 font-mono">Drag & Drop + URL</span>
+                  {serverUploads.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setPickerSlot('front')}
+                      className="px-2.5 py-1 rounded-lg bg-[#00e5ff]/15 hover:bg-[#00e5ff]/25 text-[#00e5ff] text-[11px] font-bold border border-[#00e5ff]/30 transition flex items-center space-x-1"
+                    >
+                      <ImageIcon className="w-3 h-3" />
+                      <span>📂 ატვირთულებიდან არჩევა ({serverUploads.length})</span>
+                    </button>
+                  )}
                 </div>
+
+                {serverUploads.length > 0 && (
+                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>💡 სერვერზე შენახულია <strong>{serverUploads.length}</strong> ფოტო. შეგიძლიათ პირდაპირ აირჩიოთ.</span>
+                    <button
+                      type="button"
+                      onClick={() => { setActiveTab('gallery'); fetchUploads(); }}
+                      className="text-[#00e5ff] font-bold hover:underline ml-2 shrink-0"
+                    >
+                      მედიის ნახვა →
+                    </button>
+                  </div>
+                )}
 
                 <ImageDropzone
                   value={imageFront}
@@ -1390,6 +1504,285 @@ export const AdminPage: React.FC<AdminPageProps> = ({
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* IMAGE PICKER MODAL */}
+      {pickerSlot && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#12122b] border border-cyan-500/40 rounded-3xl p-6 max-w-2xl w-full max-h-[85vh] flex flex-col space-y-4 shadow-2xl shadow-cyan-500/20">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center space-x-2">
+                <ImageIcon className="w-5 h-5 text-[#00e5ff]" />
+                <h3 className="text-base font-bold text-white">
+                  აირჩიეთ ფოტო ბიბლიოთეკიდან (
+                  {pickerSlot === 'front'
+                    ? '1️⃣ მთავარი ხედი'
+                    : pickerSlot === 'back'
+                    ? '2️⃣ უკანა ხედი'
+                    : pickerSlot === 'detail1'
+                    ? '3️⃣ დეტალი 1'
+                    : pickerSlot === 'detail2'
+                    ? '4️⃣ დეტალი 2'
+                    : '5️⃣ დეტალი 3'}
+                  )
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPickerSlot(null)}
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex items-center space-x-2 text-xs text-slate-400 font-mono">
+              <span>დანიშნულება:</span>
+              {(['front', 'back', 'detail1', 'detail2', 'detail3'] as const).map((slot) => (
+                <button
+                  key={slot}
+                  type="button"
+                  onClick={() => setPickerSlot(slot)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${
+                    pickerSlot === slot
+                      ? 'bg-[#00e5ff] text-black'
+                      : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
+                  }`}
+                >
+                  {slot === 'front'
+                    ? 'წინა'
+                    : slot === 'back'
+                    ? 'უკანა'
+                    : slot === 'detail1'
+                    ? 'დეტალი 1'
+                    : slot === 'detail2'
+                    ? 'დეტალი 2'
+                    : 'დეტალი 3'}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex-1 overflow-y-auto pr-1">
+              {serverUploads.length === 0 ? (
+                <div className="p-8 text-center text-slate-400 text-xs">
+                  სერვერზე ფოტოები არ არის ატვირთული.
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {serverUploads.map((item, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        if (pickerSlot === 'front') setImageFront(item.url);
+                        else if (pickerSlot === 'back') setImageBack(item.url);
+                        else if (pickerSlot === 'detail1') setImageDetail1(item.url);
+                        else if (pickerSlot === 'detail2') setImageDetail2(item.url);
+                        else if (pickerSlot === 'detail3') setImageDetail3(item.url);
+                        setPickerSlot(null);
+                        setStatusMessage('✓ ფოტო წარმატებით შეირჩა!');
+                        setTimeout(() => setStatusMessage(''), 2500);
+                      }}
+                      className="group relative aspect-square rounded-2xl overflow-hidden border border-slate-800 hover:border-[#00e5ff] transition bg-black flex flex-col items-center justify-center p-1"
+                    >
+                      <img
+                        src={item.url}
+                        alt={item.filename}
+                        className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded-lg bg-black/80 text-[10px] font-mono text-cyan-300 truncate text-center">
+                        არჩევა
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UPLOADED JERSEY PHOTOS & MEDIA LIBRARY TAB */}
+      {activeTab === 'gallery' && (
+        <div className="space-y-8 max-w-7xl mx-auto">
+          {/* Header Banner */}
+          <div className="p-6 rounded-3xl bg-gradient-to-r from-blue-950/60 via-slate-900 to-cyan-950/40 border border-cyan-500/30 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center space-x-3">
+                <div className="p-3.5 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-black shadow-lg shadow-cyan-500/30">
+                  <ImageIcon className="w-7 h-7" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-black text-white flex items-center space-x-2">
+                    <span>ატვირთული ფოტოების ბიბლიოთეკა & სისტემა</span>
+                    <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+                      {serverUploads.length} ფაილი
+                    </span>
+                  </h2>
+                  <p className="text-xs text-slate-300">
+                    ყველა ფოტო, რომელიც თქვენ ან თქვენმა მეგობარმა ატვირთა, ინახება სერვერის მუდმივ მეხსიერებაში (<code className="text-cyan-300">/public/uploads</code>).
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={fetchUploads}
+                  className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center space-x-1.5"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 text-[#00e5ff]" />
+                  <span>განახლება</span>
+                </button>
+                <label className="cursor-pointer px-4 py-2 rounded-xl bg-[#00e5ff] hover:bg-[#00cce6] text-black text-xs font-black transition flex items-center space-x-1.5 shadow-lg shadow-cyan-500/20">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{isBulkUploading ? 'იტვირთება...' : '➕ ახალი ფოტოების ატვირთვა'}</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleBulkUpload}
+                    disabled={isBulkUploading}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Assign Jersey Section */}
+          <div className="p-5 rounded-3xl bg-[#12122b] border border-slate-800 space-y-3">
+            <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+              <Zap className="w-4 h-4 text-[#00e5ff]" />
+              <span>სწრაფი მიბმა: აირჩიეთ რომელ მაისურს გსურთ მიაბათ ფოტო</span>
+            </h3>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex-1 min-w-[260px]">
+                <label className="text-[11px] font-mono text-slate-400 block mb-1">სამიზნე მაისური:</label>
+                <select
+                  value={selectedJerseyForUpload}
+                  onChange={(e) => setSelectedJerseyForUpload(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white text-xs font-bold focus:outline-none focus:border-[#00e5ff]"
+                >
+                  <option value="">-- აირჩიეთ მაისური ბიბლიოთეკიდან --</option>
+                  {products.map(p => (
+                    <option key={p.id} value={p.id}>
+                      {p.titleKa} ({p.price}₾)
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-mono text-slate-400 block mb-1">ფოტოს პოზიცია:</label>
+                <select
+                  value={selectedTargetSlot}
+                  onChange={(e) => setSelectedTargetSlot(e.target.value as any)}
+                  className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white text-xs font-bold focus:outline-none focus:border-[#00e5ff]"
+                >
+                  <option value="front">1️⃣ მთავარი ხედი (Front Cover)</option>
+                  <option value="back">2️⃣ უკანა ხედი (Back / Nameplate)</option>
+                  <option value="gallery">🖼️ დამატებითი გალერეა</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Uploaded Photos Grid */}
+          {serverUploads.length === 0 ? (
+            <div className="p-12 text-center rounded-3xl bg-slate-950/60 border border-slate-800 space-y-4">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-slate-900 flex items-center justify-center text-slate-500 border border-slate-800">
+                <ImageIcon className="w-8 h-8 text-cyan-400/50" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-white">სერვერზე ჯერ ფაილები არ არის ატვირთული</h3>
+                <p className="text-xs text-slate-400 max-w-md mx-auto">
+                  ატვირთეთ თქვენი მეგობრის ან მაისურების ფოტოები ზედა ღილაკით ან პირდაპირ მაისურის დამატების ფორმიდან.
+                </p>
+              </div>
+              <label className="cursor-pointer inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#00e5ff] text-black font-extrabold text-xs shadow-lg shadow-cyan-500/20 hover:bg-[#00cce6] transition">
+                <Upload className="w-4 h-4" />
+                <span>ატვირთეთ ფოტოები ახლა</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleBulkUpload}
+                />
+              </label>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {serverUploads.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="p-3.5 rounded-2xl bg-[#12122b] border border-slate-800 hover:border-cyan-500/40 transition space-y-3 flex flex-col group"
+                >
+                  <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-black border border-slate-800">
+                    <img
+                      src={item.url}
+                      alt={item.filename}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                      referrerPolicy="no-referrer"
+                    />
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-cyan-300 font-bold">
+                      {Math.round(item.size / 1024)} KB
+                    </span>
+                  </div>
+
+                  <div className="space-y-1 flex-1">
+                    <p className="text-xs font-bold text-white truncate font-mono" title={item.filename}>
+                      {item.filename}
+                    </p>
+                    <p className="text-[10px] text-slate-500 font-mono">
+                      {new Date(item.createdAt).toLocaleString('ka-GE')}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5 pt-2 border-t border-slate-800/80">
+                    {selectedJerseyForUpload && (
+                      <button
+                        type="button"
+                        onClick={() => handleAssignImageToJersey(item.url, selectedJerseyForUpload, selectedTargetSlot)}
+                        className="w-full py-2 rounded-xl bg-[#00e5ff] hover:bg-[#00cce6] text-black font-extrabold text-xs transition flex items-center justify-center space-x-1.5 shadow-md shadow-cyan-500/20"
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                        <span>მიაბი არჩეულ მაისურს</span>
+                      </button>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(item.url);
+                          setStatusMessage(`ლინკი დაკოპირდა: ${item.url}`);
+                          setTimeout(() => setStatusMessage(''), 2500);
+                        }}
+                        className="py-1.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[11px] font-mono transition flex items-center justify-center space-x-1"
+                      >
+                        <Copy className="w-3 h-3" />
+                        <span>ლინკი</span>
+                      </button>
+
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="py-1.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[11px] font-mono transition flex items-center justify-center space-x-1"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        <span>გახსნა</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

@@ -16,6 +16,35 @@ async function startServer() {
   const DATA_DIR = path.join(process.cwd(), 'data');
   const DATA_FILE = path.join(DATA_DIR, 'store.json');
 
+  // Static uploads directory for permanent shirt photos
+  const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads');
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  }
+  app.use('/uploads', express.static(UPLOADS_DIR, { maxAge: '30d', immutable: true }));
+
+  function saveBase64Image(dataUrl: string, prefix = 'shirt'): string {
+    if (!dataUrl || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
+      return dataUrl;
+    }
+    try {
+      const match = dataUrl.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+      if (!match) return dataUrl;
+      const rawExt = match[1].toLowerCase();
+      const ext = rawExt === 'jpeg' ? 'jpg' : rawExt === 'svg+xml' ? 'svg' : rawExt;
+      const buffer = Buffer.from(match[2], 'base64');
+      const safePrefix = prefix.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 30);
+      const filename = `${safePrefix}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
+      const filepath = path.join(UPLOADS_DIR, filename);
+      fs.writeFileSync(filepath, buffer);
+      console.log(`[Upload] Persisted shirt image to disk: ${filename} (${buffer.length} bytes)`);
+      return `/uploads/${filename}`;
+    } catch (e) {
+      console.warn('Failed to save base64 image to disk:', e);
+      return dataUrl;
+    }
+  }
+
   let products: Product[] = [...INITIAL_PRODUCTS];
   let players: PlayerInfo[] = [...INITIAL_PLAYERS];
   let teams: TeamInfo[] = [...INITIAL_TEAMS];
@@ -150,14 +179,64 @@ async function startServer() {
            (adminSecret ? valid.includes(adminSecret as string) : false);
   };
 
+  // Image Upload API (Accepts Base64 JSON and saves permanent file on disk)
+  app.post('/api/upload', (req, res) => {
+    try {
+      const { image, name, prefix } = req.body;
+      if (!image || typeof image !== 'string') {
+        return res.status(400).json({ error: 'No image data provided' });
+      }
+      const filePrefix = prefix || (name ? String(name).replace(/\.[^/.]+$/, '') : 'shirt');
+      const savedUrl = saveBase64Image(image, filePrefix);
+      res.json({ url: savedUrl, success: true });
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      res.status(500).json({ error: 'Failed to upload image' });
+    }
+  });
+
+  // Uploaded Images Library (for inspection and recovery)
+  app.get('/api/uploads', (req, res) => {
+    try {
+      if (!fs.existsSync(UPLOADS_DIR)) {
+        return res.json({ images: [] });
+      }
+      const files = fs.readdirSync(UPLOADS_DIR);
+      const images = files
+        .filter(f => !f.startsWith('.'))
+        .map(file => {
+          const stats = fs.statSync(path.join(UPLOADS_DIR, file));
+          return {
+            url: `/uploads/${file}`,
+            filename: file,
+            size: stats.size,
+            createdAt: stats.birthtime
+          };
+        })
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      res.json({ images });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to list uploads' });
+    }
+  });
+
   // Admin Create Product
   app.post('/api/products', (req, res) => {
     if (!checkAdminAuth(req)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    const processedFront = saveBase64Image(
+      req.body.imageFront || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      'shirt_front'
+    );
+    const processedBack = req.body.imageBack ? saveBase64Image(req.body.imageBack, 'shirt_back') : '';
+    const processedImages = Array.isArray(req.body.images) && req.body.images.length > 0
+      ? req.body.images.map((img: string, idx: number) => saveBase64Image(img, `shirt_detail_${idx + 1}`))
+      : [processedFront, processedBack].filter(Boolean);
+
     const newProd: Product = {
-      id: `prod-${Date.now()}`,
+      id: req.body.id || `prod-${Date.now()}`,
       titleKa: req.body.titleKa || 'ახალი მაისური',
       titleEn: req.body.titleEn || 'New Jersey',
       playerSlug: req.body.playerSlug || 'custom',
@@ -177,8 +256,9 @@ async function startServer() {
       isFeatured: Boolean(req.body.isFeatured),
       isWc26: Boolean(req.body.isWc26),
       isNiche: Boolean(req.body.isNiche),
-      imageFront: req.body.imageFront || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
-      imageBack: req.body.imageBack || '',
+      imageFront: processedFront,
+      imageBack: processedBack,
+      images: processedImages,
       descriptionKa: req.body.descriptionKa || 'FUT Universe-ის ახალი ექსპონატი.',
       descriptionEn: req.body.descriptionEn || 'New addition to FUT Universe library.',
       inStock: true,
@@ -219,7 +299,18 @@ async function startServer() {
     const index = products.findIndex(p => p.id === req.params.id);
     if (index === -1) return res.status(404).json({ error: 'Product not found' });
 
-    products[index] = { ...products[index], ...req.body };
+    const updated = { ...req.body };
+    if (updated.imageFront) {
+      updated.imageFront = saveBase64Image(updated.imageFront, 'shirt_front');
+    }
+    if (updated.imageBack) {
+      updated.imageBack = saveBase64Image(updated.imageBack, 'shirt_back');
+    }
+    if (Array.isArray(updated.images)) {
+      updated.images = updated.images.map((img: string, idx: number) => saveBase64Image(img, `shirt_detail_${idx + 1}`));
+    }
+
+    products[index] = { ...products[index], ...updated };
     saveData();
     res.json(products[index]);
   });

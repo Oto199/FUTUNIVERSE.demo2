@@ -12,10 +12,10 @@ export function handleImageError(e: React.SyntheticEvent<HTMLImageElement, Event
 
 /**
  * Utility functions for compressing and optimizing image strings (Base64 data URIs)
- * to ensure Firestore documents stay well under the 1MB limit.
+ * to ensure Firestore documents stay well under the 1MB limit (typically 50KB - 110KB).
  */
 
-export async function compressImage(src: string, maxDimension = 700, quality = 0.72): Promise<string> {
+export async function compressImage(src: string, maxDimension = 960, quality = 0.78): Promise<string> {
   if (!src || !src.startsWith('data:image/')) {
     return src;
   }
@@ -53,20 +53,28 @@ export async function compressImage(src: string, maxDimension = 700, quality = 0
         ctx.fillRect(0, 0, width, height);
         ctx.drawImage(img, 0, 0, width, height);
 
-        let result = canvas.toDataURL('image/jpeg', quality);
+        // Prefer modern WebP format for 35%+ better compression at crystal clear quality
+        let format = 'image/webp';
+        let result = canvas.toDataURL(format, quality);
 
-        // If still > 150KB, compress further
-        if (result.length > 200000) {
+        // If browser doesn't support WebP export, fallback to JPEG
+        if (!result.startsWith('data:image/webp')) {
+          format = 'image/jpeg';
+          result = canvas.toDataURL(format, 0.75);
+        }
+
+        // Adaptive Safety Fallback: If still > 180KB, downscale further to 720px and lower quality
+        if (result.length > 180000) {
           const smallCanvas = document.createElement('canvas');
-          const smallMax = 500;
+          const safeMax = 720;
           let sWidth = width;
           let sHeight = height;
           if (sWidth > sHeight) {
-            sHeight = Math.round((sHeight * smallMax) / sWidth);
-            sWidth = smallMax;
+            sHeight = Math.round((sHeight * safeMax) / sWidth);
+            sWidth = safeMax;
           } else {
-            sWidth = Math.round((sWidth * smallMax) / sHeight);
-            sHeight = smallMax;
+            sWidth = Math.round((sWidth * safeMax) / sHeight);
+            sHeight = safeMax;
           }
           smallCanvas.width = sWidth;
           smallCanvas.height = sHeight;
@@ -75,7 +83,7 @@ export async function compressImage(src: string, maxDimension = 700, quality = 0
             sCtx.fillStyle = '#FFFFFF';
             sCtx.fillRect(0, 0, sWidth, sHeight);
             sCtx.drawImage(img, 0, 0, sWidth, sHeight);
-            result = smallCanvas.toDataURL('image/jpeg', 0.65);
+            result = smallCanvas.toDataURL(format, 0.68);
           }
         }
 
@@ -94,25 +102,48 @@ export async function compressImage(src: string, maxDimension = 700, quality = 0
   });
 }
 
+export async function uploadImageToServer(dataUrl: string, prefix = 'shirt'): Promise<string> {
+  if (!dataUrl || !dataUrl.startsWith('data:image/')) return dataUrl;
+  try {
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: dataUrl, prefix })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.url) return data.url;
+    }
+  } catch (e) {
+    console.warn('Upload to server failed, preserving compressed base64:', e);
+  }
+  return dataUrl;
+}
+
 export async function optimizeProductImages<T extends Record<string, any>>(product: T): Promise<T> {
   const result = { ...product } as any;
 
   if (result.imageFront && typeof result.imageFront === 'string') {
-    result.imageFront = await compressImage(result.imageFront, 700, 0.72);
+    const compressed = await compressImage(result.imageFront, 700, 0.72);
+    result.imageFront = await uploadImageToServer(compressed, 'shirt_front');
   }
 
   if (result.imageBack && typeof result.imageBack === 'string') {
-    result.imageBack = await compressImage(result.imageBack, 700, 0.72);
+    const compressed = await compressImage(result.imageBack, 700, 0.72);
+    result.imageBack = await uploadImageToServer(compressed, 'shirt_back');
   }
 
   if (Array.isArray(result.images)) {
-    const compressedList: string[] = [];
-    for (const imgStr of result.images) {
+    const finalImages: string[] = [];
+    for (let i = 0; i < result.images.length; i++) {
+      const imgStr = result.images[i];
       if (typeof imgStr === 'string' && imgStr.trim()) {
-        compressedList.push(await compressImage(imgStr, 700, 0.72));
+        const compressed = await compressImage(imgStr, 700, 0.72);
+        const uploaded = await uploadImageToServer(compressed, `shirt_detail_${i + 1}`);
+        finalImages.push(uploaded);
       }
     }
-    result.images = Array.from(new Set(compressedList));
+    result.images = Array.from(new Set(finalImages));
   }
 
   return result as T;

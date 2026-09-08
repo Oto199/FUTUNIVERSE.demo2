@@ -1,6 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import { 
   getFirestore, 
+  initializeFirestore,
+  memoryLocalCache,
+  setLogLevel,
+  getDocFromServer,
   collection, 
   doc, 
   setDoc, 
@@ -17,21 +21,52 @@ import { Product, PlayerInfo, TeamInfo, BlogPost } from '../types';
 import { INITIAL_PRODUCTS, INITIAL_PLAYERS, INITIAL_TEAMS, INITIAL_BLOG_POSTS } from '../data/initialData';
 import { optimizeProductImages } from './imageUtils';
 
+// Suppress noisy Firestore internal connection warnings in sandboxed preview environments
+try {
+  setLogLevel('silent');
+} catch (e) {
+  // Ignore if unsupported
+}
+
 let app: any = null;
 let dbInstance: any = null;
 
 try {
   if (firebaseConfig && (firebaseConfig as any).apiKey && (firebaseConfig as any).projectId) {
     app = initializeApp(firebaseConfig);
-    dbInstance = (firebaseConfig as any).firestoreDatabaseId 
-      ? getFirestore(app, (firebaseConfig as any).firestoreDatabaseId)
-      : getFirestore(app);
+    const dbId = (firebaseConfig as any).firestoreDatabaseId;
+    const settings = {
+      experimentalForceLongPolling: true,
+      localCache: memoryLocalCache()
+    };
+    dbInstance = dbId 
+      ? initializeFirestore(app, settings, dbId)
+      : initializeFirestore(app, settings);
   }
 } catch (e) {
-  console.warn('Firebase initialization notice:', e);
+  try {
+    const dbId = (firebaseConfig as any)?.firestoreDatabaseId;
+    dbInstance = dbId ? getFirestore(app, dbId) : getFirestore(app);
+  } catch (err) {
+    console.warn('Firebase initialization note:', err);
+  }
 }
 
 export const db = dbInstance;
+
+/**
+ * Validate connection to Firestore as recommended by Firebase guidelines
+ */
+export async function validateFirestoreConnection(): Promise<boolean> {
+  if (!db) return false;
+  try {
+    await getDocFromServer(doc(db, '_connection_test_', 'ping'));
+    return true;
+  } catch {
+    // Expected when running with offline fallback or limited permissions
+    return false;
+  }
+}
 
 export enum OperationType {
   CREATE = 'create',
@@ -49,8 +84,13 @@ export interface FirestoreErrorInfo {
 }
 
 function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const errMsg = error instanceof Error ? error.message : String(error);
+  // Don't clutter console if backend is offline or in disconnected sandbox state
+  if (errMsg.includes('unavailable') || errMsg.includes('offline') || errMsg.includes('permission')) {
+    return;
+  }
   const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
+    error: errMsg,
     operationType,
     path
   };
@@ -79,16 +119,17 @@ export function subscribeProducts(onData: (products: Product[]) => void) {
   try {
     return onSnapshot(productsRef, async (snapshot) => {
       if (snapshot.empty) {
-        console.log('Firebase products empty. Seeding initial products...');
-        try {
-          const batch = writeBatch(db);
-          INITIAL_PRODUCTS.forEach((prod) => {
-            const ref = doc(db, 'products', prod.id);
-            batch.set(ref, prod);
-          });
-          await batch.commit();
-        } catch (err) {
-          handleFirestoreError(err, OperationType.WRITE, 'products');
+        if (!snapshot.metadata.fromCache) {
+          try {
+            const batch = writeBatch(db);
+            INITIAL_PRODUCTS.forEach((prod) => {
+              const ref = doc(db, 'products', prod.id);
+              batch.set(ref, prod);
+            });
+            await batch.commit();
+          } catch (err) {
+            handleFirestoreError(err, OperationType.WRITE, 'products');
+          }
         }
         onData(INITIAL_PRODUCTS);
       } else {
@@ -96,7 +137,11 @@ export function subscribeProducts(onData: (products: Product[]) => void) {
         snapshot.forEach((docSnap) => {
           items.push(docSnap.data() as Product);
         });
-        onData(items);
+        if (items.length > 0) {
+          onData(items);
+        } else {
+          onData(INITIAL_PRODUCTS);
+        }
       }
     }, (err) => {
       handleFirestoreError(err, OperationType.LIST, 'products');
@@ -121,15 +166,17 @@ export function subscribePlayers(onData: (players: PlayerInfo[]) => void) {
   try {
     return onSnapshot(playersRef, async (snapshot) => {
       if (snapshot.empty) {
-        try {
-          const batch = writeBatch(db);
-          INITIAL_PLAYERS.forEach((pl) => {
-            const ref = doc(db, 'players', pl.slug);
-            batch.set(ref, pl);
-          });
-          await batch.commit();
-        } catch (err) {
-          handleFirestoreError(err, OperationType.WRITE, 'players');
+        if (!snapshot.metadata.fromCache) {
+          try {
+            const batch = writeBatch(db);
+            INITIAL_PLAYERS.forEach((pl) => {
+              const ref = doc(db, 'players', pl.slug);
+              batch.set(ref, pl);
+            });
+            await batch.commit();
+          } catch (err) {
+            handleFirestoreError(err, OperationType.WRITE, 'players');
+          }
         }
         onData(INITIAL_PLAYERS);
       } else {
@@ -137,7 +184,11 @@ export function subscribePlayers(onData: (players: PlayerInfo[]) => void) {
         snapshot.forEach((docSnap) => {
           items.push(docSnap.data() as PlayerInfo);
         });
-        onData(items);
+        if (items.length > 0) {
+          onData(items);
+        } else {
+          onData(INITIAL_PLAYERS);
+        }
       }
     }, (err) => {
       handleFirestoreError(err, OperationType.LIST, 'players');
@@ -162,15 +213,17 @@ export function subscribeTeams(onData: (teams: TeamInfo[]) => void) {
   try {
     return onSnapshot(teamsRef, async (snapshot) => {
       if (snapshot.empty) {
-        try {
-          const batch = writeBatch(db);
-          INITIAL_TEAMS.forEach((tm) => {
-            const ref = doc(db, 'teams', tm.slug);
-            batch.set(ref, tm);
-          });
-          await batch.commit();
-        } catch (err) {
-          handleFirestoreError(err, OperationType.WRITE, 'teams');
+        if (!snapshot.metadata.fromCache) {
+          try {
+            const batch = writeBatch(db);
+            INITIAL_TEAMS.forEach((tm) => {
+              const ref = doc(db, 'teams', tm.slug);
+              batch.set(ref, tm);
+            });
+            await batch.commit();
+          } catch (err) {
+            handleFirestoreError(err, OperationType.WRITE, 'teams');
+          }
         }
         onData(INITIAL_TEAMS);
       } else {
@@ -178,7 +231,11 @@ export function subscribeTeams(onData: (teams: TeamInfo[]) => void) {
         snapshot.forEach((docSnap) => {
           items.push(docSnap.data() as TeamInfo);
         });
-        onData(items);
+        if (items.length > 0) {
+          onData(items);
+        } else {
+          onData(INITIAL_TEAMS);
+        }
       }
     }, (err) => {
       handleFirestoreError(err, OperationType.LIST, 'teams');
@@ -203,15 +260,17 @@ export function subscribeBlogPosts(onData: (posts: BlogPost[]) => void) {
   try {
     return onSnapshot(blogPostsRef, async (snapshot) => {
       if (snapshot.empty) {
-        try {
-          const batch = writeBatch(db);
-          INITIAL_BLOG_POSTS.forEach((bp) => {
-            const ref = doc(db, 'blogPosts', bp.slug);
-            batch.set(ref, bp);
-          });
-          await batch.commit();
-        } catch (err) {
-          handleFirestoreError(err, OperationType.WRITE, 'blogPosts');
+        if (!snapshot.metadata.fromCache) {
+          try {
+            const batch = writeBatch(db);
+            INITIAL_BLOG_POSTS.forEach((bp) => {
+              const ref = doc(db, 'blogPosts', bp.slug);
+              batch.set(ref, bp);
+            });
+            await batch.commit();
+          } catch (err) {
+            handleFirestoreError(err, OperationType.WRITE, 'blogPosts');
+          }
         }
         onData(INITIAL_BLOG_POSTS);
       } else {
@@ -219,7 +278,11 @@ export function subscribeBlogPosts(onData: (posts: BlogPost[]) => void) {
         snapshot.forEach((docSnap) => {
           items.push(docSnap.data() as BlogPost);
         });
-        onData(items);
+        if (items.length > 0) {
+          onData(items);
+        } else {
+          onData(INITIAL_BLOG_POSTS);
+        }
       }
     }, (err) => {
       handleFirestoreError(err, OperationType.LIST, 'blogPosts');

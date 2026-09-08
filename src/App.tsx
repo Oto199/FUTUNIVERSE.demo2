@@ -26,6 +26,8 @@ import {
   dbUpdateBlogPost,
   dbDeleteBlogPost
 } from './lib/firebase';
+import { getCachedData, setCachedData } from './lib/storageCache';
+import { optimizeProductImages } from './lib/imageUtils';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname + window.location.search);
@@ -206,50 +208,50 @@ export default function App() {
     return Array.from(map.values());
   };
 
-  // Real-time Firestore subscriptions + Express fallback
+  // Real-time Firestore subscriptions + Local IndexedDB caching
   useEffect(() => {
+    // 1. Instant load from local IndexedDB cache (0ms perceived latency & saves Firestore quotas)
+    getCachedData<Product[]>('products').then(cached => {
+      if (Array.isArray(cached) && cached.length > 0) {
+        setProducts(mergeProducts(cached));
+      }
+    });
+    getCachedData<BlogPost[]>('blogPosts').then(cached => {
+      if (Array.isArray(cached) && cached.length > 0) {
+        setBlogPosts(mergeBlogPosts(cached));
+      }
+    });
+
+    // 2. Real-time Firestore event subscriptions (Cloud authority)
     const unsubProducts = subscribeProducts((data) => {
       if (Array.isArray(data)) {
-        setProducts(mergeProducts(data));
+        const merged = mergeProducts(data);
+        setProducts(merged);
+        setCachedData('products', merged);
       }
     });
 
     const unsubPlayers = subscribePlayers((data) => {
       if (Array.isArray(data) && data.length > 0) {
         setPlayers(data);
+        setCachedData('players', data);
       }
     });
 
     const unsubTeams = subscribeTeams((data) => {
       if (Array.isArray(data) && data.length > 0) {
         setTeams(data);
+        setCachedData('teams', data);
       }
     });
 
     const unsubBlog = subscribeBlogPosts((data) => {
       if (Array.isArray(data)) {
-        setBlogPosts(mergeBlogPosts(data));
+        const merged = mergeBlogPosts(data);
+        setBlogPosts(merged);
+        setCachedData('blogPosts', merged);
       }
     });
-
-    // Also fetch initial data from Express backend / data/store.json
-    fetch('/api/products')
-      .then(res => res.json())
-      .then(serverProducts => {
-        if (Array.isArray(serverProducts) && serverProducts.length > 0) {
-          setProducts(prev => mergeProducts(serverProducts));
-        }
-      })
-      .catch(() => {});
-
-    fetch('/api/blog')
-      .then(res => res.json())
-      .then(serverBlog => {
-        if (Array.isArray(serverBlog) && serverBlog.length > 0) {
-          setBlogPosts(prev => mergeBlogPosts(serverBlog));
-        }
-      })
-      .catch(() => {});
 
     return () => {
       unsubProducts();
@@ -308,18 +310,29 @@ export default function App() {
         tags: newProdData.tags || ['WC26', 'Jersey']
       };
 
+      // Optimistically optimize any heavy images to WebP/URL to ensure tiny Firestore document size
+      const optimizedProd = await optimizeProductImages(newProd);
+
       // Optimistic state update
-      setProducts(prev => [newProd, ...prev]);
+      setProducts(prev => [optimizedProd, ...prev]);
 
       // Save to Firestore (Real-time Cloud Database)
-      await dbAddProduct(newProd);
+      await dbAddProduct(optimizedProd);
 
-      // Also notify local Express server if available
-      fetch('/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer shotarameqeni' },
-        body: JSON.stringify({ ...newProd, adminSecret: 'shotarameqeni' })
-      }).catch(() => {});
+      // Also notify local Express server and persist images to server disk
+      try {
+        const apiRes = await fetch('/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer shotarameqeni' },
+          body: JSON.stringify({ ...optimizedProd, adminSecret: 'shotarameqeni' })
+        });
+        if (apiRes.ok) {
+          const persistedProd = await apiRes.json();
+          setProducts(prev => prev.map(p => p.id === optimizedProd.id ? persistedProd : p));
+        }
+      } catch (e) {
+        console.warn('Server sync error on add:', e);
+      }
 
     } catch (e) {
       console.error('Failed to add product:', e);
@@ -343,13 +356,22 @@ export default function App() {
   // Update Product handler
   const handleUpdateProduct = async (productId: string, updatedData: Partial<Product>) => {
     try {
-      setProducts(prev => prev.map(p => p.id === productId ? { ...p, ...updatedData } as Product : p));
-      await dbUpdateProduct(productId, updatedData);
-      fetch(`/api/products/${productId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer shotarameqeni' },
-        body: JSON.stringify({ ...updatedData, adminSecret: 'shotarameqeni' })
-      }).catch(() => {});
+      const optimizedData = await optimizeProductImages(updatedData);
+      setProducts(prev => prev.map(p => p.id === productId ? { ...p, ...optimizedData } as Product : p));
+      await dbUpdateProduct(productId, optimizedData);
+      try {
+        const apiRes = await fetch(`/api/products/${productId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer shotarameqeni' },
+          body: JSON.stringify({ ...optimizedData, adminSecret: 'shotarameqeni' })
+        });
+        if (apiRes.ok) {
+          const persistedProd = await apiRes.json();
+          setProducts(prev => prev.map(p => p.id === productId ? persistedProd : p));
+        }
+      } catch (e) {
+        console.warn('Server sync error on update:', e);
+      }
     } catch (e) {
       console.error('Failed to update product:', e);
     }
