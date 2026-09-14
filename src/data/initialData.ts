@@ -17,7 +17,7 @@ export const INITIAL_TEAMS: TeamInfo[] = [
     flagEmoji: '🇫🇷',
     descriptionKa: 'საფრანგეთის 2006 წლის ისტორიული რეტრო მაისური — ზინედინ ზიდანი.',
     descriptionEn: 'France 2006 iconic retro jersey — Zinedine Zidane.',
-    heroImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80'
+    heroImage: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=1200&q=80'
   },
   {
     slug: 'england',
@@ -35,7 +35,7 @@ export const INITIAL_TEAMS: TeamInfo[] = [
     flagEmoji: '🇵🇹',
     descriptionKa: 'პორტუგალიისა და მანჩესტერ იუნაიტედის კაპიტანი — ბრუნო ფერნანდეში.',
     descriptionEn: 'Portugal and Manchester United captain — Bruno Fernandes.',
-    heroImage: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=1200&q=80'
+    heroImage: 'https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?auto=format&fit=crop&w=1200&q=80'
   },
   {
     slug: 'argentina',
@@ -144,7 +144,7 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     bioKa: 'ბრუნო ფერნანდეში — პორტუგალიის ნაკრებისა და იუნაიტედის კაპიტანი. ხელმისაწვდომია ფან ვერსია (Fan Version) L ზომაში 49₾-ად.',
     bioEn: 'Bruno Fernandes — Portugal captain. Fan Version available in size L at 49 GEL.',
     wc26Role: '💛 Fan Version — 49₾ (ზომა: L)',
-    image: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=600&q=80'
   },
   {
     slug: 'alvarez',
@@ -200,7 +200,7 @@ export const INITIAL_PLAYERS: PlayerInfo[] = [
     bioKa: 'ზინედინ ზიდანი ✨ — საფრანგეთის 1998 და 2006 წლების მსოფლიო ჩემპიონატის ლეგენდარული რეტრო მაისურები. ხელმისაწვდომია M, L და XL ზომებში.',
     bioEn: 'Zinedine Zidane ✨ — Iconic France 1998 and 2006 World Cup Retro jerseys. Available in M, L, XL sizes.',
     wc26Role: '⭐ რეტრო ვერსია — 59₾ (ზომები: M, L, XL)',
-    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80'
   }
 ];
 
@@ -257,10 +257,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     isFeatured: true,
     isWc26: false,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageFront: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80',
     imageBack: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
     images: [
-      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'
     ],
     descriptionKa: '🇫🇷 Zidane France 1998 World Cup Final Retro | 💰 59₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L, XL.',
@@ -289,10 +289,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     isFeatured: true,
     isWc26: false,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageFront: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80',
     imageBack: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
     images: [
-      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'
     ],
     descriptionKa: '🇫🇷 Zidane France 2006 World Cup Retro | 💰 59₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: M, L, XL.',
@@ -321,10 +321,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     isFeatured: true,
     isWc26: true,
     isNiche: false,
-    imageFront: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
+    imageFront: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=800&q=80',
     imageBack: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
     images: [
-      'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80'
     ],
     descriptionKa: '🇵🇹 Bruno Fernandes Portugal 2026 (Fan Version) | 💰 49₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L.',
@@ -354,10 +354,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: false,
     isNiche: true,
     imageFront: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80',
     images: [
       'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80'
     ],
     descriptionKa: '🇫🇷 Mbappé France 2018 World Cup Champions | 💰 59₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: XL.',
     descriptionEn: '🇫🇷 Mbappé France 2018 World Cup Champions | 59 GEL (BACK TO SCHOOL SALE!) | Size: XL.',
@@ -386,10 +386,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: true,
     isNiche: false,
     imageFront: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=800&q=80',
     images: [
       'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=800&q=80'
     ],
     descriptionKa: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Kobbie Mainoo England 2026 (Fan Version) | 💰 49₾ (BACK TO SCHOOL SALE!) | 📏 ზომა: L.',
     descriptionEn: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Kobbie Mainoo England 2026 (Fan Version) | 49 GEL (BACK TO SCHOOL SALE!) | Size: L.',
@@ -418,7 +418,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: true,
     isNiche: true,
     imageFront: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?auto=format&fit=crop&w=800&q=80',
     images: [
       'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'
     ],
@@ -449,7 +449,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: true,
     isNiche: false,
     imageFront: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80',
     images: [
       'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=800&q=80'
     ],
@@ -479,8 +479,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: false,
     isNiche: true,
     imageFront: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
-    images: ['https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80'],
+    imageBack: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80',
+    images: ['https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80'],
     descriptionKa: '🔥 Cristiano Ronaldo #7 — Manchester United 2007/08 Away Long Sleeve | 💰 75₾ | 📏 XL.',
     descriptionEn: '🔥 Cristiano Ronaldo #7 — Manchester United 2007/08 Away Long Sleeve | 75 GEL | Size XL.',
     inStock: true,
@@ -507,7 +507,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: false,
     isNiche: true,
     imageFront: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80',
     images: ['https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80'],
     descriptionKa: '🔥 Toni Kroos #8 — Real Madrid 2021/22 UCL Final Jersey | 💰 75₾ | 📏 L.',
     descriptionEn: '🔥 Toni Kroos #8 — Real Madrid 2021/22 UCL Final Jersey | 75 GEL | Size L.',
@@ -535,7 +535,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: false,
     isNiche: false,
     imageFront: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80',
     images: ['https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=800&q=80'],
     descriptionKa: '🔥 Trent Alexander-Arnold #66 — Liverpool Home Kit (Fan Version) | 💰 55₾.',
     descriptionEn: '🔥 Trent Alexander-Arnold #66 — Liverpool Home Kit (Fan Version) | 55 GEL.',
@@ -564,7 +564,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isWc26: true,
     isNiche: false,
     imageFront: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80',
-    imageBack: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageBack: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80',
     images: ['https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80'],
     descriptionKa: '🔥 Julián Álvarez #19 — არგენტინის 2026 World Cup ფან ვერსია | 💰 49₾ (ფასდაკლება!) | 📏 L.',
     descriptionEn: '🔥 Julián Álvarez #19 — Argentina 2026 World Cup Fan Version | 49 GEL (Sale!) | Size L.',
@@ -686,7 +686,7 @@ All jerseys are physically in-stock in Tbilisi, made with premium breathable pol
 DM us on Instagram (**@futt_universe**) or Facebook. Same-day local delivery across Tbilisi!`,
     publishDate: '2026-08-10',
     readTime: '2 წუთი',
-    coverImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
     author: 'FUT Universe Team',
     tags: ['World Cup 2026', 'Sale', '49 GEL', 'Jerseys', 'Tbilisi'],
     relatedPlayerSlugs: ['wirtz', 'mainoo', 'brunof', 'alvarez', 'zidane']

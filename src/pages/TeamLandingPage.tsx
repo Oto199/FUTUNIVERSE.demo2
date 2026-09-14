@@ -31,7 +31,7 @@ export const TeamLandingPage: React.FC<TeamLandingPageProps> = ({
     flagEmoji: '⚽',
     descriptionKa: `${teamSlug}-ს ოფიციალური ახალი და საკლუბო მაისურები FUT Universe-ის თბილისის ბიბლიოთეკაში.`,
     descriptionEn: `Official ${teamSlug} kits in FUT Universe Tbilisi.`,
-    heroImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80'
+    heroImage: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=1200&q=80'
   };
 
   const teamProducts = products.filter(

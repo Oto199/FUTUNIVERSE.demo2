@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ShoppingCart, Eye, Sparkles, MessageCircle, ArrowRight, Instagram } from 'lucide-react';
 import { Product, Size } from '../types';
 import ClickSpark from './reactbits/ClickSpark';
-import { handleImageError } from '../lib/imageUtils';
+import { handleImageError, sanitizeImageUrl } from '../lib/imageUtils';
 
 interface ProductCardProps {
   product: Product;
@@ -25,7 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, lan
       {/* Top Image Container */}
       <div className="relative aspect-[4/3] bg-zinc-100 overflow-hidden cursor-pointer" onClick={() => onSelect(product.id)}>
         <img
-          src={currentImg}
+          src={sanitizeImageUrl(currentImg)}
           alt={product.titleKa}
           referrerPolicy="no-referrer"
           onError={handleImageError}

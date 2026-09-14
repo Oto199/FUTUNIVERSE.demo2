@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MessageCircle, ArrowLeft, ShieldCheck, Truck, Sparkles, Check, Share2, Info, ArrowRight, Instagram } from 'lucide-react';
 import { Product, Size, PlayerInfo } from '../types';
 import { ProductCard } from '../components/ProductCard';
-import { handleImageError } from '../lib/imageUtils';
+import { handleImageError, sanitizeImageUrl } from '../lib/imageUtils';
 
 interface ProductPageProps {
   productId: string;
@@ -106,7 +106,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({
         <div className="lg:col-span-7 space-y-4">
           <div className="relative aspect-[4/3] rounded-3xl bg-slate-950 border border-slate-800 overflow-hidden shadow-2xl shadow-cyan-950/20">
             <img
-              src={images[activeImageIndex] || product.imageFront}
+              src={sanitizeImageUrl(images[activeImageIndex] || product.imageFront)}
               alt={product.titleKa}
               referrerPolicy="no-referrer"
               onError={handleImageError}
@@ -138,7 +138,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({
                     activeImageIndex === idx ? 'border-[#00e5ff] scale-105' : 'border-slate-800 opacity-60 hover:opacity-100'
                   }`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" onError={handleImageError} />
+                  <img src={sanitizeImageUrl(img)} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" onError={handleImageError} />
                 </button>
               ))}
             </div>

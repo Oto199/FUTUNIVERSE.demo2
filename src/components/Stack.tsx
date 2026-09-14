@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'motion/react';
 import './Stack.css';
+import { handleImageError } from '../lib/imageUtils';
 
 interface CardRotateProps {
   key?: React.Key;
@@ -98,8 +99,9 @@ export default function Stack({
           id: 1,
           content: (
             <img
-              src="https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format"
+              src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=500&auto=format"
               alt="card-1"
+              onError={handleImageError}
               className="card-image"
             />
           )
@@ -108,8 +110,9 @@ export default function Stack({
           id: 2,
           content: (
             <img
-              src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format"
+              src="https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=500&auto=format"
               alt="card-2"
+              onError={handleImageError}
               className="card-image"
             />
           )
@@ -118,8 +121,9 @@ export default function Stack({
           id: 3,
           content: (
             <img
-              src="https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format"
+              src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=500&auto=format"
               alt="card-3"
+              onError={handleImageError}
               className="card-image"
             />
           )
@@ -128,8 +132,9 @@ export default function Stack({
           id: 4,
           content: (
             <img
-              src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format"
+              src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?q=80&w=500&auto=format"
               alt="card-4"
+              onError={handleImageError}
               className="card-image"
             />
           )
@@ -138,12 +143,19 @@ export default function Stack({
     }
   });
 
-  const cardsCount = cards.length;
   useEffect(() => {
-    if (cardsCount > 0) {
-      setStack(cards.map((content, index) => ({ id: index + 1, content })));
+    if (cards && cards.length > 0) {
+      setStack(prev => {
+        if (prev.length !== cards.length) {
+          return cards.map((content, index) => ({ id: index + 1, content }));
+        }
+        return prev.map(item => ({
+          ...item,
+          content: cards[item.id - 1] ?? item.content
+        }));
+      });
     }
-  }, [cardsCount]);
+  }, [cards]);
 
   const sendToBack = (id: number) => {
     setStack(prev => {

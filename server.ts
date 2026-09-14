@@ -227,7 +227,7 @@ async function startServer() {
     }
 
     const processedFront = saveBase64Image(
-      req.body.imageFront || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      req.body.imageFront || 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80',
       'shirt_front'
     );
     const processedBack = req.body.imageBack ? saveBase64Image(req.body.imageBack, 'shirt_back') : '';
@@ -399,7 +399,7 @@ async function startServer() {
       contentEn: req.body.contentEn,
       publishDate: new Date().toISOString().split('T')[0],
       readTime: '4 წუთი',
-      coverImage: req.body.coverImage || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+      coverImage: req.body.coverImage || 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
       author: 'FUT Universe Editorial',
       tags: req.body.tags || ['FUT Universe', 'Georgia'],
       relatedPlayerSlugs: req.body.relatedPlayerSlugs || []

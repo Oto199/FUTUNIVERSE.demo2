@@ -27,7 +27,7 @@ import {
   dbDeleteBlogPost
 } from './lib/firebase';
 import { getCachedData, setCachedData } from './lib/storageCache';
-import { optimizeProductImages } from './lib/imageUtils';
+import { optimizeProductImages, FALLBACK_JERSEY_IMAGE, sanitizeImageUrl } from './lib/imageUtils';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname + window.location.search);
@@ -42,7 +42,16 @@ export default function App() {
           const map = new Map<string, Product>();
           INITIAL_PRODUCTS.forEach(p => map.set(p.id, p));
           parsed.forEach((p: Product) => {
-            if (p?.id) map.set(p.id, { ...(map.get(p.id) || {}), ...p });
+            if (p?.id) {
+              const base = map.get(p.id);
+              const merged: Product = { ...(base || ({} as Product)), ...p };
+              merged.imageFront = sanitizeImageUrl(merged.imageFront, base?.imageFront || FALLBACK_JERSEY_IMAGE);
+              if (merged.imageBack) merged.imageBack = sanitizeImageUrl(merged.imageBack, base?.imageBack);
+              if (Array.isArray(merged.images)) {
+                merged.images = merged.images.map(img => sanitizeImageUrl(img, merged.imageFront));
+              }
+              map.set(p.id, merged);
+            }
           });
           return Array.from(map.values());
         }
@@ -112,6 +121,11 @@ export default function App() {
         if (!p.id) return;
         const existing = map.get(p.id);
         const mergedObj = existing ? { ...existing, ...p } : p;
+        mergedObj.imageFront = sanitizeImageUrl(mergedObj.imageFront, existing?.imageFront || FALLBACK_JERSEY_IMAGE);
+        if (mergedObj.imageBack) mergedObj.imageBack = sanitizeImageUrl(mergedObj.imageBack, existing?.imageBack);
+        if (Array.isArray(mergedObj.images)) {
+          mergedObj.images = mergedObj.images.map(img => sanitizeImageUrl(img, mergedObj.imageFront));
+        }
         if (!p.originalPrice || (p.price && p.originalPrice <= p.price)) {
           delete mergedObj.originalPrice;
         }
@@ -126,6 +140,11 @@ export default function App() {
         const existing = map.get(p.id);
         if (!existing) {
           const finalItem = { ...p };
+          finalItem.imageFront = sanitizeImageUrl(finalItem.imageFront, FALLBACK_JERSEY_IMAGE);
+          if (finalItem.imageBack) finalItem.imageBack = sanitizeImageUrl(finalItem.imageBack);
+          if (Array.isArray(finalItem.images)) {
+            finalItem.images = finalItem.images.map(img => sanitizeImageUrl(img, finalItem.imageFront));
+          }
           if (!p.originalPrice || (p.price && p.originalPrice <= p.price)) {
             delete finalItem.originalPrice;
           }
@@ -142,6 +161,7 @@ export default function App() {
           } else {
             bestFront = p.imageFront || existing.imageFront;
           }
+          bestFront = sanitizeImageUrl(bestFront, existing.imageFront || FALLBACK_JERSEY_IMAGE);
 
           let bestBack = p.imageBack;
           if (isDataUrl(p.imageBack)) {
@@ -151,13 +171,17 @@ export default function App() {
           } else {
             bestBack = p.imageBack || existing.imageBack;
           }
+          if (bestBack) bestBack = sanitizeImageUrl(bestBack, existing.imageBack);
+
+          const rawImages = (Array.isArray(p.images) && p.images.some(img => isDataUrl(img) || !isDefaultUnsplash(img))) ? p.images : (existing.images || p.images);
+          const sanitizedImages = Array.isArray(rawImages) ? rawImages.map(img => sanitizeImageUrl(img, bestFront)) : [bestFront];
 
           const mergedProd: Product = {
             ...existing,
             ...p,
             imageFront: bestFront,
             imageBack: bestBack,
-            images: (Array.isArray(p.images) && p.images.some(img => isDataUrl(img) || !isDefaultUnsplash(img))) ? p.images : (existing.images || p.images)
+            images: sanitizedImages
           };
 
           if (!p.originalPrice || (p.price && p.originalPrice <= p.price)) {
@@ -300,9 +324,9 @@ export default function App() {
         isFeatured: Boolean(newProdData.isFeatured),
         isWc26: Boolean(newProdData.isWc26),
         isNiche: Boolean(newProdData.isNiche),
-        imageFront: newProdData.imageFront || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
-        imageBack: newProdData.imageBack || '',
-        images: newProdData.images || [newProdData.imageFront || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80'],
+        imageFront: sanitizeImageUrl(newProdData.imageFront, FALLBACK_JERSEY_IMAGE),
+        imageBack: newProdData.imageBack ? sanitizeImageUrl(newProdData.imageBack) : '',
+        images: newProdData.images || [sanitizeImageUrl(newProdData.imageFront, FALLBACK_JERSEY_IMAGE)],
         descriptionKa: newProdData.descriptionKa || 'FUT Universe-ის ახალი ექსპონატი.',
         descriptionEn: newProdData.descriptionEn || 'New addition to FUT Universe library.',
         inStock: true,
@@ -390,7 +414,7 @@ export default function App() {
         contentEn: newPostData.contentEn || '',
         publishDate: new Date().toISOString().split('T')[0],
         readTime: '4 წუთი',
-        coverImage: newPostData.coverImage || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+        coverImage: sanitizeImageUrl(newPostData.coverImage, 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80'),
         author: 'FUT Universe Editorial',
         tags: newPostData.tags || ['FUT Universe', 'Georgia'],
         relatedPlayerSlugs: newPostData.relatedPlayerSlugs || []

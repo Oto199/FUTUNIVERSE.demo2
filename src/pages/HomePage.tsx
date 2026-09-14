@@ -9,7 +9,7 @@ import TrueFocus from '../components/reactbits/TrueFocus';
 import DecryptedText from '../components/reactbits/DecryptedText';
 import ClickSpark from '../components/reactbits/ClickSpark';
 import DriftWall, { DriftWallItem } from '../components/reactbits/DriftWall';
-import { handleImageError } from '../lib/imageUtils';
+import { handleImageError, sanitizeImageUrl } from '../lib/imageUtils';
 
 interface HomePageProps {
   products: Product[];
@@ -37,7 +37,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const saleStackCards = saleStackItems.map((prod) => (
     <div key={`sale-stack-${prod.id}`} className="relative w-full h-full bg-[#0d091a] border-2 border-amber-500/40 rounded-2xl overflow-hidden group shadow-2xl select-none">
       <img
-        src={prod.imageFront}
+        src={sanitizeImageUrl(prod.imageFront)}
         alt={lang === 'ka' ? prod.titleKa : prod.titleEn}
         referrerPolicy="no-referrer"
         onError={handleImageError}
@@ -99,7 +99,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   const driftWallItems: DriftWallItem[] = products.map((prod) => ({
     id: prod.id,
-    image: prod.imageFront,
+    image: sanitizeImageUrl(prod.imageFront),
     title: lang === 'ka' ? prod.titleKa : prod.titleEn
   }));
 

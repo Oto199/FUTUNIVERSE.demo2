@@ -4,7 +4,7 @@ import { Product, Size, Category, KitType, BlogPost } from '../types';
 import { ImageDropzone } from '../components/ImageDropzone';
 import { TOP_CLUBS, TOP_NATIONS } from '../data/teamsList';
 import { subscribeContactMessages, dbDeleteContactMessage } from '../lib/firebase';
-import { optimizeProductImages } from '../lib/imageUtils';
+import { optimizeProductImages, FALLBACK_JERSEY_IMAGE } from '../lib/imageUtils';
 
 interface AdminPageProps {
   products: Product[];
@@ -106,7 +106,7 @@ const INSTAGRAM_PRESETS: Array<Partial<Product> & { captionSampleKa: string }> =
     isFeatured: true,
     isWc26: true,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1560272564-669520551062?auto=format&fit=crop&w=800&q=80',
+    imageFront: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=800&q=80',
     descriptionKa: '🔥 Cristiano Ronaldo #7 — Portugal 2026 World Cup Player Version | 💰 49₾ (ფასდაკლება!) | 📏 M, L, XL.',
     descriptionEn: 'Cristiano Ronaldo #7 Portugal 2026 World Cup Player Version | 49 GEL.',
     captionSampleKa: 'Cristiano Ronaldo — Portugal 2026 World Cup\n💰 ფასი: 49₾ (ფასდაკლება!)\n📏 ზომა: M, L, XL\n🔥 პორტუგალია #7 Player Version'
@@ -195,7 +195,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
   const [customTeamEn, setCustomTeamEn] = useState<string>('');
 
   // 5 Gallery photo slots
-  const [imageFront, setImageFront] = useState<string>('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80');
+  const [imageFront, setImageFront] = useState<string>(FALLBACK_JERSEY_IMAGE);
   const [imageBack, setImageBack] = useState<string>('');
   const [imageDetail1, setImageDetail1] = useState<string>('');
   const [imageDetail2, setImageDetail2] = useState<string>('');
@@ -234,7 +234,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
     excerptEn: '',
     contentKa: '',
     contentEn: '',
-    coverImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
     author: 'FUT Universe Team',
     readTime: '3 წუთი',
     tags: 'World Cup 2026, Sale, 49 GEL, Tbilisi',
@@ -499,7 +499,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
     setSelectedTeamSlug('real-madrid');
     setCustomTeamKa('');
     setCustomTeamEn('');
-    setImageFront('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80');
+    setImageFront(FALLBACK_JERSEY_IMAGE);
     setImageBack('');
     setImageDetail1('');
     setImageDetail2('');
@@ -548,7 +548,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
         nationalTeamKa: teamKa,
         nationalTeamEn: teamEn,
         teamSlug,
-        imageFront: imageFront || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+        imageFront: imageFront || FALLBACK_JERSEY_IMAGE,
         imageBack: imageBack || undefined,
         images: allImages,
         playerSlug: newProd.playerSlug || newProd.playerEn.toLowerCase().replace(/\s+/g, '-'),
@@ -587,7 +587,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
       excerptEn: post.excerptEn || '',
       contentKa: post.contentKa || '',
       contentEn: post.contentEn || '',
-      coverImage: post.coverImage || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+      coverImage: post.coverImage || 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
       author: post.author || 'FUT Universe Team',
       readTime: post.readTime || '3 წუთი',
       tags: Array.isArray(post.tags) ? post.tags.join(', ') : '',
@@ -608,7 +608,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
       excerptEn: '',
       contentKa: '',
       contentEn: '',
-      coverImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
       author: 'FUT Universe Team',
       readTime: '3 წუთი',
       tags: 'World Cup 2026, Sale, 49 GEL, Tbilisi',

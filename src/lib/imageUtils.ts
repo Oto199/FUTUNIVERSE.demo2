@@ -1,12 +1,31 @@
 import type React from 'react';
 
-export const FALLBACK_JERSEY_IMAGE = 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80';
+// Verified, high-definition 200 OK football match and kit photo on Unsplash
+export const FALLBACK_JERSEY_IMAGE = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80';
+
+// Bulletproof zero-network inline SVG fallback jersey with gold and dark-purple accents
+export const INLINE_SVG_JERSEY = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="100%" height="100%"><rect width="400" height="500" fill="%230d091a"/><path d="M120,40 L160,80 L240,80 L280,40 L340,90 L300,160 L270,140 L270,440 L130,440 L130,140 L100,160 L60,90 Z" fill="%231a1233" stroke="%23f59e0b" stroke-width="3"/><path d="M160,80 Q200,110 240,80 Z" fill="%23f59e0b" opacity="0.6"/><rect x="180" y="110" width="40" height="15" rx="3" fill="%23f59e0b" opacity="0.9"/><text x="200" y="270" fill="%23ffffff" font-family="sans-serif" font-weight="900" font-size="64" text-anchor="middle">10</text><text x="200" y="360" fill="%23f59e0b" font-family="sans-serif" font-weight="900" font-size="16" letter-spacing="3" text-anchor="middle">FUT UNIVERSE</text></svg>`;
+
+export function isBrokenImageUrl(url?: string): boolean {
+  if (!url) return true;
+  return url.includes('photo-1508098682722-e99c43a406b2') || url.includes('photo-1560272564-669520551062');
+}
+
+export function sanitizeImageUrl(url?: string, defaultFallback = FALLBACK_JERSEY_IMAGE): string {
+  if (!url || typeof url !== 'string' || !url.trim() || isBrokenImageUrl(url)) {
+    return defaultFallback;
+  }
+  return url;
+}
 
 export function handleImageError(e: React.SyntheticEvent<HTMLImageElement, Event>, fallback = FALLBACK_JERSEY_IMAGE) {
   const target = e.currentTarget;
   if (!target.dataset.failed) {
-    target.dataset.failed = 'true';
+    target.dataset.failed = '1';
     target.src = fallback;
+  } else if (target.dataset.failed === '1') {
+    target.dataset.failed = '2';
+    target.src = INLINE_SVG_JERSEY;
   }
 }
 

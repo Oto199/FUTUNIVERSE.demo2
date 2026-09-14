@@ -36,7 +36,7 @@ export const PlayerLandingPage: React.FC<PlayerLandingPageProps> = ({
     bioKa: `${playerSlug}-ს ოფიციალური მაისურები FUT Universe-ის თბილისის ბიბლიოთეკაში.`,
     bioEn: `Official ${playerSlug} jerseys in FUT Universe Tbilisi library.`,
     wc26Role: 'ნაკრების წევრი',
-    image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80'
   };
 
   const playerProducts = products.filter(
