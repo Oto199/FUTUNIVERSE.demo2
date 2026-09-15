@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles, ShieldCheck, BookOpen, MessageCircle, Search, Com
 import { Product, PlayerInfo, TeamInfo, BlogPost } from '../types';
 import { ProductCard } from '../components/ProductCard';
 import Stack from '../components/Stack';
+import { MobileSaleShowcase } from '../components/MobileSaleShowcase';
 import ShinyText from '../components/reactbits/ShinyText';
 import SpotlightCard from '../components/reactbits/SpotlightCard';
 import TrueFocus from '../components/reactbits/TrueFocus';
@@ -245,27 +246,39 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
               </div>
 
-              {/* Right Column: High-Contrast Interactive React Bits Stack Card for Back To School */}
-              <div className="lg:col-span-5 relative flex flex-col items-center">
-                <div className="w-full max-w-[320px] sm:max-w-[360px] aspect-[4/5] relative">
-                  <Stack
-                    randomRotation={true}
-                    sensitivity={160}
-                    sendToBackOnClick={true}
-                    autoplay={true}
-                    autoplayDelay={3500}
-                    pauseOnHover={true}
-                    cards={saleStackCards}
+              {/* Right Column: High-Contrast Interactive Showcase for Back To School */}
+              <div className="lg:col-span-5 relative flex flex-col items-center w-full">
+                {/* Mobile version: Ultra-smooth 60fps gesture-based showcase with kit switcher and thumbnail strip */}
+                <div className="w-full block lg:hidden">
+                  <MobileSaleShowcase
+                    products={saleStackItems}
+                    lang={lang}
+                    onSelectProduct={(id) => navigate(`/product/${id}`)}
                   />
                 </div>
-                <p className="text-[11px] text-amber-300/80 mt-3 flex items-center space-x-1.5 font-medium tracking-wide">
-                  <Layers className="w-3.5 h-3.5 text-amber-400" />
-                  <span>
-                    {lang === 'ka'
-                      ? 'დააჭირეთ ან გადაფურცლეთ SALE მაისურების დასათვალიერებლად'
-                      : 'Click or swipe card to reveal next SALE kit'}
-                  </span>
-                </p>
+
+                {/* Desktop version: 3D interactive stack */}
+                <div className="hidden lg:flex flex-col items-center w-full">
+                  <div className="w-full max-w-[320px] sm:max-w-[360px] aspect-[4/5] relative">
+                    <Stack
+                      randomRotation={true}
+                      sensitivity={160}
+                      sendToBackOnClick={true}
+                      autoplay={true}
+                      autoplayDelay={3500}
+                      pauseOnHover={true}
+                      cards={saleStackCards}
+                    />
+                  </div>
+                  <p className="text-[11px] text-amber-300/80 mt-3 flex items-center space-x-1.5 font-medium tracking-wide">
+                    <Layers className="w-3.5 h-3.5 text-amber-400" />
+                    <span>
+                      {lang === 'ka'
+                        ? 'დააჭირეთ ან გადაფურცლეთ SALE მაისურების დასათვალიერებლად'
+                        : 'Click or swipe card to reveal next SALE kit'}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
