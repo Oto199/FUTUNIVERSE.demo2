@@ -96,12 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             {lang === 'ka' ? 'მთავარი' : 'Home'}
           </button>
           <button
-            onClick={() => navigate('/shop')}
-            className={`transition flex items-center space-x-1 ${currentPath === '/shop' ? 'text-[#008ba3] font-black' : 'text-zinc-700 hover:text-black'}`}
-          >
-            <span>{lang === 'ka' ? 'მაღაზია' : 'Catalog'}</span>
-          </button>
-          <button
             onClick={() => navigate('/shop?niche=true')}
             className="px-2.5 py-1 rounded-full bg-cyan-50 border border-cyan-300 text-[#008ba3] text-xs font-extrabold hover:bg-cyan-100 transition whitespace-nowrap"
           >
@@ -173,12 +167,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="block w-full text-left py-2 px-3 rounded text-zinc-800 hover:bg-zinc-100 hover:text-[#008ba3] font-medium"
           >
             {lang === 'ka' ? 'მთავარი' : 'Home'}
-          </button>
-          <button
-            onClick={() => { setIsMenuOpen(false); navigate('/shop'); }}
-            className="block w-full text-left py-2 px-3 rounded text-zinc-800 hover:bg-zinc-100 hover:text-[#008ba3] font-medium"
-          >
-            {lang === 'ka' ? 'მაღაზია' : 'Catalog'}
           </button>
           <button
             onClick={() => { setIsMenuOpen(false); navigate('/shop?niche=true'); }}
