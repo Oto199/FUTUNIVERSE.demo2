@@ -82,16 +82,16 @@ export const Footer: React.FC<FooterProps> = ({ navigate, lang, players, teams }
               <Instagram className="w-4 h-4" />
             </a>
             <a
-              href="https://facebook.com/futt_universe"
+              href="https://www.facebook.com/p/Fut-Universe-61590795092247/"
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-xl bg-zinc-100 border border-zinc-200 text-zinc-700 hover:text-[#008ba3] hover:border-[#008ba3] transition"
-              title="Facebook futt_universe"
+              title="Facebook Fut Universe"
             >
               <Facebook className="w-4 h-4" />
             </a>
             <a
-              href="https://m.me/futt_universe"
+              href="https://m.me/61590795092247"
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-xl bg-zinc-100 border border-zinc-200 text-zinc-700 hover:text-[#008ba3] hover:border-[#008ba3] transition"
@@ -129,8 +129,13 @@ export const Footer: React.FC<FooterProps> = ({ navigate, lang, players, teams }
               </button>
             </li>
             <li>
-              <button onClick={() => navigate('/admin')} className="hover:text-black text-zinc-400 transition font-mono">
-                ადმინ პანელი (Admin)
+              <button
+                onClick={() => navigate('/admin')}
+                className="opacity-0 hover:opacity-0 cursor-default select-none transition-none text-xs block py-0.5"
+                tabIndex={-1}
+                aria-hidden="true"
+              >
+                Admin
               </button>
             </li>
             <li className="pt-2 border-t border-zinc-200 text-[11px] text-zinc-500 flex items-center space-x-3">
@@ -152,7 +157,7 @@ export const Footer: React.FC<FooterProps> = ({ navigate, lang, players, teams }
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>© 2026 FUT Universe Tbilisi. ყველა უფლება დაცულია.</p>
           <p className="text-[11px] text-zinc-500">
-            Instagram: <a href="https://instagram.com/futt_universe" target="_blank" rel="noreferrer" className="text-[#008ba3] font-bold">@futt_universe</a> | Facebook: <a href="https://facebook.com/futt_universe" target="_blank" rel="noreferrer" className="text-[#008ba3] font-bold">futt_universe</a>
+            Instagram: <a href="https://www.instagram.com/futt_universe/" target="_blank" rel="noreferrer" className="text-[#008ba3] font-bold">@futt_universe</a> | Facebook: <a href="https://www.facebook.com/p/Fut-Universe-61590795092247/" target="_blank" rel="noreferrer" className="text-[#008ba3] font-bold">Fut Universe</a>
           </p>
         </div>
       </div>

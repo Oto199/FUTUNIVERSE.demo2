@@ -88,7 +88,7 @@ export const TeamLandingPage: React.FC<TeamLandingPageProps> = ({
               <span>{lang === 'ka' ? 'Instagram-ზე წერა' : 'Order via Instagram'}</span>
             </a>
             <a
-              href="https://m.me/futt_universe"
+              href="https://m.me/61590795092247"
               target="_blank"
               rel="noreferrer"
               className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center space-x-2 transition shadow-lg shadow-blue-950/40"

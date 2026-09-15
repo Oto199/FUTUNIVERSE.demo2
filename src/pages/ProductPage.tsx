@@ -229,7 +229,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({
               </a>
 
               <a
-                href="https://m.me/futt_universe"
+                href="https://m.me/61590795092247"
                 target="_blank"
                 rel="noreferrer"
                 className="py-3.5 px-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-sm flex items-center justify-center space-x-2 transition shadow-xl shadow-blue-950/40"

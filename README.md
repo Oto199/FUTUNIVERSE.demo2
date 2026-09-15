@@ -41,8 +41,9 @@ All products in the FUT Universe Tbilisi library are 100% in-stock with immediat
 ## 📞 Order & Contact Channels
 
 Customers can order directly via social channels or the website:
-* **Instagram:** [@futt_universe](https://instagram.com/futt_universe)
-* **Facebook Messenger:** FUT Universe Tbilisi
+* **Instagram:** [@futt_universe](https://www.instagram.com/futt_universe/)
+* **Facebook:** [Fut Universe](https://www.facebook.com/p/Fut-Universe-61590795092247/)
+* **Facebook Messenger:** [m.me/61590795092247](https://m.me/61590795092247)
 * **Website:** Direct product catalog with filtering by Player, Team, Kit Type, Size, and Price.
 
 ---

@@ -96,7 +96,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
             </a>
 
             <a
-              href="https://m.me/futt_universe"
+              href="https://m.me/61590795092247"
               target="_blank"
               rel="noreferrer"
               className="p-4 rounded-2xl bg-blue-950/60 hover:bg-blue-900/80 border border-blue-500/30 text-blue-100 flex items-center space-x-3 transition shadow-lg"
@@ -106,12 +106,12 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
               </div>
               <div>
                 <p className="text-sm font-bold">Facebook Messenger Direct</p>
-                <p className="text-xs text-blue-200">m.me/futt_universe</p>
+                <p className="text-xs text-blue-200">Fut Universe Messenger</p>
               </div>
             </a>
 
             <a
-              href="https://facebook.com/futt_universe"
+              href="https://www.facebook.com/p/Fut-Universe-61590795092247/"
               target="_blank"
               rel="noreferrer"
               className="p-4 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 flex items-center space-x-3 transition"
@@ -119,7 +119,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
               <Facebook className="w-5 h-5 text-blue-400" />
               <div>
                 <p className="text-sm font-bold">Facebook Page</p>
-                <p className="text-xs text-slate-400">futt_universe</p>
+                <p className="text-xs text-slate-400">Fut-Universe</p>
               </div>
             </a>
 
@@ -159,7 +159,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
                   <span>Instagram</span>
                 </a>
                 <a
-                  href="https://m.me/futt_universe"
+                  href="https://m.me/61590795092247"
                   target="_blank"
                   rel="noreferrer"
                   className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs flex items-center space-x-1"

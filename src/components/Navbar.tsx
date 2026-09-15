@@ -144,8 +144,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={() => navigate('/admin')}
-            className="p-2 rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-600 hover:text-black text-xs hidden sm:block font-bold"
-            title="Admin Management"
+            className="px-3 py-2 text-xs font-bold opacity-0 hover:opacity-0 cursor-default select-none transition-none"
+            tabIndex={-1}
+            aria-hidden="true"
           >
             Admin
           </button>
