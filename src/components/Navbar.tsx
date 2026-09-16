@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ShoppingBag, Menu, X, ArrowRight, ShieldCheck, Sparkles, MessageCircle, SlidersHorizontal, BookOpen, Instagram } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, ArrowRight, ShieldCheck, Sparkles, MessageCircle, SlidersHorizontal, BookOpen, Instagram, Clock, Send } from 'lucide-react';
 import { Product, PlayerInfo, TeamInfo } from '../types';
 
 interface NavbarProps {
@@ -326,15 +326,49 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
 
               {searchQuery.trim() && filteredPlayers.length === 0 && filteredTeams.length === 0 && filteredProducts.length === 0 && (
-                <div className="text-center py-8 text-zinc-500">
-                  <p className="text-sm font-medium">შედეგი ვერ მოიძებნა: "{searchQuery}"</p>
-                  <p className="text-xs text-zinc-400 mt-1">სცადეთ სხვა მოთამაშის ან ნაკრების დასახელება</p>
-                  <button
-                    onClick={() => handleSelectResult('/shop')}
-                    className="mt-4 px-4 py-2 rounded-xl bg-cyan-50 border border-cyan-200 text-[#008ba3] text-xs font-bold"
-                  >
-                    იხილეთ სრული კატალოგი
-                  </button>
+                <div className="py-6 px-4 rounded-2xl bg-gradient-to-b from-zinc-50 to-cyan-50/40 border border-cyan-200/80 text-center space-y-4">
+                  <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#008ba3]/10 text-[#008ba3] text-xs font-mono font-bold">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{lang === 'ka' ? 'ჩამოტანა შეკვეთით • 14-15 დღეში' : 'CUSTOM ORDER • 14-15 DAYS'}</span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h4 className="text-base font-extrabold text-zinc-900">
+                      {lang === 'ka'
+                        ? `ვერ იპოვეთ "${searchQuery}"? ჩამოგიტანთ შეკვეთით!`
+                        : `Can't find "${searchQuery}"? We order it in 14-15 days!`}
+                    </h4>
+                    <p className="text-xs text-zinc-600 max-w-md mx-auto">
+                      {lang === 'ka'
+                        ? 'ნებისმიერი კლუბის, ნაკრების თუ რეტრო მოდელის მაისურს ჩამოგიტანთ სასურველი მოთამაშის სახელითა და ნომრით სულ რაღაც 14-15 დღეში.'
+                        : 'We can import any club, national team, or retro kit with custom name & number in just 14-15 days.'}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                    <a
+                      href="https://www.instagram.com/futt_universe/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2 rounded-xl bg-[#008ba3] text-white text-xs font-bold hover:bg-cyan-700 transition flex items-center space-x-1.5 shadow-sm"
+                    >
+                      <Instagram className="w-3.5 h-3.5" />
+                      <span>{lang === 'ka' ? 'შეკვეთა Instagram-ზე' : 'Order via Instagram'}</span>
+                    </a>
+                    <button
+                      onClick={() => handleSelectResult('/contact')}
+                      className="px-4 py-2 rounded-xl bg-white border border-zinc-300 text-zinc-800 text-xs font-semibold hover:border-zinc-400 transition flex items-center space-x-1.5"
+                    >
+                      <Send className="w-3.5 h-3.5 text-[#008ba3]" />
+                      <span>{lang === 'ka' ? 'საკონტაქტო ფორმა' : 'Contact Form'}</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelectResult('/shop')}
+                      className="px-3 py-2 text-zinc-500 hover:text-zinc-800 text-xs font-medium transition"
+                    >
+                      {lang === 'ka' ? 'სრული კატალოგი' : 'All Kits'}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

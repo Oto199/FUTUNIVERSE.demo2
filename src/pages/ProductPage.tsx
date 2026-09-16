@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, ArrowLeft, ShieldCheck, Truck, Sparkles, Check, Share2, Info, ArrowRight, Instagram } from 'lucide-react';
+import { MessageCircle, ArrowLeft, ShieldCheck, Truck, Sparkles, Check, Share2, Info, ArrowRight, Instagram, Clock, Send } from 'lucide-react';
 import { Product, Size, PlayerInfo } from '../types';
 import { ProductCard } from '../components/ProductCard';
 import { handleImageError, sanitizeImageUrl } from '../lib/imageUtils';
@@ -19,7 +19,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({
   navigate,
   lang
 }) => {
-  const product = products.find(p => p.id === productId) || products[0];
+  const product = products.find(p => p.id === productId);
   const [selectedSize, setSelectedSize] = useState<Size>(product?.sizes[0] || 'M');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
@@ -35,11 +35,49 @@ export const ProductPage: React.FC<ProductPageProps> = ({
 
   if (!product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center space-y-4">
-        <p className="text-[#00e5ff] font-mono">PRODUCT NOT FOUND</p>
-        <button onClick={() => navigate('/shop')} className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs">
-          {lang === 'ka' ? 'კატალოგში დაბრუნება' : 'Back to Catalog'}
-        </button>
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-6">
+        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-b from-[#12122b] via-slate-900 to-slate-950 border-2 border-cyan-500/40 shadow-2xl space-y-6 relative overflow-hidden">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#00e5ff]/15 border border-[#00e5ff]/40 text-[#00e5ff] text-xs font-mono font-bold uppercase tracking-wider">
+            <Clock className="w-3.5 h-3.5" />
+            <span>{lang === 'ka' ? 'მაისურების ჩამოტანა შეკვეთით • 14-15 დღეში' : 'CUSTOM ORDERS • 14-15 DAYS'}</span>
+          </div>
+
+          <div className="space-y-3 max-w-lg mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-black text-white">
+              {lang === 'ka' ? 'ეს მაისური მარაგში აღარ არის? ჩამოგიტანთ!' : 'Kit Out of Stock? We Import on Order!'}
+            </h2>
+            <p className="text-sm text-slate-300 leading-relaxed">
+              {lang === 'ka'
+                ? 'არ იდარდოთ! FUT Universe გთავაზობთ ნებისმიერი მაისურის ჩამოტანას სულ რაღაც 14-15 დღეში. აირჩიეთ ნებისმიერი მოთამაშე, ნომერი და ზომა (S-4XL).'
+                : 'Do not worry! We can order any player kit, retro classic, or club jersey and deliver it in just 14-15 days with official customization.'}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <a
+              href="https://www.instagram.com/futt_universe/"
+              target="_blank"
+              rel="noreferrer"
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#00e5ff] to-cyan-400 text-black font-extrabold text-xs sm:text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition flex items-center space-x-2"
+            >
+              <Instagram className="w-4 h-4" />
+              <span>{lang === 'ka' ? 'შეკვეთა Instagram-ზე' : 'Order via Instagram'}</span>
+            </a>
+            <button
+              onClick={() => navigate('/contact')}
+              className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-xs sm:text-sm transition flex items-center space-x-2"
+            >
+              <Send className="w-4 h-4 text-cyan-400" />
+              <span>{lang === 'ka' ? 'საკონტაქტო ფორმა' : 'Contact Form'}</span>
+            </button>
+            <button
+              onClick={() => navigate('/shop')}
+              className="px-4 py-3 rounded-2xl text-slate-400 hover:text-white text-xs font-semibold transition"
+            >
+              {lang === 'ka' ? 'კატალოგში დაბრუნება' : 'Back to Catalog'}
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -255,6 +293,29 @@ export const ProductPage: React.FC<ProductPageProps> = ({
                 <Share2 className="w-3.5 h-3.5" />
                 <span>{isCopied ? (lang === 'ka' ? 'დაკოპირდა!' : 'Copied!') : (lang === 'ka' ? 'გაზიარება' : 'Share')}</span>
               </button>
+            </div>
+
+            {/* Custom order notice */}
+            <div className="p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-500/30 flex items-start space-x-3 text-xs">
+              <Clock className="w-4 h-4 text-[#00e5ff] shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-bold text-white">
+                  {lang === 'ka' ? 'გჭირდებათ სხვა ზომა (S-4XL) ან სხვა მოთამაშე?' : 'Need another size (S-4XL) or player?'}
+                </p>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  {lang === 'ka'
+                    ? 'ჩვენ ჩამოგვაქვს ნებისმიერი სასურველი მაისური შეკვეთით 14-15 დღეში.'
+                    : 'We can import any kit on custom order in just 14-15 days.'}{' '}
+                  <a
+                    href="https://www.instagram.com/futt_universe/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#00e5ff] underline font-semibold"
+                  >
+                    {lang === 'ka' ? 'მოგვწერეთ Instagram-ზე' : 'Message on Instagram'}
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
 

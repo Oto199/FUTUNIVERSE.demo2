@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, MapPin, Sparkles, MessageCircle, Instagram, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, MapPin, Sparkles, MessageCircle, Instagram, CheckCircle2, Clock, PackageCheck, Send, ArrowRight } from 'lucide-react';
 
 interface AboutPageProps {
   navigate: (path: string) => void;
@@ -22,6 +22,99 @@ export const AboutPage: React.FC<AboutPageProps> = ({ navigate, lang }) => {
             ? 'FUT Universe შეიქმნა თბილისში, როგორც საფეხბურთო მაისურების ბიბლიოთეკა და არქივი. ჩვენ არ ვართ უბრალოდ კიდევ ერთი მაღაზია — ჩვენ ვართ ადგილი, სადაც საფეხბურთო კულტურა ცოცხლობს.'
             : 'FUT Universe was established in Tbilisi as a football jersey library and archive for true purists.'}
         </p>
+      </div>
+
+      {/* SPECIAL ORDER PROMOTION: 14-15 DAYS IMPORT SERVICE */}
+      <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#0b0f24] via-[#12122b] to-[#0a071a] border-2 border-cyan-500/40 shadow-2xl space-y-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#00e5ff]/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#00e5ff]/15 border border-[#00e5ff]/40 text-[#00e5ff] text-xs font-mono font-bold uppercase tracking-wider">
+            <Clock className="w-4 h-4" />
+            <span>{lang === 'ka' ? 'ექსკლუზიური შეკვეთა • 14-15 დღეში' : 'CUSTOM ORDERS • 14-15 DAYS'}</span>
+          </div>
+          <span className="text-xs text-amber-400 font-mono font-bold bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">
+            {lang === 'ka' ? '✓ ნებისმიერი კლუბი & რეტრო' : '✓ Any Club & Retro'}
+          </span>
+        </div>
+
+        <div className="space-y-3">
+          <h2 className="text-2xl sm:text-3xl font-black text-white">
+            {lang === 'ka'
+              ? 'ვერ იპოვეთ სასურველი მაისური? ჩამოგიტანთ 14-15 დღეში!'
+              : "Can't find your desired jersey? We import it in 14-15 days!"}
+          </h2>
+          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
+            {lang === 'ka'
+              ? 'თუ კატალოგში თქვენი საყვარელი გუნდის, ნაკრების ან რეტრო სეზონის ფორმა ამ ეტაპზე არ არის, ჩვენ გთავაზობთ ინდივიდუალური ჩამოტანის სერვისს. აირჩიეთ ნებისმიერი მოთამაშე, ნომერი და ოფიციალური ტურნირის პაჩები — მაისური თქვენთან იქნება სულ რაღაც 14-15 დღეში.'
+              : 'If your dream club kit, national jersey, or vintage retro shirt is not currently in our local stock, our special import service brings it directly to Tbilisi in just 14-15 days with full official printing and custom badge choices.'}
+          </p>
+        </div>
+
+        {/* 3 Step Process */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+          <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-1.5">
+            <div className="w-8 h-8 rounded-lg bg-[#00e5ff]/20 text-[#00e5ff] flex items-center justify-center font-mono font-bold text-sm">
+              01
+            </div>
+            <h3 className="text-sm font-bold text-white">
+              {lang === 'ka' ? 'აირჩიეთ მაისური' : 'Choose Any Jersey'}
+            </h3>
+            <p className="text-xs text-slate-400">
+              {lang === 'ka' ? 'ნებისმიერი ლიგა, სეზონი, რეტრო თუ ნაკრები სასურველი ზომით' : 'Any league, classic retro, or national squad in sizes S-4XL'}
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-1.5">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono font-bold text-sm">
+              02
+            </div>
+            <h3 className="text-sm font-bold text-white">
+              {lang === 'ka' ? 'დაგვიკავშირდით' : 'Contact Our Team'}
+            </h3>
+            <p className="text-xs text-slate-400">
+              {lang === 'ka' ? 'გამოგვიგზავნეთ ფოტო ან მოთამაშის სახელი Instagram-ზე' : 'Send screenshot or kit details via Instagram Direct'}
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-1.5">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm">
+              03
+            </div>
+            <h3 className="text-sm font-bold text-white">
+              {lang === 'ka' ? 'მიიღეთ 14-15 დღეში' : 'Receive in 14-15 Days'}
+            </h3>
+            <p className="text-xs text-slate-400">
+              {lang === 'ka' ? 'სწრაფი საერთაშორისო ტრანზიტი და მიწოდება თბილისში' : 'Direct international transit and delivery straight to your door'}
+            </p>
+          </div>
+        </div>
+
+        {/* CTA Bar */}
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <a
+            href="https://www.instagram.com/futt_universe/"
+            target="_blank"
+            rel="noreferrer"
+            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#00e5ff] to-cyan-400 text-black font-extrabold text-xs sm:text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition flex items-center space-x-2"
+          >
+            <Instagram className="w-4 h-4" />
+            <span>{lang === 'ka' ? 'ინდივიდუალური შეკვეთა Instagram-ზე' : 'Custom Order on Instagram'}</span>
+          </a>
+          <button
+            onClick={() => navigate('/contact')}
+            className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-xs sm:text-sm transition flex items-center space-x-2"
+          >
+            <Send className="w-4 h-4 text-cyan-400" />
+            <span>{lang === 'ka' ? 'საკონტაქტო ფორმა' : 'Contact Form'}</span>
+          </button>
+          <button
+            onClick={() => navigate('/shop')}
+            className="px-4 py-3 rounded-2xl text-slate-400 hover:text-white text-xs font-semibold transition"
+          >
+            {lang === 'ka' ? 'მარაგში არსებული კატალოგი →' : 'Browse In-Stock Kits →'}
+          </button>
+        </div>
       </div>
 
       {/* Story Grid */}
@@ -55,15 +148,19 @@ export const AboutPage: React.FC<AboutPageProps> = ({ navigate, lang }) => {
         </div>
       </div>
 
-      {/* Highlights */}
+      {/* Highlights & Guarantees */}
       <div className="p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-4 text-center">
         <h3 className="text-lg font-bold text-white">
           {lang === 'ka' ? 'FUT Universe თბილისის გარანტიები' : 'FUT Universe Guarantees'}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-semibold text-slate-200">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-semibold text-slate-200">
           <div className="p-4 rounded-2xl bg-[#0a0a0f] border border-slate-800 flex items-center justify-center space-x-2">
             <CheckCircle2 className="w-4 h-4 text-[#00e5ff]" />
             <span>{lang === 'ka' ? 'ოფიციალური პრინტები' : 'Official Printing'}</span>
+          </div>
+          <div className="p-4 rounded-2xl bg-[#0a0a0f] border border-slate-800 flex items-center justify-center space-x-2">
+            <Clock className="w-4 h-4 text-[#00e5ff]" />
+            <span>{lang === 'ka' ? 'შეკვეთით 14-15 დღეში' : '14-15d Custom Orders'}</span>
           </div>
           <div className="p-4 rounded-2xl bg-[#0a0a0f] border border-slate-800 flex items-center justify-center space-x-2">
             <CheckCircle2 className="w-4 h-4 text-[#00e5ff]" />
@@ -78,3 +175,4 @@ export const AboutPage: React.FC<AboutPageProps> = ({ navigate, lang }) => {
     </div>
   );
 };
+export default AboutPage;

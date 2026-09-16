@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageCircle, Instagram, Facebook, Truck, Mail, Send, Check } from 'lucide-react';
+import { MessageCircle, Instagram, Facebook, Truck, Mail, Send, Check, Clock } from 'lucide-react';
 import { TikTokIcon } from '../components/TikTokIcon';
 import { dbAddContactMessage } from '../lib/firebase';
 
@@ -52,8 +52,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
         </h1>
         <p className="text-xs sm:text-sm text-slate-300">
           {lang === 'ka'
-            ? 'შეკვეთები, ზომების დაზუსტება და ინდივიდუალური პრინტები თბილისში.'
-            : 'Orders, size verification, and custom prints in Tbilisi.'}
+            ? 'შეკვეთები, 14-15 დღეში ინდივიდუალური ჩამოტანა, ზომების დაზუსტება და პრინტები.'
+            : 'Orders, 14-15 day custom kit imports, size verification, and official prints in Tbilisi.'}
         </p>
       </div>
 
@@ -65,6 +65,16 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
           </h2>
 
           <div className="space-y-3">
+            {/* 14-15 Days Import Banner */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-[#12122b] border border-cyan-500/40 flex items-center space-x-3 text-slate-300 text-xs shadow-lg">
+              <div className="w-9 h-9 rounded-xl bg-[#00e5ff]/20 text-[#00e5ff] flex items-center justify-center shrink-0">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-bold text-white">{lang === 'ka' ? 'მაისურების ჩამოტანა • 14-15 დღეში' : 'Custom Kits • 14-15 Days'}</p>
+                <p className="text-slate-400 text-[11px]">{lang === 'ka' ? 'ჩამოგვაქვს ნებისმიერი კლუბის, ნაკრების თუ რეტრო მაისური' : 'Import any club, national team, or retro classic kit'}</p>
+              </div>
+            </div>
             <a
               href="https://www.tiktok.com/@fut.universe8"
               target="_blank"

@@ -1,5 +1,23 @@
 import React, { useState, useMemo } from 'react';
-import { SlidersHorizontal, Search, X, RotateCcw, Sparkles, Filter, Shield, Globe, Flame, Tag, Percent } from 'lucide-react';
+import {
+  SlidersHorizontal,
+  Search,
+  X,
+  RotateCcw,
+  Sparkles,
+  Filter,
+  Shield,
+  Globe,
+  Flame,
+  Tag,
+  Percent,
+  Clock,
+  PackageCheck,
+  Send,
+  Instagram,
+  ShieldCheck,
+  ArrowRight
+} from 'lucide-react';
 import { Product, PlayerInfo, TeamInfo, FilterState, Size, Category, KitType } from '../types';
 import { ProductCard } from '../components/ProductCard';
 import { TOP_CLUBS, TOP_NATIONS } from '../data/teamsList';
@@ -725,32 +743,133 @@ export const ShopPage: React.FC<ShopPageProps> = ({
 
           {/* Product Cards Grid */}
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onSelect={(id) => navigate(`/product/${id}`)}
-                  lang={lang}
-                />
-              ))}
+            <div className="space-y-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onSelect={(id) => navigate(`/product/${id}`)}
+                    lang={lang}
+                  />
+                ))}
+              </div>
+
+              {/* Discovery Banner for Custom Orders */}
+              <div className="p-6 rounded-3xl bg-gradient-to-r from-[#0d0d1f] via-slate-900 to-[#0d0d1f] border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-2xl bg-[#00e5ff]/10 border border-[#00e5ff]/30 flex items-center justify-center text-[#00e5ff] shrink-0">
+                    <Clock className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm sm:text-base font-black text-white">
+                      {lang === 'ka'
+                        ? 'ვერ იპოვეთ სასურველი მაისური? ჩამოგიტანთ შეკვეთით 14-15 დღეში!'
+                        : "Can't find your desired jersey? We import any kit in 14-15 days!"}
+                    </h4>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      {lang === 'ka'
+                        ? 'ნებისმიერი კლუბი, ნაკრები, რეტრო მოდელი და მოთამაშის ბეჭდვა ოფიციალური შრიფტით.'
+                        : 'Any club, national team, retro classic, and custom official player printing.'}
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href="https://www.instagram.com/futt_universe/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="shrink-0 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#00e5ff] to-cyan-400 text-black font-black text-xs hover:shadow-lg hover:shadow-cyan-500/30 transition flex items-center space-x-2 cursor-pointer"
+                >
+                  <Instagram className="w-4 h-4" />
+                  <span>{lang === 'ka' ? 'შეკვეთა Instagram-ზე' : 'Order on Instagram'}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
           ) : (
-            <div className="p-12 text-center rounded-3xl bg-slate-900/50 border border-slate-800 space-y-4">
-              <p className="text-base text-slate-300 font-semibold">
-                {lang === 'ka' ? 'მითითებული ფილტრებით მაისური ვერ მოიძებნა' : 'No jerseys found matching selected filters'}
-              </p>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                {lang === 'ka'
-                  ? 'სცადეთ ფილტრების გასუფთავება ან სხვა მოთამაშის/ნაკრების არჩევა. FUT Universe-ის ბიბლიოთეკა მუდმივად ახლდება.'
-                  : 'Try resetting filters or searching for a different player or national team.'}
-              </p>
-              <button
-                onClick={resetFilters}
-                className="px-6 py-2.5 rounded-xl bg-[#00e5ff] text-black font-extrabold text-xs"
-              >
-                {lang === 'ka' ? 'ფილტრების გასუფთავება' : 'Reset All Filters'}
-              </button>
+            <div className="p-8 sm:p-12 text-center rounded-3xl bg-gradient-to-b from-[#12122b] via-slate-900 to-slate-950 border-2 border-cyan-500/40 shadow-2xl space-y-6 relative overflow-hidden">
+              {/* Background ambient glow */}
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#00e5ff]/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#00e5ff]/15 border border-[#00e5ff]/40 text-[#00e5ff] text-xs font-mono font-bold uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{lang === 'ka' ? 'მაისურების ჩამოტანა შეკვეთით • 14-15 დღეში' : 'CUSTOM ORDER SERVICE • 14-15 DAYS'}</span>
+              </div>
+
+              <div className="space-y-3 max-w-xl mx-auto">
+                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                  {lang === 'ka'
+                    ? 'ვერ იპოვეთ სასურველი მაისური? ჩამოგიტანთ შეკვეთით!'
+                    : "Can't find the jersey you're looking for? We'll order it for you!"}
+                </h3>
+                <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+                  {lang === 'ka'
+                    ? 'FUT Universe-ში შეგიძლიათ შეუკვეთოთ მსოფლიოს ნებისმიერი კლუბის, ნაკრების თუ ისტორიული რეტრო სეზონის მაისური. ჩამოტანა ხდება სულ რაღაც 14-15 დღეში!'
+                    : 'At FUT Universe, you can order any club, national team, or historic retro classic jersey. Delivered straight to your hands in just 14-15 days!'}
+                </p>
+              </div>
+
+              {/* Highlights: 14-15 Days, Any Player/Retro, Guarantee */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto text-left">
+                <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <div className="flex items-center space-x-2 text-[#00e5ff] font-bold text-xs">
+                    <Clock className="w-4 h-4" />
+                    <span>{lang === 'ka' ? '14-15 დღეში ჩამოტანა' : '14-15 Days Delivery'}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    {lang === 'ka' ? 'პირდაპირი საერთაშორისო რეისით თბილისში უმოკლეს ვადაში' : 'Express international transit straight to Tbilisi'}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <div className="flex items-center space-x-2 text-emerald-400 font-bold text-xs">
+                    <PackageCheck className="w-4 h-4" />
+                    <span>{lang === 'ka' ? 'ნებისმიერი გუნდი & მოთამაშე' : 'Any Club & Player'}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    {lang === 'ka' ? 'სასურველი სახელი, ნომერი, ოფიციალური პაჩები (S-4XL)' : 'Custom name, number, tournament sleeve patches (S-4XL)'}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <div className="flex items-center space-x-2 text-purple-400 font-bold text-xs">
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>{lang === 'ka' ? '100% ხარისხის გარანტია' : '100% Quality Check'}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    {lang === 'ka' ? 'სუნთქვადი Dry-Fit ქსოვილი და ზომის დაზღვევა' : 'Premium breathable fabrics & hassle-free guarantee'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href="https://www.instagram.com/futt_universe/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#00e5ff] to-cyan-400 text-black font-extrabold text-xs sm:text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition flex items-center space-x-2 cursor-pointer"
+                >
+                  <Instagram className="w-4 h-4" />
+                  <span>{lang === 'ka' ? 'მოგვწერეთ Instagram-ზე და შეუკვეთეთ' : 'Order via Instagram Direct'}</span>
+                </a>
+                <button
+                  onClick={() => navigate('/contact')}
+                  className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-xs sm:text-sm transition flex items-center space-x-2 cursor-pointer"
+                >
+                  <Send className="w-4 h-4 text-cyan-400" />
+                  <span>{lang === 'ka' ? 'შეკვეთის ფორმა' : 'Order Form'}</span>
+                </button>
+                {hasActiveFilters && (
+                  <button
+                    onClick={resetFilters}
+                    className="px-4 py-3 rounded-2xl bg-transparent hover:bg-slate-800/60 text-slate-400 hover:text-white text-xs font-semibold transition cursor-pointer"
+                  >
+                    {lang === 'ka' ? 'ფილტრების გასუფთავება' : 'Reset Filters'}
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </main>
