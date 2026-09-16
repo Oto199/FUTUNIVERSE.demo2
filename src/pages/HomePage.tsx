@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Sparkles, ShieldCheck, BookOpen, MessageCircle, Search, Compass, Instagram, Layers, MapPin, Award, CheckCircle2, Zap, Tag, Percent, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldCheck, BookOpen, MessageCircle, Search, Instagram, Layers, MapPin, Award, CheckCircle2, Zap, Tag, Percent, ShoppingBag } from 'lucide-react';
 import { Product, PlayerInfo, TeamInfo, BlogPost } from '../types';
 import { ProductCard } from '../components/ProductCard';
 import Stack from '../components/Stack';
@@ -285,69 +285,10 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* QUICK PLAYER ARCHIVE STRIP */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-6 rounded-2xl bg-[#12122b]/80 border border-slate-800 space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-            <div>
-              <h3 className="text-sm font-bold text-white flex items-center space-x-2">
-                <Compass className="w-4 h-4 text-[#00e5ff]" />
-                <span>{lang === 'ka' ? 'მოძებნე შენი მოთამაშე ბიბლიოთეკაში' : 'Explore Library Players'}</span>
-              </h3>
-              <p className="text-xs text-slate-400">
-                {lang === 'ka' ? 'დააჭირეთ მოთამაშეს მისი პირად გვერდზე გადასასვლელად' : 'Click player to view detailed player page'}
-              </p>
-            </div>
-            <button
-              onClick={() => navigate('/shop')}
-              className="text-xs text-[#00e5ff] hover:underline font-semibold flex items-center space-x-1"
-            >
-              <span>{lang === 'ka' ? 'ყველა მოთამაშე' : 'All Players'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="flex items-center space-x-3 overflow-x-auto pb-2 scrollbar-none">
-            {players.map((pl) => (
-              <button
-                key={pl.slug}
-                onClick={() => navigate(`/player/${pl.slug}`)}
-                className="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-[#00e5ff]/50 text-slate-200 text-xs font-medium shrink-0 transition"
-              >
-                <img src={pl.image} alt={pl.nameKa} className="w-6 h-6 rounded-full object-cover" referrerPolicy="no-referrer" />
-                <span className="font-semibold">{pl.nameKa}</span>
-                <span className="text-[10px] text-[#00e5ff] font-mono">#{pl.number}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* LIBRARY PHILOSOPHY SECTION - ULTRA SLEEK BENTO GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-6">
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-white/10">
-            <div>
-              <div className="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-black/80 border border-[#00e5ff]/30 backdrop-blur-md mb-2">
-                <img src="/logo.png" alt="FUT Universe" className="w-4 h-4 rounded-full object-contain border border-[#00e5ff] bg-black" referrerPolicy="no-referrer" />
-                <span className="text-[11px] font-mono font-bold text-[#00e5ff] tracking-widest uppercase">
-                  {lang === 'ka' ? 'FUT UNIVERSE STANDARDS' : 'FUT UNIVERSE STANDARDS'}
-                </span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight">
-                {lang === 'ka' ? 'რატომ FUT Universe?' : 'Why FUT Universe?'}
-              </h2>
-            </div>
-            <p className="text-xs text-zinc-400 max-w-md">
-              {lang === 'ka'
-                ? 'თბილისის საფეხბურთო ბიბლიოთეკა — მხოლოდ უმაღლესი ხარისხის მოთამაშეების ვერსიები (Player Versions), რეტრო კოლექციები და ექსკლუზიური პრინტები.'
-                : 'Tbilisi Football Library — only premium Player Versions, retro collections, and authentic player nameprints.'}
-            </p>
-          </div>
-
-          {/* Bento Cards Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Bento Cards Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Bento Card 1 - Main Highlight (Span 2 on desktop) */}
             <div className="md:col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0d0d1f] via-[#090915] to-[#04040a] border border-white/10 hover:border-[#00e5ff]/50 p-8 sm:p-10 flex flex-col justify-between group transition duration-500 shadow-2xl">
               <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-[#00e5ff]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00e5ff]/20 transition duration-700" />
@@ -421,7 +362,6 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* FEATURED NICHE PICKS CATALOG */}
