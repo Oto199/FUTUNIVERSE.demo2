@@ -35,17 +35,22 @@ export default function App() {
 
   const [products, setProducts] = useState<Product[]>(() => {
     try {
-      // Clear legacy caches that might contain old stock photos or deleted items
+      // Clear legacy caches that might contain old stock photos or broken /uploads/ paths
       localStorage.removeItem('fut_products_v3');
       localStorage.removeItem('fut_products_v4');
+      localStorage.removeItem('fut_products_v5');
 
-      const stored = localStorage.getItem('fut_products_v5');
+      const stored = localStorage.getItem('fut_products_v6');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // If stored items contain obsolete unsplash stock photos, discard and use clean initial products
-          const hasOldStockImages = parsed.some((p: Product) => p?.imageFront?.includes('images.unsplash.com'));
-          if (!hasOldStockImages) {
+          // If stored items contain obsolete stock photos or invalid /uploads/ paths, discard and use clean initial products
+          const hasInvalidImages = parsed.some((p: Product) => 
+            !p?.imageFront || 
+            p.imageFront.includes('images.unsplash.com') || 
+            p.imageFront.startsWith('/uploads/')
+          );
+          if (!hasInvalidImages) {
             return parsed;
           }
         }
@@ -56,7 +61,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('fut_products_v5', JSON.stringify(products));
+      localStorage.setItem('fut_products_v6', JSON.stringify(products));
     } catch (e) {}
   }, [products]);
 
@@ -109,15 +114,15 @@ export default function App() {
     return incomingFromDb.map(p => {
       const initial = initialMap.get(p.id);
 
-      // Determine best front image: prefer clean uploads or custom data URL over old stock unsplash
+      // Determine best front image: prefer valid base64 data URLs or clean images, avoid 404-prone /uploads/ paths and unsplash
       let bestFront = p.imageFront;
-      if (isDefaultUnsplash(bestFront)) {
+      if (isDefaultUnsplash(bestFront) || (bestFront && bestFront.startsWith('/uploads/'))) {
         bestFront = initial?.imageFront || bestFront;
       }
       bestFront = sanitizeImageUrl(bestFront, initial?.imageFront || FALLBACK_JERSEY_IMAGE);
 
       let bestBack = p.imageBack;
-      if (isDefaultUnsplash(bestBack)) {
+      if (isDefaultUnsplash(bestBack) || (bestBack && bestBack.startsWith('/uploads/'))) {
         bestBack = initial?.imageBack || bestBack;
       }
       if (bestBack) {
@@ -125,7 +130,7 @@ export default function App() {
       }
 
       let rawImages = Array.isArray(p.images) && p.images.length > 0 ? p.images : (initial?.images || [bestFront]);
-      if (rawImages.some(img => isDefaultUnsplash(img)) && initial?.images) {
+      if (rawImages.some(img => isDefaultUnsplash(img) || (img && img.startsWith('/uploads/'))) && initial?.images) {
         rawImages = initial.images;
       }
       const sanitizedImages = rawImages.map(img => sanitizeImageUrl(img, bestFront));
@@ -187,7 +192,14 @@ export default function App() {
     // 1. Instant load from local IndexedDB cache (0ms perceived latency & saves Firestore quotas)
     getCachedData<Product[]>('products').then(cached => {
       if (Array.isArray(cached) && cached.length > 0) {
-        setProducts(mergeProducts(cached));
+        const hasInvalid = cached.some((p: Product) => 
+          !p?.imageFront || 
+          p.imageFront.includes('images.unsplash.com') || 
+          p.imageFront.startsWith('/uploads/')
+        );
+        if (!hasInvalid) {
+          setProducts(mergeProducts(cached));
+        }
       }
     });
     getCachedData<BlogPost[]>('blogPosts').then(cached => {
