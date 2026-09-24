@@ -39,8 +39,9 @@ export default function App() {
       localStorage.removeItem('fut_products_v3');
       localStorage.removeItem('fut_products_v4');
       localStorage.removeItem('fut_products_v5');
+      localStorage.removeItem('fut_products_v6');
 
-      const stored = localStorage.getItem('fut_products_v6');
+      const stored = localStorage.getItem('fut_products_v7');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -48,6 +49,7 @@ export default function App() {
           const hasInvalidImages = parsed.some((p: Product) => 
             !p?.imageFront || 
             p.imageFront.includes('images.unsplash.com') || 
+            p.imageFront.includes('picsum.photos') ||
             p.imageFront.startsWith('/uploads/')
           );
           if (!hasInvalidImages) {
@@ -61,7 +63,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('fut_products_v6', JSON.stringify(products));
+      localStorage.setItem('fut_products_v7', JSON.stringify(products));
     } catch (e) {}
   }, [products]);
 
@@ -195,6 +197,7 @@ export default function App() {
         const hasInvalid = cached.some((p: Product) => 
           !p?.imageFront || 
           p.imageFront.includes('images.unsplash.com') || 
+          p.imageFront.includes('picsum.photos') ||
           p.imageFront.startsWith('/uploads/')
         );
         if (!hasInvalid) {

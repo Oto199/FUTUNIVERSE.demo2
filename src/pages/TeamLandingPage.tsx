@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ArrowLeft, MessageCircle, ShieldCheck, ArrowRight, Instagram } from 'lucide-react';
 import { TeamInfo, Product, PlayerInfo } from '../types';
 import { ProductCard } from '../components/ProductCard';
+import { INLINE_SVG_JERSEY } from '../lib/imageUtils';
 
 interface TeamLandingPageProps {
   teamSlug: string;
@@ -31,7 +32,7 @@ export const TeamLandingPage: React.FC<TeamLandingPageProps> = ({
     flagEmoji: '⚽',
     descriptionKa: `${teamSlug}-ს ოფიციალური ახალი და საკლუბო მაისურები FUT Universe-ის თბილისის ბიბლიოთეკაში.`,
     descriptionEn: `Official ${teamSlug} kits in FUT Universe Tbilisi.`,
-    heroImage: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=1200&q=80'
+    heroImage: INLINE_SVG_JERSEY
   };
 
   const teamProducts = products.filter(

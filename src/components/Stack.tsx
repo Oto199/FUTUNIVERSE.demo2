@@ -2,6 +2,7 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'motion/react';
 import './Stack.css';
 import { handleImageError } from '../lib/imageUtils';
+import { INITIAL_PRODUCTS } from '../data/initialData';
 
 interface CardRotateProps {
   key?: React.Key;
@@ -94,52 +95,17 @@ export default function Stack({
     if (cards.length) {
       return cards.map((content, index) => ({ id: index + 1, content }));
     } else {
-      return [
-        {
-          id: 1,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=500&auto=format"
-              alt="card-1"
-              onError={handleImageError}
-              className="card-image"
-            />
-          )
-        },
-        {
-          id: 2,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=500&auto=format"
-              alt="card-2"
-              onError={handleImageError}
-              className="card-image"
-            />
-          )
-        },
-        {
-          id: 3,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=500&auto=format"
-              alt="card-3"
-              onError={handleImageError}
-              className="card-image"
-            />
-          )
-        },
-        {
-          id: 4,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?q=80&w=500&auto=format"
-              alt="card-4"
-              onError={handleImageError}
-              className="card-image"
-            />
-          )
-        }
-      ];
+      return INITIAL_PRODUCTS.slice(0, 4).map((prod, idx) => ({
+        id: idx + 1,
+        content: (
+          <img
+            src={prod.imageFront}
+            alt={prod.titleKa}
+            onError={handleImageError}
+            className="card-image object-cover w-full h-full"
+          />
+        )
+      }));
     }
   });
 

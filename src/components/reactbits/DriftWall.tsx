@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import './DriftWall.css';
 import { handleImageError } from '../../lib/imageUtils';
+import { INITIAL_PRODUCTS } from '../../data/initialData';
 
 export interface DriftWallItem {
   image: string;
@@ -36,14 +37,12 @@ export interface DriftWallProps {
   onTileClick?: (item: DriftWallItem) => void;
 }
 
-const DEFAULT_ITEMS: DriftWallItem[] = Array.from({ length: 15 }, (_, i) => {
-  const ids = [1015, 1025, 1039, 1043, 1044, 1050, 1062, 1069, 1074, 1080, 1084, 106, 110, 133, 164];
-  return {
-    image: `https://picsum.photos/id/${ids[i % ids.length]}/600/400`,
-    title: `Tile ${i + 1}`,
-    href: undefined
-  };
-});
+const DEFAULT_ITEMS: DriftWallItem[] = INITIAL_PRODUCTS.map((prod) => ({
+  id: prod.id,
+  image: prod.imageFront,
+  title: prod.titleKa,
+  href: undefined
+}));
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

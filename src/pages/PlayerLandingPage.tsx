@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ArrowLeft, MessageCircle, Sparkles, ShieldCheck, ArrowRight, Share2, Instagram } from 'lucide-react';
 import { PlayerInfo, Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
-import { handleImageError } from '../lib/imageUtils';
+import { handleImageError, INLINE_SVG_JERSEY } from '../lib/imageUtils';
 
 interface PlayerLandingPageProps {
   playerSlug: string;
@@ -36,7 +36,7 @@ export const PlayerLandingPage: React.FC<PlayerLandingPageProps> = ({
     bioKa: `${playerSlug}-ს ოფიციალური მაისურები FUT Universe-ის თბილისის ბიბლიოთეკაში.`,
     bioEn: `Official ${playerSlug} jerseys in FUT Universe Tbilisi library.`,
     wc26Role: 'ნაკრების წევრი',
-    image: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80'
+    image: INLINE_SVG_JERSEY
   };
 
   const playerProducts = products.filter(

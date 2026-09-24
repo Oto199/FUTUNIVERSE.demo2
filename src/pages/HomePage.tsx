@@ -11,6 +11,7 @@ import DecryptedText from '../components/reactbits/DecryptedText';
 import ClickSpark from '../components/reactbits/ClickSpark';
 import DriftWall, { DriftWallItem } from '../components/reactbits/DriftWall';
 import { handleImageError, sanitizeImageUrl } from '../lib/imageUtils';
+import { INITIAL_PRODUCTS } from '../data/initialData';
 
 interface HomePageProps {
   products: Product[];
@@ -29,12 +30,14 @@ export const HomePage: React.FC<HomePageProps> = ({
   navigate,
   lang
 }) => {
-  const backToSchoolProducts = products.filter(p => 
+  const validProducts = Array.isArray(products) && products.length > 0 ? products : INITIAL_PRODUCTS;
+
+  const backToSchoolProducts = validProducts.filter(p => 
     p.tags?.some(t => t.toLowerCase().includes('back to school') || t.toLowerCase().includes('sale')) ||
     (p.originalPrice && p.originalPrice > p.price)
   );
-  const featuredNicheProducts = products.filter(p => p.isNiche || p.isFeatured).slice(0, 8);
-  const saleStackItems = (backToSchoolProducts.length > 0 ? backToSchoolProducts : products).slice(0, 8);
+  const featuredNicheProducts = validProducts.filter(p => p.isNiche || p.isFeatured).slice(0, 8);
+  const saleStackItems = (backToSchoolProducts.length > 0 ? backToSchoolProducts : validProducts).slice(0, 8);
   const saleStackCards = saleStackItems.map((prod) => (
     <div key={`sale-stack-${prod.id}`} className="relative w-full h-full bg-[#0d091a] border-2 border-amber-500/40 rounded-2xl overflow-hidden group shadow-2xl select-none">
       <img
@@ -98,7 +101,7 @@ export const HomePage: React.FC<HomePageProps> = ({
     </div>
   ));
 
-  const driftWallItems: DriftWallItem[] = products.map((prod) => ({
+  const driftWallItems: DriftWallItem[] = validProducts.map((prod) => ({
     id: prod.id,
     image: sanitizeImageUrl(prod.imageFront),
     title: lang === 'ka' ? prod.titleKa : prod.titleEn
@@ -112,7 +115,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="relative w-full overflow-hidden bg-[#050508] border-b border-white/10">
           <div className="relative w-full h-[580px] sm:h-[700px] flex items-center justify-center">
             <DriftWall
-              items={driftWallItems.length > 0 ? driftWallItems : undefined}
+              items={driftWallItems}
               columns={5}
               tileWidth={220}
               tileHeight={140}
@@ -422,7 +425,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {products.slice(0, 4).map((item) => (
+          {validProducts.slice(0, 4).map((item) => (
             <a
               key={item.id}
               href="https://instagram.com/futt_universe"
