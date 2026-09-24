@@ -4,8 +4,15 @@
  * preserving Google Cloud Firestore's free tier quotas.
  */
 
-const DB_NAME = 'fut_universe_cache_v1';
+const DB_NAME = 'fut_universe_cache_v2';
 const DB_VERSION = 1;
+
+// Self-healing: automatically clear legacy v1 IndexedDB if present
+if (typeof window !== 'undefined' && window.indexedDB && window.indexedDB.deleteDatabase) {
+  try {
+    window.indexedDB.deleteDatabase('fut_universe_cache_v1');
+  } catch (e) {}
+}
 
 function openDB(): Promise<IDBDatabase | null> {
   if (typeof window === 'undefined' || !window.indexedDB) {

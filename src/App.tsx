@@ -35,25 +35,19 @@ export default function App() {
 
   const [products, setProducts] = useState<Product[]>(() => {
     try {
-      const stored = localStorage.getItem('fut_products_v4') || localStorage.getItem('fut_products_v3');
+      // Clear legacy caches that might contain old stock photos or deleted items
+      localStorage.removeItem('fut_products_v3');
+      localStorage.removeItem('fut_products_v4');
+
+      const stored = localStorage.getItem('fut_products_v5');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const map = new Map<string, Product>();
-          INITIAL_PRODUCTS.forEach(p => map.set(p.id, p));
-          parsed.forEach((p: Product) => {
-            if (p?.id) {
-              const base = map.get(p.id);
-              const merged: Product = { ...(base || ({} as Product)), ...p };
-              merged.imageFront = sanitizeImageUrl(merged.imageFront, base?.imageFront || FALLBACK_JERSEY_IMAGE);
-              if (merged.imageBack) merged.imageBack = sanitizeImageUrl(merged.imageBack, base?.imageBack);
-              if (Array.isArray(merged.images)) {
-                merged.images = merged.images.map(img => sanitizeImageUrl(img, merged.imageFront));
-              }
-              map.set(p.id, merged);
-            }
-          });
-          return Array.from(map.values());
+          // If stored items contain obsolete unsplash stock photos, discard and use clean initial products
+          const hasOldStockImages = parsed.some((p: Product) => p?.imageFront?.includes('images.unsplash.com'));
+          if (!hasOldStockImages) {
+            return parsed;
+          }
         }
       }
     } catch (e) {}
@@ -62,7 +56,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('fut_products_v4', JSON.stringify(products));
+      localStorage.setItem('fut_products_v5', JSON.stringify(products));
     } catch (e) {}
   }, [products]);
 
@@ -102,98 +96,54 @@ export default function App() {
   const isDataUrl = (url?: string) => Boolean(url && (url.startsWith('data:image/') || url.startsWith('blob:')));
   const isDefaultUnsplash = (url?: string) => !url || url.includes('images.unsplash.com');
 
-  // Helper to merge local uploads and edits with incoming Firestore data
+  // Helper to merge incoming database products: authority is always Firestore/Cloud DB.
+  // Deleted products in DB must NEVER be resurrected.
   const mergeProducts = (incomingFromDb: Product[]): Product[] => {
-    let localStored: Product[] = [];
-    try {
-      const stored = localStorage.getItem('fut_products_v4') || localStorage.getItem('fut_products_v3');
-      if (stored) localStored = JSON.parse(stored);
-    } catch (e) {}
-
-    const map = new Map<string, Product>();
-
-    // 1. Base: INITIAL_PRODUCTS
-    INITIAL_PRODUCTS.forEach(p => map.set(p.id, p));
-
-    // 2. Overlay Local Storage
-    if (Array.isArray(localStored)) {
-      localStored.forEach(p => {
-        if (!p.id) return;
-        const existing = map.get(p.id);
-        const mergedObj = existing ? { ...existing, ...p } : p;
-        mergedObj.imageFront = sanitizeImageUrl(mergedObj.imageFront, existing?.imageFront || FALLBACK_JERSEY_IMAGE);
-        if (mergedObj.imageBack) mergedObj.imageBack = sanitizeImageUrl(mergedObj.imageBack, existing?.imageBack);
-        if (Array.isArray(mergedObj.images)) {
-          mergedObj.images = mergedObj.images.map(img => sanitizeImageUrl(img, mergedObj.imageFront));
-        }
-        if (!p.originalPrice || (p.price && p.originalPrice <= p.price)) {
-          delete mergedObj.originalPrice;
-        }
-        map.set(p.id, mergedObj);
-      });
+    if (!Array.isArray(incomingFromDb) || incomingFromDb.length === 0) {
+      return INITIAL_PRODUCTS;
     }
 
-    // 3. Overlay Firestore Data (Realtime Cloud Database is source of truth)
-    if (Array.isArray(incomingFromDb)) {
-      incomingFromDb.forEach(p => {
-        if (!p.id) return;
-        const existing = map.get(p.id);
-        if (!existing) {
-          const finalItem = { ...p };
-          finalItem.imageFront = sanitizeImageUrl(finalItem.imageFront, FALLBACK_JERSEY_IMAGE);
-          if (finalItem.imageBack) finalItem.imageBack = sanitizeImageUrl(finalItem.imageBack);
-          if (Array.isArray(finalItem.images)) {
-            finalItem.images = finalItem.images.map(img => sanitizeImageUrl(img, finalItem.imageFront));
-          }
-          if (!p.originalPrice || (p.price && p.originalPrice <= p.price)) {
-            delete finalItem.originalPrice;
-          }
-          map.set(p.id, finalItem);
-        } else {
-          // Determine best front image (prefer custom DataURL or non-default image)
-          let bestFront = p.imageFront;
-          if (isDataUrl(p.imageFront)) {
-            bestFront = p.imageFront;
-          } else if (isDataUrl(existing.imageFront) && isDefaultUnsplash(p.imageFront)) {
-            bestFront = existing.imageFront;
-          } else if (p.imageFront && !isDefaultUnsplash(p.imageFront)) {
-            bestFront = p.imageFront;
-          } else {
-            bestFront = p.imageFront || existing.imageFront;
-          }
-          bestFront = sanitizeImageUrl(bestFront, existing.imageFront || FALLBACK_JERSEY_IMAGE);
+    const initialMap = new Map<string, Product>();
+    INITIAL_PRODUCTS.forEach(p => initialMap.set(p.id, p));
 
-          let bestBack = p.imageBack;
-          if (isDataUrl(p.imageBack)) {
-            bestBack = p.imageBack;
-          } else if (isDataUrl(existing.imageBack) && isDefaultUnsplash(p.imageBack)) {
-            bestBack = existing.imageBack;
-          } else {
-            bestBack = p.imageBack || existing.imageBack;
-          }
-          if (bestBack) bestBack = sanitizeImageUrl(bestBack, existing.imageBack);
+    return incomingFromDb.map(p => {
+      const initial = initialMap.get(p.id);
 
-          const rawImages = (Array.isArray(p.images) && p.images.some(img => isDataUrl(img) || !isDefaultUnsplash(img))) ? p.images : (existing.images || p.images);
-          const sanitizedImages = Array.isArray(rawImages) ? rawImages.map(img => sanitizeImageUrl(img, bestFront)) : [bestFront];
+      // Determine best front image: prefer clean uploads or custom data URL over old stock unsplash
+      let bestFront = p.imageFront;
+      if (isDefaultUnsplash(bestFront)) {
+        bestFront = initial?.imageFront || bestFront;
+      }
+      bestFront = sanitizeImageUrl(bestFront, initial?.imageFront || FALLBACK_JERSEY_IMAGE);
 
-          const mergedProd: Product = {
-            ...existing,
-            ...p,
-            imageFront: bestFront,
-            imageBack: bestBack,
-            images: sanitizedImages
-          };
+      let bestBack = p.imageBack;
+      if (isDefaultUnsplash(bestBack)) {
+        bestBack = initial?.imageBack || bestBack;
+      }
+      if (bestBack) {
+        bestBack = sanitizeImageUrl(bestBack, initial?.imageBack);
+      }
 
-          if (!p.originalPrice || (p.price && p.originalPrice <= p.price)) {
-            delete mergedProd.originalPrice;
-          }
+      let rawImages = Array.isArray(p.images) && p.images.length > 0 ? p.images : (initial?.images || [bestFront]);
+      if (rawImages.some(img => isDefaultUnsplash(img)) && initial?.images) {
+        rawImages = initial.images;
+      }
+      const sanitizedImages = rawImages.map(img => sanitizeImageUrl(img, bestFront));
 
-          map.set(p.id, mergedProd);
-        }
-      });
-    }
+      const mergedProd: Product = {
+        ...(initial || {}),
+        ...p,
+        imageFront: bestFront,
+        imageBack: bestBack,
+        images: sanitizedImages
+      };
 
-    return Array.from(map.values());
+      if (!mergedProd.originalPrice || (mergedProd.price && mergedProd.originalPrice <= mergedProd.price)) {
+        delete mergedProd.originalPrice;
+      }
+
+      return mergedProd;
+    });
   };
 
   const mergeBlogPosts = (incomingFromDb: BlogPost[]): BlogPost[] => {
