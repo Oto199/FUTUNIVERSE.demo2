@@ -4,15 +4,16 @@
  * preserving Google Cloud Firestore's free tier quotas.
  */
 
-const DB_NAME = 'fut_universe_cache_v4';
+const DB_NAME = 'fut_universe_cache_v5';
 const DB_VERSION = 1;
 
-// Self-healing: automatically clear legacy v1, v2 & v3 IndexedDB if present
+// Self-healing: automatically clear legacy v1, v2, v3 & v4 IndexedDB if present
 if (typeof window !== 'undefined' && window.indexedDB && window.indexedDB.deleteDatabase) {
   try {
     window.indexedDB.deleteDatabase('fut_universe_cache_v1');
     window.indexedDB.deleteDatabase('fut_universe_cache_v2');
     window.indexedDB.deleteDatabase('fut_universe_cache_v3');
+    window.indexedDB.deleteDatabase('fut_universe_cache_v4');
   } catch (e) {}
 }
 

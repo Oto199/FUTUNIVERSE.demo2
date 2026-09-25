@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ArrowLeft, Calendar, Clock, MessageCircle, ArrowRight, Share2 } from 'lucide-react';
 import { BlogPost, PlayerInfo, Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
+import { sanitizeImageUrl, handleImageError } from '../lib/imageUtils';
 
 interface BlogPostPageProps {
   postSlug: string;
@@ -78,8 +79,9 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
       {/* Cover Image / Poster */}
       <div className="rounded-3xl overflow-hidden border border-slate-800 bg-[#090914] shadow-2xl flex items-center justify-center p-2 sm:p-4">
         <img
-          src={post.coverImage}
+          src={sanitizeImageUrl(post.coverImage)}
           alt={post.titleKa}
+          onError={handleImageError}
           className="max-h-[750px] w-auto max-w-full rounded-2xl object-contain shadow-2xl"
           referrerPolicy="no-referrer"
         />
@@ -106,7 +108,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
                 className="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-[#00e5ff]/50 cursor-pointer flex items-center justify-between transition"
               >
                 <div className="flex items-center space-x-3">
-                  <img src={pl.image} alt={pl.nameKa} className="w-9 h-9 rounded-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={sanitizeImageUrl(pl.image)} alt={pl.nameKa} onError={handleImageError} className="w-9 h-9 rounded-full object-cover" referrerPolicy="no-referrer" />
                   <div>
                     <p className="text-xs font-bold text-white">{pl.nameKa} მაისური</p>
                     <p className="text-[10px] text-[#00e5ff]">{pl.teamKa} #{pl.number}</p>

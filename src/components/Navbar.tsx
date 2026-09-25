@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, ShoppingBag, Menu, X, ArrowRight, ShieldCheck, Sparkles, MessageCircle, SlidersHorizontal, BookOpen, Instagram, Clock, Send } from 'lucide-react';
 import { Product, PlayerInfo, TeamInfo } from '../types';
+import { sanitizeImageUrl, handleImageError } from '../lib/imageUtils';
 
 interface NavbarProps {
   currentPath: string;
@@ -265,7 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="p-3 rounded-xl bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 hover:border-[#008ba3] cursor-pointer flex items-center justify-between transition"
                       >
                         <div className="flex items-center space-x-3">
-                          <img src={pl.image} alt={pl.nameKa} className="w-10 h-10 rounded-full object-cover border border-zinc-300" referrerPolicy="no-referrer" />
+                          <img src={sanitizeImageUrl(pl.image)} alt={pl.nameKa} onError={handleImageError} className="w-10 h-10 rounded-full object-cover border border-zinc-300" referrerPolicy="no-referrer" />
                           <div>
                             <p className="text-sm font-bold text-zinc-900">{pl.nameKa} ({pl.nameEn})</p>
                             <p className="text-xs text-[#008ba3] font-semibold">{pl.teamKa} #{pl.number} — {pl.position}</p>
@@ -312,7 +313,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="p-3 rounded-xl bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 hover:border-[#008ba3] cursor-pointer flex items-center justify-between transition"
                       >
                         <div className="flex items-center space-x-3">
-                          <img src={prod.imageFront} alt={prod.titleKa} className="w-12 h-12 rounded-lg object-cover border border-zinc-300" referrerPolicy="no-referrer" />
+                          <img src={sanitizeImageUrl(prod.imageFront)} alt={prod.titleKa} onError={handleImageError} className="w-12 h-12 rounded-lg object-cover border border-zinc-300" referrerPolicy="no-referrer" />
                           <div>
                             <p className="text-sm font-bold text-zinc-900">{prod.titleKa}</p>
                             <p className="text-xs text-zinc-500">{prod.nationalTeamKa} • {prod.kitType}</p>

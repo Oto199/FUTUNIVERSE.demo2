@@ -6,8 +6,16 @@ export const INLINE_SVG_JERSEY = `data:image/svg+xml;utf8,<svg xmlns="http://www
 export const FALLBACK_JERSEY_IMAGE = INLINE_SVG_JERSEY;
 
 export function isBrokenImageUrl(url?: string): boolean {
-  if (!url) return true;
-  return url.includes('photo-1508098682722-e99c43a406b2') || url.includes('photo-1560272564-669520551062');
+  if (!url || typeof url !== 'string' || !url.trim()) return true;
+  const lower = url.toLowerCase();
+  return (
+    lower.includes('unsplash.com') ||
+    lower.includes('picsum.photos') ||
+    lower.includes('placeholder') ||
+    lower.includes('loremflickr') ||
+    lower.includes('source.unsplash') ||
+    lower.startsWith('/uploads/')
+  );
 }
 
 export function sanitizeImageUrl(url?: string, defaultFallback = FALLBACK_JERSEY_IMAGE): string {

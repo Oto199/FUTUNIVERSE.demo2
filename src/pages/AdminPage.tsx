@@ -4,7 +4,8 @@ import { Product, Size, Category, KitType, BlogPost } from '../types';
 import { ImageDropzone } from '../components/ImageDropzone';
 import { TOP_CLUBS, TOP_NATIONS } from '../data/teamsList';
 import { subscribeContactMessages, dbDeleteContactMessage } from '../lib/firebase';
-import { optimizeProductImages, FALLBACK_JERSEY_IMAGE } from '../lib/imageUtils';
+import { optimizeProductImages, FALLBACK_JERSEY_IMAGE, INLINE_SVG_JERSEY } from '../lib/imageUtils';
+import { INITIAL_PRODUCTS } from '../data/initialData';
 
 interface AdminPageProps {
   products: Product[];
@@ -37,7 +38,7 @@ const INSTAGRAM_PRESETS: Array<Partial<Product> & { captionSampleKa: string }> =
     isFeatured: true,
     isWc26: true,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
+    imageFront: INITIAL_PRODUCTS[0]?.imageFront || INLINE_SVG_JERSEY,
     descriptionKa: '🔥 Lamine Yamal #19 — Spain 2026 World Cup Player Version | 💰 49₾ (ფასდაკლება!) | 📏 M, L, XL.',
     descriptionEn: 'Lamine Yamal #19 Spain 2026 World Cup Player Version | 49 GEL (Sale!) | Sizes: M, L, XL.',
     captionSampleKa: 'Lamine Yamal — Spain 2026 World Cup\n💰 ფასი: 49₾ (ფასდაკლება!)\n📏 ზომა: M, L, XL\n🔥 ესპანეთი #19 Player Version'
@@ -60,7 +61,7 @@ const INSTAGRAM_PRESETS: Array<Partial<Product> & { captionSampleKa: string }> =
     isFeatured: true,
     isWc26: true,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+    imageFront: INITIAL_PRODUCTS[4]?.imageFront || INLINE_SVG_JERSEY,
     descriptionKa: '🔥 Jude Bellingham — England 2026 World Cup #10 | 💰 49₾ (ფასდაკლება!) | 📏 S, M, L, XL.',
     descriptionEn: 'Jude Bellingham England 2026 World Cup Player Version | 49 GEL | Sizes S, M, L, XL.',
     captionSampleKa: 'Jude Bellingham — England 2026 World Cup\n💰 ფასი: 49₾ (ფასდაკლება!)\n📏 ზომა: S, M, L, XL\n🔥 ინგლისი #10 Player Version'
@@ -83,7 +84,7 @@ const INSTAGRAM_PRESETS: Array<Partial<Product> & { captionSampleKa: string }> =
     isFeatured: true,
     isWc26: true,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80',
+    imageFront: INITIAL_PRODUCTS[0]?.imageFront || INLINE_SVG_JERSEY,
     descriptionKa: '🔥 Lionel Messi #10 — Argentina 2026 World Cup Player Version | 💰 49₾ (ფასდაკლება!) | 📏 M, L, XL.',
     descriptionEn: 'Lionel Messi #10 Argentina 2026 World Cup Kit | 49 GEL | Sizes M, L, XL.',
     captionSampleKa: 'Lionel Messi — Argentina 2026 World Cup\n💰 ფასი: 49₾ (ფასდაკლება!)\n📏 ზომა: M, L, XL\n🔥 არგენტინა #10 Player Version'
@@ -106,7 +107,7 @@ const INSTAGRAM_PRESETS: Array<Partial<Product> & { captionSampleKa: string }> =
     isFeatured: true,
     isWc26: true,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=800&q=80',
+    imageFront: INITIAL_PRODUCTS[7]?.imageFront || INLINE_SVG_JERSEY,
     descriptionKa: '🔥 Cristiano Ronaldo #7 — Portugal 2026 World Cup Player Version | 💰 49₾ (ფასდაკლება!) | 📏 M, L, XL.',
     descriptionEn: 'Cristiano Ronaldo #7 Portugal 2026 World Cup Player Version | 49 GEL.',
     captionSampleKa: 'Cristiano Ronaldo — Portugal 2026 World Cup\n💰 ფასი: 49₾ (ფასდაკლება!)\n📏 ზომა: M, L, XL\n🔥 პორტუგალია #7 Player Version'
@@ -129,7 +130,7 @@ const INSTAGRAM_PRESETS: Array<Partial<Product> & { captionSampleKa: string }> =
     isFeatured: true,
     isWc26: true,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
+    imageFront: INITIAL_PRODUCTS[5]?.imageFront || INLINE_SVG_JERSEY,
     descriptionKa: '🔥 Kylian Mbappé #10 — France 2026 World Cup Player Version | 💰 49₾ (ფასდაკლება!) | 📏 S, M, L, XL.',
     descriptionEn: 'Kylian Mbappé #10 France 2026 World Cup Player Version | 49 GEL.',
     captionSampleKa: 'Kylian Mbappé — France 2026 World Cup\n💰 ფასი: 49₾ (ფასდაკლება!)\n📏 ზომა: S, M, L, XL\n🔥 საფრანგეთი #10'
@@ -152,7 +153,7 @@ const INSTAGRAM_PRESETS: Array<Partial<Product> & { captionSampleKa: string }> =
     isFeatured: false,
     isWc26: true,
     isNiche: true,
-    imageFront: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=800&q=80',
+    imageFront: INITIAL_PRODUCTS[9]?.imageFront || INLINE_SVG_JERSEY,
     descriptionKa: '🔥 Jamal Musiala #10 — Germany 2026 World Cup Player Version | 💰 49₾ (ფასდაკლება!) | 📏 M, L.',
     descriptionEn: 'Jamal Musiala #10 Germany 2026 World Cup Player Version | 49 GEL.',
     captionSampleKa: 'Jamal Musiala — Germany 2026 World Cup #10\n💰 ფასი: 49₾ (ფასდაკლება!)\n📏 ზომა: M, L\n🔥 გერმანია #10'
@@ -186,7 +187,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
 
   // Instagram Import state
   const [igCaptionText, setIgCaptionText] = useState('');
-  const [igPhotoUrl, setIgPhotoUrl] = useState('https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80');
+  const [igPhotoUrl, setIgPhotoUrl] = useState('');
 
   // Team category state (Club vs Nation mutually exclusive)
   const [teamCategory, setTeamCategory] = useState<'club' | 'nation'>('club');
@@ -234,7 +235,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
     excerptEn: '',
     contentKa: '',
     contentEn: '',
-    coverImage: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+    coverImage: '/back-to-school-poster.jpg',
     author: 'FUT Universe Team',
     readTime: '3 წუთი',
     tags: 'World Cup 2026, Sale, 49 GEL, Tbilisi',
@@ -587,7 +588,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
       excerptEn: post.excerptEn || '',
       contentKa: post.contentKa || '',
       contentEn: post.contentEn || '',
-      coverImage: post.coverImage || 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+      coverImage: post.coverImage || '/back-to-school-poster.jpg',
       author: post.author || 'FUT Universe Team',
       readTime: post.readTime || '3 წუთი',
       tags: Array.isArray(post.tags) ? post.tags.join(', ') : '',
@@ -608,7 +609,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
       excerptEn: '',
       contentKa: '',
       contentEn: '',
-      coverImage: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+      coverImage: '/back-to-school-poster.jpg',
       author: 'FUT Universe Team',
       readTime: '3 წუთი',
       tags: 'World Cup 2026, Sale, 49 GEL, Tbilisi',
@@ -781,7 +782,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
       isFeatured: true,
       isWc26: true,
       isNiche: true,
-      imageFront: igPhotoUrl || 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
+      imageFront: igPhotoUrl || INLINE_SVG_JERSEY,
       descriptionKa: text,
       descriptionEn: text
     };

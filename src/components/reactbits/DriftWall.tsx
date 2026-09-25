@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import './DriftWall.css';
-import { handleImageError } from '../../lib/imageUtils';
+import { handleImageError, sanitizeImageUrl } from '../../lib/imageUtils';
 import { INITIAL_PRODUCTS } from '../../data/initialData';
 
 export interface DriftWallItem {
@@ -39,7 +39,7 @@ export interface DriftWallProps {
 
 const DEFAULT_ITEMS: DriftWallItem[] = INITIAL_PRODUCTS.map((prod) => ({
   id: prod.id,
-  image: prod.imageFront,
+  image: sanitizeImageUrl(prod.imageFront),
   title: prod.titleKa,
   href: undefined
 }));
@@ -264,7 +264,7 @@ export default function DriftWall({
   const renderTile = (item: DriftWallItem, id: string, colIndex: number) => {
     const inner = (
       <span className="drift-wall__inner">
-        <img src={item.image} alt={item.title ?? ''} loading="lazy" decoding="async" draggable={false} onError={handleImageError} />
+        <img src={sanitizeImageUrl(item.image)} alt={item.title ?? ''} loading="lazy" decoding="async" draggable={false} onError={handleImageError} />
         <span className="drift-wall__overlay" aria-hidden="true" />
       </span>
     );

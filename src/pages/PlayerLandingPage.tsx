@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ArrowLeft, MessageCircle, Sparkles, ShieldCheck, ArrowRight, Share2, Instagram } from 'lucide-react';
 import { PlayerInfo, Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
-import { handleImageError, INLINE_SVG_JERSEY } from '../lib/imageUtils';
+import { handleImageError, INLINE_SVG_JERSEY, sanitizeImageUrl } from '../lib/imageUtils';
 
 interface PlayerLandingPageProps {
   playerSlug: string;
@@ -122,7 +122,7 @@ export const PlayerLandingPage: React.FC<PlayerLandingPageProps> = ({
           <div className="md:col-span-4 flex justify-center">
             <div className="relative w-48 h-48 md:w-60 md:h-60 rounded-full p-1 bg-gradient-to-tr from-[#00e5ff] to-indigo-600 shadow-2xl shadow-cyan-950/50">
               <img
-                src={playerProducts[0]?.imageFront || player.image}
+                src={sanitizeImageUrl(playerProducts[0]?.imageFront || player.image)}
                 alt={player.nameKa}
                 className="w-full h-full rounded-full object-cover border-4 border-[#0a0a0f]"
                 referrerPolicy="no-referrer"

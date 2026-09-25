@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'motion/react';
 import './Stack.css';
-import { handleImageError } from '../lib/imageUtils';
+import { handleImageError, sanitizeImageUrl } from '../lib/imageUtils';
 import { INITIAL_PRODUCTS } from '../data/initialData';
 
 interface CardRotateProps {
@@ -99,7 +99,7 @@ export default function Stack({
         id: idx + 1,
         content: (
           <img
-            src={prod.imageFront}
+            src={sanitizeImageUrl(prod.imageFront)}
             alt={prod.titleKa}
             onError={handleImageError}
             className="card-image object-cover w-full h-full"

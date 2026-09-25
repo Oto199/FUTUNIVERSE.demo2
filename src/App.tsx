@@ -27,32 +27,60 @@ import {
   dbDeleteBlogPost
 } from './lib/firebase';
 import { getCachedData, setCachedData } from './lib/storageCache';
-import { optimizeProductImages, FALLBACK_JERSEY_IMAGE, sanitizeImageUrl } from './lib/imageUtils';
+import { optimizeProductImages, FALLBACK_JERSEY_IMAGE, sanitizeImageUrl, isBrokenImageUrl, INLINE_SVG_JERSEY } from './lib/imageUtils';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname + window.location.search);
   const [lang, setLang] = useState<'ka' | 'en'>('ka');
 
+  // Helper sanitizers for players and teams
+  const sanitizePlayers = (incoming: PlayerInfo[]): PlayerInfo[] => {
+    if (!Array.isArray(incoming) || incoming.length === 0) return INITIAL_PLAYERS;
+    const initialMap = new Map<string, PlayerInfo>(INITIAL_PLAYERS.map(p => [p.slug, p]));
+    return incoming.map(pl => {
+      const initial = initialMap.get(pl.slug);
+      let img = pl.image;
+      if (isBrokenImageUrl(img)) {
+        img = initial?.image || INLINE_SVG_JERSEY;
+      }
+      return {
+        ...(initial || {}),
+        ...pl,
+        image: sanitizeImageUrl(img, initial?.image || INLINE_SVG_JERSEY)
+      };
+    });
+  };
+
+  const sanitizeTeams = (incoming: TeamInfo[]): TeamInfo[] => {
+    if (!Array.isArray(incoming) || incoming.length === 0) return INITIAL_TEAMS;
+    const initialMap = new Map<string, TeamInfo>(INITIAL_TEAMS.map(t => [t.slug, t]));
+    return incoming.map(t => {
+      const initial = initialMap.get(t.slug);
+      let img = t.heroImage;
+      if (isBrokenImageUrl(img)) {
+        img = initial?.heroImage || INLINE_SVG_JERSEY;
+      }
+      return {
+        ...(initial || {}),
+        ...t,
+        heroImage: sanitizeImageUrl(img, initial?.heroImage || INLINE_SVG_JERSEY)
+      };
+    });
+  };
+
   const [products, setProducts] = useState<Product[]>(() => {
     try {
-      // Clear legacy caches that might contain old stock photos or broken /uploads/ paths
-      localStorage.removeItem('fut_products_v3');
-      localStorage.removeItem('fut_products_v4');
-      localStorage.removeItem('fut_products_v5');
-      localStorage.removeItem('fut_products_v6');
+      // Clear all legacy caches that might contain old stock photos or broken /uploads/ paths
+      ['fut_products_v1', 'fut_products_v2', 'fut_products_v3', 'fut_products_v4', 'fut_products_v5', 'fut_products_v6', 'fut_products_v7'].forEach(k => {
+        localStorage.removeItem(k);
+      });
 
-      const stored = localStorage.getItem('fut_products_v7');
+      const stored = localStorage.getItem('fut_products_v8');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // If stored items contain obsolete stock photos or invalid /uploads/ paths, discard and use clean initial products
-          const hasInvalidImages = parsed.some((p: Product) => 
-            !p?.imageFront || 
-            p.imageFront.includes('images.unsplash.com') || 
-            p.imageFront.includes('picsum.photos') ||
-            p.imageFront.startsWith('/uploads/')
-          );
-          if (!hasInvalidImages) {
+          const hasInvalid = parsed.some((p: Product) => isBrokenImageUrl(p?.imageFront));
+          if (!hasInvalid) {
             return parsed;
           }
         }
@@ -63,31 +91,61 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('fut_products_v7', JSON.stringify(products));
+      localStorage.setItem('fut_products_v8', JSON.stringify(products));
     } catch (e) {}
   }, [products]);
 
-  const [players, setPlayers] = useState<PlayerInfo[]>(INITIAL_PLAYERS);
-  const [teams, setTeams] = useState<TeamInfo[]>(INITIAL_TEAMS);
+  const [players, setPlayers] = useState<PlayerInfo[]>(() => {
+    try {
+      ['fut_players_v1', 'fut_players_v2', 'fut_players_v3', 'fut_players_v4'].forEach(k => localStorage.removeItem(k));
+      const stored = localStorage.getItem('fut_players_v5');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0 && !parsed.some((p: PlayerInfo) => isBrokenImageUrl(p?.image))) {
+          return sanitizePlayers(parsed);
+        }
+      }
+    } catch (e) {}
+    return INITIAL_PLAYERS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('fut_players_v5', JSON.stringify(players));
+    } catch (e) {}
+  }, [players]);
+
+  const [teams, setTeams] = useState<TeamInfo[]>(() => {
+    try {
+      ['fut_teams_v1', 'fut_teams_v2', 'fut_teams_v3', 'fut_teams_v4'].forEach(k => localStorage.removeItem(k));
+      const stored = localStorage.getItem('fut_teams_v5');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0 && !parsed.some((t: TeamInfo) => isBrokenImageUrl(t?.heroImage))) {
+          return sanitizeTeams(parsed);
+        }
+      }
+    } catch (e) {}
+    return INITIAL_TEAMS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('fut_teams_v5', JSON.stringify(teams));
+    } catch (e) {}
+  }, [teams]);
 
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(() => {
     try {
-      const stored = localStorage.getItem('fut_blog_posts_v4') || localStorage.getItem('fut_blog_posts_v3');
+      ['fut_blog_posts_v1', 'fut_blog_posts_v2', 'fut_blog_posts_v3', 'fut_blog_posts_v4'].forEach(k => localStorage.removeItem(k));
+      const stored = localStorage.getItem('fut_blog_posts_v5');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const map = new Map<string, BlogPost>();
-          INITIAL_BLOG_POSTS.forEach(b => map.set(b.slug, b));
-          parsed.forEach((b: BlogPost) => {
-            if (b?.slug) {
-              const item = { ...(map.get(b.slug) || {}), ...b };
-              if (b.slug === 'back-to-school-sale-2026' && (!b.coverImage || b.coverImage.includes('unsplash.com'))) {
-                item.coverImage = '/back-to-school-poster.jpg';
-              }
-              map.set(b.slug, item);
-            }
-          });
-          return Array.from(map.values());
+          const hasInvalid = parsed.some((b: BlogPost) => isBrokenImageUrl(b?.coverImage));
+          if (!hasInvalid) {
+            return parsed;
+          }
         }
       }
     } catch (e) {}
@@ -96,12 +154,9 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('fut_blog_posts_v4', JSON.stringify(blogPosts));
+      localStorage.setItem('fut_blog_posts_v5', JSON.stringify(blogPosts));
     } catch (e) {}
   }, [blogPosts]);
-
-  const isDataUrl = (url?: string) => Boolean(url && (url.startsWith('data:image/') || url.startsWith('blob:')));
-  const isDefaultUnsplash = (url?: string) => !url || url.includes('images.unsplash.com');
 
   // Helper to merge incoming database products: authority is always Firestore/Cloud DB.
   // Deleted products in DB must NEVER be resurrected.
@@ -118,21 +173,21 @@ export default function App() {
 
       // Determine best front image: prefer valid base64 data URLs or clean images, avoid 404-prone /uploads/ paths and unsplash
       let bestFront = p.imageFront;
-      if (isDefaultUnsplash(bestFront) || (bestFront && bestFront.startsWith('/uploads/'))) {
-        bestFront = initial?.imageFront || bestFront;
+      if (isBrokenImageUrl(bestFront)) {
+        bestFront = initial?.imageFront || FALLBACK_JERSEY_IMAGE;
       }
       bestFront = sanitizeImageUrl(bestFront, initial?.imageFront || FALLBACK_JERSEY_IMAGE);
 
       let bestBack = p.imageBack;
-      if (isDefaultUnsplash(bestBack) || (bestBack && bestBack.startsWith('/uploads/'))) {
-        bestBack = initial?.imageBack || bestBack;
+      if (isBrokenImageUrl(bestBack)) {
+        bestBack = initial?.imageBack || undefined;
       }
       if (bestBack) {
         bestBack = sanitizeImageUrl(bestBack, initial?.imageBack);
       }
 
       let rawImages = Array.isArray(p.images) && p.images.length > 0 ? p.images : (initial?.images || [bestFront]);
-      if (rawImages.some(img => isDefaultUnsplash(img) || (img && img.startsWith('/uploads/'))) && initial?.images) {
+      if (rawImages.some(img => isBrokenImageUrl(img)) && initial?.images) {
         rawImages = initial.images;
       }
       const sanitizedImages = rawImages.map(img => sanitizeImageUrl(img, bestFront));
@@ -154,36 +209,27 @@ export default function App() {
   };
 
   const mergeBlogPosts = (incomingFromDb: BlogPost[]): BlogPost[] => {
-    let localStored: BlogPost[] = [];
-    try {
-      const stored = localStorage.getItem('fut_blog_posts_v3');
-      if (stored) localStored = JSON.parse(stored);
-    } catch (e) {}
-
     const map = new Map<string, BlogPost>();
 
     // 1. Initial code posts
     INITIAL_BLOG_POSTS.forEach(bp => map.set(bp.slug, bp));
 
-    // 2. Overlay Local Storage
-    localStored.forEach(bp => {
-      if (bp.slug) map.set(bp.slug, bp);
-    });
-
-    // 3. Overlay Firestore (Cloud Database)
+    // 2. Overlay Firestore (Cloud Database)
     if (Array.isArray(incomingFromDb)) {
       incomingFromDb.forEach(bp => {
         if (bp.slug) {
           const existing = map.get(bp.slug);
-          map.set(bp.slug, existing ? { ...existing, ...bp } : bp);
+          let cover = bp.coverImage;
+          if (isBrokenImageUrl(cover)) {
+            cover = existing?.coverImage || '/back-to-school-poster.jpg';
+          }
+          map.set(bp.slug, {
+            ...(existing || {}),
+            ...bp,
+            coverImage: sanitizeImageUrl(cover, existing?.coverImage || '/back-to-school-poster.jpg')
+          });
         }
       });
-    }
-
-    // Ensure Back to School poster is preserved if previous db record has placeholder
-    const schoolPost = map.get('back-to-school-sale-2026');
-    if (schoolPost && (!schoolPost.coverImage || schoolPost.coverImage.includes('unsplash.com'))) {
-      schoolPost.coverImage = '/back-to-school-poster.jpg';
     }
 
     return Array.from(map.values());
@@ -194,12 +240,7 @@ export default function App() {
     // 1. Instant load from local IndexedDB cache (0ms perceived latency & saves Firestore quotas)
     getCachedData<Product[]>('products').then(cached => {
       if (Array.isArray(cached) && cached.length > 0) {
-        const hasInvalid = cached.some((p: Product) => 
-          !p?.imageFront || 
-          p.imageFront.includes('images.unsplash.com') || 
-          p.imageFront.includes('picsum.photos') ||
-          p.imageFront.startsWith('/uploads/')
-        );
+        const hasInvalid = cached.some((p: Product) => isBrokenImageUrl(p?.imageFront));
         if (!hasInvalid) {
           setProducts(mergeProducts(cached));
         }
@@ -207,7 +248,26 @@ export default function App() {
     });
     getCachedData<BlogPost[]>('blogPosts').then(cached => {
       if (Array.isArray(cached) && cached.length > 0) {
-        setBlogPosts(mergeBlogPosts(cached));
+        const hasInvalid = cached.some((b: BlogPost) => isBrokenImageUrl(b?.coverImage));
+        if (!hasInvalid) {
+          setBlogPosts(mergeBlogPosts(cached));
+        }
+      }
+    });
+    getCachedData<PlayerInfo[]>('players').then(cached => {
+      if (Array.isArray(cached) && cached.length > 0) {
+        const hasInvalid = cached.some((pl: PlayerInfo) => isBrokenImageUrl(pl?.image));
+        if (!hasInvalid) {
+          setPlayers(sanitizePlayers(cached));
+        }
+      }
+    });
+    getCachedData<TeamInfo[]>('teams').then(cached => {
+      if (Array.isArray(cached) && cached.length > 0) {
+        const hasInvalid = cached.some((t: TeamInfo) => isBrokenImageUrl(t?.heroImage));
+        if (!hasInvalid) {
+          setTeams(sanitizeTeams(cached));
+        }
       }
     });
 
@@ -222,15 +282,17 @@ export default function App() {
 
     const unsubPlayers = subscribePlayers((data) => {
       if (Array.isArray(data) && data.length > 0) {
-        setPlayers(data);
-        setCachedData('players', data);
+        const sanitized = sanitizePlayers(data);
+        setPlayers(sanitized);
+        setCachedData('players', sanitized);
       }
     });
 
     const unsubTeams = subscribeTeams((data) => {
       if (Array.isArray(data) && data.length > 0) {
-        setTeams(data);
-        setCachedData('teams', data);
+        const sanitized = sanitizeTeams(data);
+        setTeams(sanitized);
+        setCachedData('teams', sanitized);
       }
     });
 
@@ -379,7 +441,7 @@ export default function App() {
         contentEn: newPostData.contentEn || '',
         publishDate: new Date().toISOString().split('T')[0],
         readTime: '4 წუთი',
-        coverImage: sanitizeImageUrl(newPostData.coverImage, 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80'),
+        coverImage: sanitizeImageUrl(newPostData.coverImage, INLINE_SVG_JERSEY),
         author: 'FUT Universe Editorial',
         tags: newPostData.tags || ['FUT Universe', 'Georgia'],
         relatedPlayerSlugs: newPostData.relatedPlayerSlugs || []

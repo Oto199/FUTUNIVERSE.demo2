@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, BookOpen, Clock, Calendar, Sparkles } from 'lucide-react';
 import { BlogPost } from '../types';
+import { sanitizeImageUrl, handleImageError } from '../lib/imageUtils';
 
 interface JournalPageProps {
   blogPosts: BlogPost[];
@@ -37,8 +38,9 @@ export const JournalPage: React.FC<JournalPageProps> = ({ blogPosts, navigate, l
             <div className="space-y-4">
               <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-slate-950">
                 <img
-                  src={post.coverImage}
+                  src={sanitizeImageUrl(post.coverImage)}
                   alt={post.titleKa}
+                  onError={handleImageError}
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   referrerPolicy="no-referrer"
                 />

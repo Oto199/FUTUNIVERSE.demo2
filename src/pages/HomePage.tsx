@@ -433,7 +433,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               rel="noreferrer"
               className="group relative aspect-square rounded-2xl overflow-hidden border border-slate-800 bg-slate-950"
             >
-              <img src={item.imageFront} alt={lang === 'ka' ? item.titleKa : item.titleEn} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" referrerPolicy="no-referrer" />
+              <img src={sanitizeImageUrl(item.imageFront)} alt={lang === 'ka' ? item.titleKa : item.titleEn} onError={handleImageError} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-2 text-center">
                 <p className="text-xs font-semibold text-white flex items-center space-x-1">
                   <Instagram className="w-3.5 h-3.5 text-[#00e5ff]" />
@@ -474,7 +474,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="flex flex-col justify-between h-full space-y-4 text-left">
                 <div className="space-y-3">
                   <div className="aspect-[16/9] rounded-xl overflow-hidden bg-black">
-                    <img src={post.coverImage} alt={post.titleKa} className="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90" referrerPolicy="no-referrer" />
+                    <img src={sanitizeImageUrl(post.coverImage)} alt={post.titleKa} onError={handleImageError} className="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90" referrerPolicy="no-referrer" />
                   </div>
                   <div className="flex items-center space-x-2 text-[11px] text-zinc-400">
                     <span className="text-[#00e5ff] font-mono">{post.publishDate}</span>

@@ -334,7 +334,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({
           {playerObj && (
             <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <img src={playerObj.image} alt="" className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" />
+                <img src={sanitizeImageUrl(playerObj.image)} alt="" onError={handleImageError} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div>
                   <p className="text-xs font-bold text-white">{playerObj.nameKa}</p>
                   <p className="text-[11px] text-[#00e5ff]">{playerObj.wc26Role}</p>
