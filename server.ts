@@ -455,8 +455,8 @@ async function startServer() {
     return res.status(401).json({ success: false, message: 'არასწორი პაროლი' });
   });
 
-  // Technical SEO: Dynamic Sitemap.xml
-  app.get('/sitemap.xml', (req, res) => {
+  // Technical SEO: Dynamic Sitemap (XML & TXT)
+  const buildSitemapXml = () => {
     const baseUrl = 'https://futuniverse.ge';
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
@@ -483,16 +483,46 @@ async function startServer() {
     });
 
     xml += `</urlset>`;
+    return xml;
+  };
 
+  const buildSitemapTxt = () => {
+    const baseUrl = 'https://futuniverse.ge';
+    const urls: string[] = [
+      `${baseUrl}/`,
+      `${baseUrl}/shop`,
+      `${baseUrl}/about`,
+      `${baseUrl}/contact`,
+      `${baseUrl}/journal`,
+      ...players.map(pl => `${baseUrl}/player/${pl.slug}`),
+      ...teams.map(t => `${baseUrl}/team/${t.slug}`),
+      ...products.map(pr => `${baseUrl}/product/${pr.id}`),
+      ...blogPosts.map(b => `${baseUrl}/journal/${b.slug}`),
+    ];
+    return urls.join('\n') + '\n';
+  };
+
+  app.get(['/sitemap.xml', '/sitemap-index.xml'], (req, res) => {
+    res.status(200);
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.send(xml);
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.send(buildSitemapXml());
+  });
+
+  app.get('/sitemap.txt', (req, res) => {
+    res.status(200);
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.send(buildSitemapTxt());
   });
 
   // Technical SEO: robots.txt
   app.get('/robots.txt', (req, res) => {
     const baseUrl = 'https://futuniverse.ge';
     const content = `User-agent: *\nAllow: /\nSitemap: ${baseUrl}/sitemap.xml\n`;
+    res.status(200);
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.send(content);
   });
 

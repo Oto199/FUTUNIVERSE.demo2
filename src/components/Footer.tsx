@@ -141,10 +141,6 @@ export const Footer: React.FC<FooterProps> = ({ navigate, lang, players, teams }
             <li className="pt-2 border-t border-zinc-200 text-[11px] text-zinc-500 flex items-center space-x-3">
               <a
                 href="/sitemap.xml"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/sitemap.xml');
-                }}
                 className="hover:underline flex items-center space-x-1 cursor-pointer"
               >
                 <FileText className="w-3 h-3 text-[#008ba3]" />
@@ -152,10 +148,6 @@ export const Footer: React.FC<FooterProps> = ({ navigate, lang, players, teams }
               </a>
               <a
                 href="/robots.txt"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/robots.txt');
-                }}
                 className="hover:underline flex items-center space-x-1 cursor-pointer"
               >
                 <ShieldCheck className="w-3 h-3 text-[#008ba3]" />
