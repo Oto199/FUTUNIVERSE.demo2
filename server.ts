@@ -457,11 +457,11 @@ async function startServer() {
 
   // Technical SEO: Dynamic Sitemap.xml
   app.get('/sitemap.xml', (req, res) => {
-    const baseUrl = process.env.APP_URL || 'https://futuniverse.ge';
+    const baseUrl = 'https://futuniverse.ge';
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-    const staticPages = ['', '/shop', '/about', '/contact', '/journal'];
+    const staticPages = ['/', '/shop', '/about', '/contact', '/journal'];
     staticPages.forEach(p => {
       xml += `  <url>\n    <loc>${baseUrl}${p}</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
     });
@@ -484,15 +484,15 @@ async function startServer() {
 
     xml += `</urlset>`;
 
-    res.header('Content-Type', 'application/xml');
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.send(xml);
   });
 
   // Technical SEO: robots.txt
   app.get('/robots.txt', (req, res) => {
-    const baseUrl = process.env.APP_URL || 'https://futuniverse.ge';
+    const baseUrl = 'https://futuniverse.ge';
     const content = `User-agent: *\nAllow: /\nSitemap: ${baseUrl}/sitemap.xml\n`;
-    res.header('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.send(content);
   });
 

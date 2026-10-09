@@ -594,6 +594,80 @@ export default function App() {
         lang={lang}
       />
     );
+  } else if (pathWithoutQuery === '/sitemap.xml') {
+    const baseUrl = 'https://futuniverse.ge';
+    const staticPages = ['/', '/shop', '/about', '/contact', '/journal'];
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+    staticPages.forEach(p => {
+      xml += `  <url>\n    <loc>${baseUrl}${p}</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+    });
+    players.forEach(pl => {
+      xml += `  <url>\n    <loc>${baseUrl}/player/${pl.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+    });
+    teams.forEach(t => {
+      xml += `  <url>\n    <loc>${baseUrl}/team/${t.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+    });
+    products.forEach(pr => {
+      xml += `  <url>\n    <loc>${baseUrl}/product/${pr.id}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+    });
+    blogPosts.forEach(b => {
+      xml += `  <url>\n    <loc>${baseUrl}/journal/${b.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+    });
+    xml += `</urlset>`;
+
+    return (
+      <div className="min-h-screen bg-[#1e1e1e] text-[#d4d4d4] font-mono text-xs sm:text-sm p-4 sm:p-6">
+        <div className="max-w-5xl mx-auto space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-zinc-700 text-xs font-sans">
+            <div className="flex items-center space-x-3">
+              <span className="px-2 py-0.5 rounded bg-[#008ba3] text-white font-semibold">XML Sitemap</span>
+              <span className="text-zinc-400">https://futuniverse.ge/sitemap.xml</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => navigator.clipboard?.writeText(xml)}
+                className="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-600 transition cursor-pointer"
+              >
+                Copy XML
+              </button>
+              <button
+                onClick={() => navigate('/')}
+                className="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-600 transition cursor-pointer"
+              >
+                ← Back to Site
+              </button>
+            </div>
+          </div>
+          <pre className="whitespace-pre-wrap break-all leading-relaxed select-all bg-[#141414] p-4 rounded-lg border border-zinc-800 overflow-x-auto">
+            {xml}
+          </pre>
+        </div>
+      </div>
+    );
+  } else if (pathWithoutQuery === '/robots.txt') {
+    const robotsTxt = `User-agent: *\nAllow: /\nSitemap: https://futuniverse.ge/sitemap.xml\n`;
+    return (
+      <div className="min-h-screen bg-[#1e1e1e] text-[#d4d4d4] font-mono text-xs sm:text-sm p-4 sm:p-6">
+        <div className="max-w-5xl mx-auto space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-zinc-700 text-xs font-sans">
+            <div className="flex items-center space-x-3">
+              <span className="px-2 py-0.5 rounded bg-[#008ba3] text-white font-semibold">robots.txt</span>
+              <span className="text-zinc-400">https://futuniverse.ge/robots.txt</span>
+            </div>
+            <button
+              onClick={() => navigate('/')}
+              className="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-600 transition cursor-pointer"
+            >
+              ← Back to Site
+            </button>
+          </div>
+          <pre className="whitespace-pre-wrap break-all leading-relaxed select-all bg-[#141414] p-4 rounded-lg border border-zinc-800">
+            {robotsTxt}
+          </pre>
+        </div>
+      </div>
+    );
   } else {
     // Fallback to Shop
     pageContent = (
