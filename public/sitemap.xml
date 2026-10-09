@@ -1,192 +1,192 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://futuniverse.ge/</loc>
+    <loc>https://futuniverse.netlify.app/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/shop</loc>
+    <loc>https://futuniverse.netlify.app/shop</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/about</loc>
+    <loc>https://futuniverse.netlify.app/about</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/contact</loc>
+    <loc>https://futuniverse.netlify.app/contact</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/journal</loc>
+    <loc>https://futuniverse.netlify.app/journal</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/alvarez</loc>
+    <loc>https://futuniverse.netlify.app/player/alvarez</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/brunof</loc>
+    <loc>https://futuniverse.netlify.app/player/brunof</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/diaz</loc>
+    <loc>https://futuniverse.netlify.app/player/diaz</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/mainoo</loc>
+    <loc>https://futuniverse.netlify.app/player/mainoo</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/mbappe</loc>
+    <loc>https://futuniverse.netlify.app/player/mbappe</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/ronaldinho</loc>
+    <loc>https://futuniverse.netlify.app/player/ronaldinho</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/valverde</loc>
+    <loc>https://futuniverse.netlify.app/player/valverde</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/wirtz</loc>
+    <loc>https://futuniverse.netlify.app/player/wirtz</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/player/zidane</loc>
+    <loc>https://futuniverse.netlify.app/player/zidane</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/argentina</loc>
+    <loc>https://futuniverse.netlify.app/team/argentina</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/brazil</loc>
+    <loc>https://futuniverse.netlify.app/team/brazil</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/colombia</loc>
+    <loc>https://futuniverse.netlify.app/team/colombia</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/england</loc>
+    <loc>https://futuniverse.netlify.app/team/england</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/france</loc>
+    <loc>https://futuniverse.netlify.app/team/france</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/germany</loc>
+    <loc>https://futuniverse.netlify.app/team/germany</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/portugal</loc>
+    <loc>https://futuniverse.netlify.app/team/portugal</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/team/uruguay</loc>
+    <loc>https://futuniverse.netlify.app/team/uruguay</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-alvarez-argentina</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-alvarez-argentina</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-bruno-portugal</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-bruno-portugal</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-diaz-colombia-2026</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-diaz-colombia-2026</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-kroos-real-2022</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-kroos-real-2022</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-mainoo-england</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-mainoo-england</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-mbappe-france-2018</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-mbappe-france-2018</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-ronaldinho-brazil-2002</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-ronaldinho-brazil-2002</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-ronaldo-mufc-2007</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-ronaldo-mufc-2007</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-trent-liverpool</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-trent-liverpool</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-wirtz-germany</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-wirtz-germany</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-zidane-2006</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-zidane-2006</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/product/prod-zidane-france-1998</loc>
+    <loc>https://futuniverse.netlify.app/product/prod-zidane-france-1998</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/journal/2026-world-cup-jerseys-sale-49gel</loc>
+    <loc>https://futuniverse.netlify.app/journal/2026-world-cup-jerseys-sale-49gel</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/journal/available-jerseys-tbilisi</loc>
+    <loc>https://futuniverse.netlify.app/journal/available-jerseys-tbilisi</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/journal/back-to-school-sale-2026</loc>
+    <loc>https://futuniverse.netlify.app/journal/back-to-school-sale-2026</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://futuniverse.ge/journal/fan-version-vs-player-version-guide</loc>
+    <loc>https://futuniverse.netlify.app/journal/fan-version-vs-player-version-guide</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

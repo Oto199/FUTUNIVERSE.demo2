@@ -457,7 +457,7 @@ async function startServer() {
 
   // Technical SEO: Dynamic Sitemap (XML & TXT)
   const buildSitemapXml = () => {
-    const baseUrl = 'https://futuniverse.ge';
+    const baseUrl = 'https://futuniverse.netlify.app';
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
@@ -487,7 +487,7 @@ async function startServer() {
   };
 
   const buildSitemapTxt = () => {
-    const baseUrl = 'https://futuniverse.ge';
+    const baseUrl = 'https://futuniverse.netlify.app';
     const urls: string[] = [
       `${baseUrl}/`,
       `${baseUrl}/shop`,
@@ -518,7 +518,7 @@ async function startServer() {
 
   // Technical SEO: robots.txt
   app.get('/robots.txt', (req, res) => {
-    const baseUrl = 'https://futuniverse.ge';
+    const baseUrl = 'https://futuniverse.netlify.app';
     const content = `User-agent: *\nAllow: /\nSitemap: ${baseUrl}/sitemap.xml\n`;
     res.status(200);
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');

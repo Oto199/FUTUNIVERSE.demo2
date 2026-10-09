@@ -595,7 +595,7 @@ export default function App() {
       />
     );
   } else if (pathWithoutQuery === '/sitemap.xml') {
-    const baseUrl = 'https://futuniverse.ge';
+    const baseUrl = 'https://futuniverse.netlify.app';
     const staticPages = ['/', '/shop', '/about', '/contact', '/journal'];
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
@@ -622,7 +622,7 @@ export default function App() {
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-zinc-700 text-xs font-sans">
             <div className="flex items-center space-x-3">
               <span className="px-2 py-0.5 rounded bg-[#008ba3] text-white font-semibold">XML Sitemap</span>
-              <span className="text-zinc-400">https://futuniverse.ge/sitemap.xml</span>
+              <span className="text-zinc-400">https://futuniverse.netlify.app/sitemap.xml</span>
             </div>
             <div className="flex items-center space-x-2">
               <button
@@ -646,14 +646,14 @@ export default function App() {
       </div>
     );
   } else if (pathWithoutQuery === '/robots.txt') {
-    const robotsTxt = `User-agent: *\nAllow: /\nSitemap: https://futuniverse.ge/sitemap.xml\n`;
+    const robotsTxt = `User-agent: *\nAllow: /\nSitemap: https://futuniverse.netlify.app/sitemap.xml\n`;
     return (
       <div className="min-h-screen bg-[#1e1e1e] text-[#d4d4d4] font-mono text-xs sm:text-sm p-4 sm:p-6">
         <div className="max-w-5xl mx-auto space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-zinc-700 text-xs font-sans">
             <div className="flex items-center space-x-3">
               <span className="px-2 py-0.5 rounded bg-[#008ba3] text-white font-semibold">robots.txt</span>
-              <span className="text-zinc-400">https://futuniverse.ge/robots.txt</span>
+              <span className="text-zinc-400">https://futuniverse.netlify.app/robots.txt</span>
             </div>
             <button
               onClick={() => navigate('/')}
